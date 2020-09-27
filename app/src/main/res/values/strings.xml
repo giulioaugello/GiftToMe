@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GiftToMe</string>
+
+    <!--    Twitter API credentials-->
+    <string name="CONSUMER_KEY" translatable="false">FDuIWWAoNzMAgJFnJFOKVGvAe</string>
+    <string name="CONSUMER_SECRET" translatable="false">dRGTLXzxSmWwT3ekam0vRRhFl8g8PaeLKAsrzTlxRCzrT80K1p</string>
+
+</resources>

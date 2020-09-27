@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/nav_newGift"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="New Gift" />
+
+    <item
+        android:id="@+id/nav_chat"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="Chat" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="Account" />
+
+</menu>
