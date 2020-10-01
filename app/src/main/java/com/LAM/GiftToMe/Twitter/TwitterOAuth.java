@@ -1,11 +1,20 @@
 package com.LAM.GiftToMe.Twitter;
 
+import android.util.Base64;
+
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
+
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 public class TwitterOAuth {
 
@@ -25,6 +34,10 @@ public class TwitterOAuth {
     private static final String oauth_signature = "oauth_signature";
     private static final String HMAC_SHA1 = "HmacSHA1";
 
+    public static final String between = "=\"";
+    public static final String last = "\",";
+
+
     public TwitterOAuth(String consumerKey, String consumerSecret, String token, String tokenSecret){
         this.consumerKey = consumerKey;
         this.consumerSecret = consumerSecret;
@@ -32,6 +45,32 @@ public class TwitterOAuth {
         this.tokenSecret = tokenSecret;
         this.signatureMethod = "HMAC-SHA1";
         this.version = "1.0";
+    }
+
+    public String generateHeader(String httpMethod, String url, Map<String, String> requestParams) {
+
+        String timestamp = timestampGenerator();
+        String nonce = nonceGenerator();
+        String baseSignatureString = signatureBaseStringGenerator(httpMethod, url, requestParams, nonce, timestamp);
+        String signature = signingKeyGenerator(baseSignatureString);
+
+
+        String header = "OAuth " +
+                oauth_consumer_key + between + consumerKey + last +
+
+                oauth_nonce + between + nonce + last +
+
+                oauth_signature + between + signature + last +
+
+                oauth_signature_method + between + signatureMethod + last +
+
+                oauth_timestamp + between + timestamp + last +
+
+                oauth_token + between + token + last +
+
+                oauth_version + between + version + "\"";
+
+        return header;
     }
 
     private String timestampGenerator(){
@@ -76,6 +115,24 @@ public class TwitterOAuth {
         templateString.deleteCharAt(templateString.length() - 1);
 
         return httpMethod.toUpperCase() + "&" + encodeString(url) + "&" + encodeString(templateString.toString());
+    }
+
+    private String signingKeyGenerator(String input){
+        String signingKey = new StringBuilder().append(encodeString(consumerSecret)).append("&").append(encodeString(tokenSecret)).toString();
+        SecretKey key = new SecretKeySpec(signingKey.getBytes(StandardCharsets.UTF_8), HMAC_SHA1);
+        Mac mac; //A MAC provides a way to check the integrity of information transmitted over or stored in an unreliable medium, based on a secret key.
+
+        try {
+            mac = Mac.getInstance("HmacSHA1");
+            mac.init(key);
+            byte[] signatureBytes = mac.doFinal(input.getBytes(StandardCharsets.UTF_8));
+
+            return new String(Base64.encode(signatureBytes,Base64.DEFAULT));
+
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private String encodeString(String value) {
