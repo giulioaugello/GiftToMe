@@ -2,14 +2,23 @@ package com.LAM.GiftToMe.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
+import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.VolleyListener;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
@@ -19,8 +28,12 @@ import com.twitter.sdk.android.core.TwitterConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.core.Callback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,9 +43,15 @@ import androidx.fragment.app.Fragment;
 public class ProfileFragment extends Fragment {
 
     private Context mContext;
+    private View v;
+
     private TwitterLoginButton loginButton;
     private CardView logoutButton;
-    private View v;
+    private TextView text;
+    private ImageView logo;
+    private TextView twitterUsername;
+
+    public String userName;
 
     @Nullable
     @Override
@@ -46,6 +65,9 @@ public class ProfileFragment extends Fragment {
 
         loginButton = v.findViewById(R.id.login_button);
         logoutButton = v.findViewById(R.id.logout);
+        text = v.findViewById(R.id.text);
+        logo = v.findViewById(R.id.logo);
+        twitterUsername = v.findViewById(R.id.twitterUsername);
 
 //        CardView cardView = v.findViewById(R.id.myGift);
 //
@@ -59,10 +81,15 @@ public class ProfileFragment extends Fragment {
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
+
+                MainActivity.session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                MainActivity.userName = MainActivity.session.getUserName();
+                MainActivity.userId = MainActivity.session.getUserId();
+                MainActivity.token = MainActivity.session.getAuthToken().token;
+                MainActivity.tokenSecret = MainActivity.session.getAuthToken().secret;
+
+
                 updateUI(true);
-                TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
-                TwitterAuthToken authToken = session.getAuthToken();
-                Toast.makeText(mContext, "Logged! My toke is: "+authToken.token, Toast.LENGTH_LONG).show();
             }
             @Override
             public void failure(TwitterException exception) {
@@ -76,6 +103,12 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 TwitterCore.getInstance().getSessionManager().clearActiveSession();
                 Toast.makeText(mContext, "Logged out!", Toast.LENGTH_LONG).show();
+                MainActivity.isLogged = false;
+                MainActivity.session = null;
+                MainActivity.userName = null;
+                MainActivity.userId = null;
+                MainActivity.token = null;
+                MainActivity.tokenSecret = null;
                 updateUI(false);
             }
         });
@@ -95,11 +128,18 @@ public class ProfileFragment extends Fragment {
 
     private void updateUI(boolean signedIn) {
         if (signedIn) {
+            setPageWithUserInfo();
             loginButton.setVisibility(View.GONE);
-            loginButton.setVisibility(View.VISIBLE);
+            text.setVisibility(View.GONE);
+            logo.setVisibility(View.GONE);
+            logoutButton.setVisibility(View.VISIBLE);
+            twitterUsername.setVisibility(View.VISIBLE);
         } else {
+            logoutButton.setVisibility(View.GONE);
+            twitterUsername.setVisibility(View.GONE);
             loginButton.setVisibility(View.VISIBLE);
-            loginButton.setVisibility(View.GONE);
+            text.setVisibility(View.VISIBLE);
+            logo.setVisibility(View.VISIBLE);
         }
     }
 
@@ -107,6 +147,34 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         loginButton.onActivityResult(requestCode, resultCode, data);
-
     }
+
+    private void setPageWithUserInfo(){
+        TwitterRequests.getUserInfo(mContext, MainActivity.userName, new VolleyListener() {
+
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject userObject = new JSONObject(response);
+
+                    //replace serve per prendere l'immagine con le dimensioni (width e height) originali
+                    //Uri profileImgUri = Uri.parse((userObject.getString(getResources().getString(R.string.json_profile_image_url_https))).replace(getResources().getString(R.string.json_profile_image_normal),""));
+                    //Picasso.with(mContext).load(profileImgUri).transform(new CircleTransformation()).into(profileImage);
+
+                    userName = String.valueOf(userObject.get(getResources().getString(R.string.user_gift_parsing_name)));
+                    twitterUsername.setText(userName);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+    }
+
 }

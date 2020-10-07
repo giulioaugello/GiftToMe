@@ -1,6 +1,7 @@
 package com.LAM.GiftToMe.Twitter;
 
 import android.util.Base64;
+import android.util.Log;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -70,6 +71,8 @@ public class TwitterOAuth {
 
                 oauth_version + between + version + "\"";
 
+        Log.i("ciaociao", header + "");
+
         return header;
     }
 
@@ -77,10 +80,11 @@ public class TwitterOAuth {
         return String.valueOf(Math.round((new Date()).getTime() / 1000.0));
     }
 
-    private String nonceGenerator(){
-        String firstUUID = String.valueOf(UUID.randomUUID());
-        String secondUUID = String.valueOf(UUID.randomUUID());
-        return firstUUID + secondUUID;
+    private String nonceGenerator(){ //vuole 32 bytes = 256 bit
+        String firstUUID = String.valueOf(UUID.randomUUID()); //ognugno crea 128 bit
+        //String secondUUID = String.valueOf(UUID.randomUUID());
+        //return firstUUID + secondUUID;
+        return firstUUID;
 //        Random random = ThreadLocalRandom.current();
 //        byte[] r = new byte[32]; //256 bit
 //        random.nextBytes(r);
@@ -127,7 +131,7 @@ public class TwitterOAuth {
             mac.init(key);
             byte[] signatureBytes = mac.doFinal(input.getBytes(StandardCharsets.UTF_8));
 
-            return new String(Base64.encode(signatureBytes,Base64.DEFAULT));
+            return new String(Base64.encode(signatureBytes, Base64.NO_WRAP));
 
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();

@@ -1,8 +1,28 @@
 <resources>
     <string name="app_name">GiftToMe</string>
 
-    <!--    Twitter API credentials-->
+    <!--  Twitter API credentials -->
     <string name="CONSUMER_KEY" translatable="false">FDuIWWAoNzMAgJFnJFOKVGvAe</string>
     <string name="CONSUMER_SECRET" translatable="false">dRGTLXzxSmWwT3ekam0vRRhFl8g8PaeLKAsrzTlxRCzrT80K1p</string>
+
+    <!--  User Shared Preferences  -->
+    <string name="shared_preferences_user_name" translatable="false">userName</string>
+    <string name="shared_preferences_token" translatable="false">token</string>
+    <string name="shared_preferences_token_secret" translatable="false">tokenSecret</string>
+    <string name="shared_preferences_user_id" translatable="false">userId</string>
+
+    <!--    UserGift Parsing-->
+    <string name="user_gift_parsing_name" translatable="false">name</string>
+
+    <!--    Fragment tags-->
+    <string name="map_fragment_tag" translatable="false">MapFragment</string>
+    <string name="list_fragment_tag" translatable="false">ListFragment</string>
+    <string name="messages_fragment_tag" translatable="false">MessagesFragment</string>
+    <string name="profile_fragment_tag" translatable="false">ProfileFragment</string>
+    <string name="conversation_fragment_tag" translatable="false">ConversationFragment</string>
+    <string name="user_replies_fragment_tag" translatable="false">UserRepliesFragment</string>
+    <string name="settings_fragment_tag" translatable="false">SettingsFragment</string>
+
+    <string name="double_tap_to_exit_message">Press back button again to exit</string>
 
 </resources>
