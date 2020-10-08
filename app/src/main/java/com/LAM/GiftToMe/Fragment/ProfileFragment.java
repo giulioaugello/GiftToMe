@@ -38,6 +38,7 @@ import org.json.JSONObject;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 public class ProfileFragment extends Fragment {
@@ -50,6 +51,7 @@ public class ProfileFragment extends Fragment {
     private TextView text;
     private ImageView logo;
     private TextView twitterUsername;
+    private ConstraintLayout constraintLayout;
 
     public String userName;
 
@@ -68,6 +70,7 @@ public class ProfileFragment extends Fragment {
         text = v.findViewById(R.id.text);
         logo = v.findViewById(R.id.logo);
         twitterUsername = v.findViewById(R.id.twitterUsername);
+        constraintLayout = v.findViewById(R.id.constraint);
 
 //        CardView cardView = v.findViewById(R.id.myGift);
 //
@@ -88,11 +91,17 @@ public class ProfileFragment extends Fragment {
                 MainActivity.token = MainActivity.session.getAuthToken().token;
                 MainActivity.tokenSecret = MainActivity.session.getAuthToken().secret;
 
+                Log.i("LOGLOGLO","Username: " + MainActivity.userName);
+                Log.i("LOGLOGLO","Userid: " + MainActivity.userId);
+                Log.i("LOGLOGLO","token: " + MainActivity.token);
+                Log.i("LOGLOGLO","tokenSecret: " + MainActivity.tokenSecret);
 
                 updateUI(true);
             }
             @Override
             public void failure(TwitterException exception) {
+                Log.i("LOGLOGLO","exexex" + exception);
+
                 updateUI(false);
                 Toast.makeText(mContext, exception.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -129,11 +138,13 @@ public class ProfileFragment extends Fragment {
     private void updateUI(boolean signedIn) {
         if (signedIn) {
             setPageWithUserInfo();
+            Log.i("wewewe","wewe");
             loginButton.setVisibility(View.GONE);
             text.setVisibility(View.GONE);
             logo.setVisibility(View.GONE);
             logoutButton.setVisibility(View.VISIBLE);
             twitterUsername.setVisibility(View.VISIBLE);
+            constraintLayout.setVisibility(View.VISIBLE);
         } else {
             logoutButton.setVisibility(View.GONE);
             twitterUsername.setVisibility(View.GONE);
@@ -161,6 +172,8 @@ public class ProfileFragment extends Fragment {
                     //replace serve per prendere l'immagine con le dimensioni (width e height) originali
                     //Uri profileImgUri = Uri.parse((userObject.getString(getResources().getString(R.string.json_profile_image_url_https))).replace(getResources().getString(R.string.json_profile_image_normal),""));
                     //Picasso.with(mContext).load(profileImgUri).transform(new CircleTransformation()).into(profileImage);
+
+                    twitterUsername.setVisibility(View.VISIBLE);
 
                     userName = String.valueOf(userObject.get(getResources().getString(R.string.user_gift_parsing_name)));
                     twitterUsername.setText(userName);

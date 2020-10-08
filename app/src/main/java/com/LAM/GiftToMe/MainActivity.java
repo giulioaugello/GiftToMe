@@ -125,45 +125,45 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    public void onBackPressed() {
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        if(activeFragment.equals(fragmentManager.findFragmentByTag(homeFragmentTag))) {
-            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
-                finishAndRemoveTask();
-                return;
-            }
-            else {
-                Toast.makeText(this, getResources().getString(R.string.double_tap_to_exit_message), Toast.LENGTH_SHORT).show();
-            }
-
-            mBackPressed = System.currentTimeMillis();
-        }
-
-        else if(activeFragment.equals(fragmentManager.findFragmentByTag(conversationFragmentTag))){
-            fragmentTransaction.replace(R.id.fragment_container, chatFragment,messagesFragmentTag).commit();
-            fragmentTransaction.addToBackStack(messagesFragmentTag);
-            activeFragment = chatFragment;
-            bottomNavigationView.setSelectedItemId(R.id.nav_chat);
-        }
-
-        else if(activeFragment.equals(getSupportFragmentManager().findFragmentByTag(settingsFragmentTag)) || activeFragment.equals(getSupportFragmentManager().findFragmentByTag(userRepliesFragmentTag))){
-            fragmentTransaction.replace(R.id.fragment_container, profileFragment,profileFragmentTag).commit();
-            fragmentTransaction.addToBackStack(profileFragmentTag);
-            activeFragment = profileFragment;
-            bottomNavigationView.setSelectedItemId(R.id.nav_profile);
-        }
-
-        else {
-            fragmentTransaction.replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
-            fragmentTransaction.addToBackStack(homeFragmentTag);
-            activeFragment = homeFragment;
-            bottomNavigationView.setSelectedItemId(R.id.nav_home);
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//        if(activeFragment.equals(fragmentManager.findFragmentByTag(homeFragmentTag))) {
+//            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
+//                finishAndRemoveTask();
+//                return;
+//            }
+//            else {
+//                Toast.makeText(this, getResources().getString(R.string.double_tap_to_exit_message), Toast.LENGTH_SHORT).show();
+//            }
+//
+//            mBackPressed = System.currentTimeMillis();
+//        }
+//
+//        else if(activeFragment.equals(fragmentManager.findFragmentByTag(conversationFragmentTag))){
+//            fragmentTransaction.replace(R.id.fragment_container, chatFragment,messagesFragmentTag).commit();
+//            fragmentTransaction.addToBackStack(messagesFragmentTag);
+//            activeFragment = chatFragment;
+//            bottomNavigationView.setSelectedItemId(R.id.nav_chat);
+//        }
+//
+//        else if(activeFragment.equals(getSupportFragmentManager().findFragmentByTag(settingsFragmentTag)) || activeFragment.equals(getSupportFragmentManager().findFragmentByTag(userRepliesFragmentTag))){
+//            fragmentTransaction.replace(R.id.fragment_container, profileFragment,profileFragmentTag).commit();
+//            fragmentTransaction.addToBackStack(profileFragmentTag);
+//            activeFragment = profileFragment;
+//            bottomNavigationView.setSelectedItemId(R.id.nav_profile);
+//        }
+//
+//        else {
+//            fragmentTransaction.replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
+//            fragmentTransaction.addToBackStack(homeFragmentTag);
+//            activeFragment = homeFragment;
+//            bottomNavigationView.setSelectedItemId(R.id.nav_home);
+//        }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

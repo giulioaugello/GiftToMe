@@ -260,12 +260,18 @@ public class TwitterRequests {
                     @Override
                     public void onResponse(String response) {
                         volleyListener.onResponse(response);
+                        Log.i("LOGLOG","res" + response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         volleyListener.onError(error);
+                        Log.i("LOGLOGLO","error: " + error.networkResponse.data);
+                        error.printStackTrace();
+
+
+
                     }
                 }
         ) {
@@ -274,7 +280,6 @@ public class TwitterRequests {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Authorization", header);
-                headers.put("Content-Type", "application/json");
                 return headers;
             }
         };
