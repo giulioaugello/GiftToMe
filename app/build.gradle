@@ -33,6 +33,9 @@ dependencies {
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
+    //Lottie Animation
+    implementation "com.airbnb.android:lottie:3.4.0"
+
     //Twitter
     implementation 'com.twitter.sdk.android:twitter:3.1.1'
     implementation 'com.twitter.sdk.android:twitter-core:3.1.1'

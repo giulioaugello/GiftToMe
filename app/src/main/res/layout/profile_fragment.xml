@@ -114,7 +114,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/myGift"
         app:layout_constraintVertical_bias="0.05"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/settings"
@@ -131,10 +131,18 @@
                 android:padding="10dp"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@mipmap/ic_launcher"/>
+<!--                <ImageView-->
+<!--                    android:layout_width="50dp"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    android:src="@mipmap/ic_launcher"/>-->
+
+<!--                <com.airbnb.lottie.LottieAnimationView-->
+<!--                    android:id="@+id/animationView"-->
+<!--                    android:layout_width="50dp"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    app:lottie_url="se"-->
+<!--                    app:lottie_autoPlay="true"-->
+<!--                    app:lottie_loop="true"/>-->
 
                 <TextView
                     android:layout_width="0dp"
@@ -196,7 +204,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.1"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/text"
@@ -211,7 +219,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintVertical_bias="0.1"
-        android:visibility="visible"
+        android:visibility="gone"
         android:text="Per ottenere gli oggetti che ti interessano o pubblicarne nuovi:"/>
 
     <com.twitter.sdk.android.core.identity.TwitterLoginButton
@@ -226,6 +234,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
