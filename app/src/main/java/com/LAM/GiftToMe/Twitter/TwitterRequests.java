@@ -249,7 +249,6 @@ public class TwitterRequests {
         String urlWithParams = url + screenNameString;
 
         TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY) , mContext.getResources().getString(R.string.CONSUMER_SECRET) , MainActivity.token, MainActivity.tokenSecret);
-        Log.i("ciaociao", generator + "");
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("screen_name", screenName);
         final String header = generator.generateHeader("GET", url, requestParams);
@@ -260,18 +259,15 @@ public class TwitterRequests {
                     @Override
                     public void onResponse(String response) {
                         volleyListener.onResponse(response);
-                        Log.i("LOGLOG","res" + response);
+                        //Log.i("LOGLOG","res" + response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         volleyListener.onError(error);
-                        Log.i("LOGLOGLO","error: " + error.networkResponse.data);
+                        //Log.i("LOGLOGLO","error: " + error.networkResponse.data);
                         error.printStackTrace();
-
-
-
                     }
                 }
         ) {

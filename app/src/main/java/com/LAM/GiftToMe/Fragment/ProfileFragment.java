@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.MainActivity;
+import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
@@ -32,6 +33,7 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.core.Callback;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +57,7 @@ public class ProfileFragment extends Fragment {
     private ConstraintLayout constraintLayout;
     private CardView myGift;
     private LinearLayout linearSettings;
+    private ImageView twitterBanner, twitterPhoto;
 
     public String userName;
 
@@ -76,6 +79,8 @@ public class ProfileFragment extends Fragment {
         constraintLayout = v.findViewById(R.id.constraint);
         myGift = v.findViewById(R.id.myGift);
         linearSettings = v.findViewById(R.id.linearSettings);
+        twitterPhoto = v.findViewById(R.id.twitterPhoto);
+        twitterBanner = v.findViewById(R.id.twitterBanner);
 
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
@@ -167,10 +172,11 @@ public class ProfileFragment extends Fragment {
                     JSONObject userObject = new JSONObject(response);
 
                     //replace serve per prendere l'immagine con le dimensioni (width e height) originali
-                    //Uri profileImgUri = Uri.parse((userObject.getString(getResources().getString(R.string.json_profile_image_url_https))).replace(getResources().getString(R.string.json_profile_image_normal),""));
-                    //Picasso.with(mContext).load(profileImgUri).transform(new CircleTransformation()).into(profileImage);
+                    Uri profileImgUri = Uri.parse((userObject.getString(getResources().getString(R.string.json_profile_image_url_https))).replace(getResources().getString(R.string.json_profile_image_normal),""));
+                    Picasso.with(mContext).load(profileImgUri).transform(new CircleTransformation()).into(twitterPhoto);
 
-                    twitterUsername.setVisibility(View.VISIBLE);
+                    Uri profileBannerUri = Uri.parse((userObject.getString(getResources().getString(R.string.json_profile_banner_url))));
+                    Picasso.with(mContext).load(profileBannerUri).into(twitterBanner);
 
                     userName = String.valueOf(userObject.get(getResources().getString(R.string.user_gift_parsing_name)));
                     twitterUsername.setText(userName);
