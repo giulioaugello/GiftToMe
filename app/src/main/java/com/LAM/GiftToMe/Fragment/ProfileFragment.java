@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,8 @@ public class ProfileFragment extends Fragment {
     private ImageView logo;
     private TextView twitterUsername;
     private ConstraintLayout constraintLayout;
+    private CardView myGift;
+    private LinearLayout linearSettings;
 
     public String userName;
 
@@ -71,15 +74,8 @@ public class ProfileFragment extends Fragment {
         logo = v.findViewById(R.id.logo);
         twitterUsername = v.findViewById(R.id.twitterUsername);
         constraintLayout = v.findViewById(R.id.constraint);
-
-//        CardView cardView = v.findViewById(R.id.myGift);
-//
-//        cardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(mContext, "Ciao", Toast.LENGTH_LONG).show();
-//            }
-//        });
+        myGift = v.findViewById(R.id.myGift);
+        linearSettings = v.findViewById(R.id.linearSettings);
 
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
@@ -142,12 +138,13 @@ public class ProfileFragment extends Fragment {
             loginButton.setVisibility(View.GONE);
             text.setVisibility(View.GONE);
             logo.setVisibility(View.GONE);
-            logoutButton.setVisibility(View.VISIBLE);
-            twitterUsername.setVisibility(View.VISIBLE);
             constraintLayout.setVisibility(View.VISIBLE);
+            myGift.setVisibility(View.VISIBLE);
+            linearSettings.setVisibility(View.VISIBLE);
         } else {
-            logoutButton.setVisibility(View.GONE);
-            twitterUsername.setVisibility(View.GONE);
+            constraintLayout.setVisibility(View.GONE);
+            myGift.setVisibility(View.GONE);
+            linearSettings.setVisibility(View.GONE);
             loginButton.setVisibility(View.VISIBLE);
             text.setVisibility(View.VISIBLE);
             logo.setVisibility(View.VISIBLE);
