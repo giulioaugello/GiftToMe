@@ -43,6 +43,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class ProfileFragment extends Fragment {
 
@@ -54,7 +55,7 @@ public class ProfileFragment extends Fragment {
     private TextView text;
     private ImageView logo;
     private TextView twitterUsername;
-    private ConstraintLayout constraintLayout;
+    private ConstraintLayout constraintLayout, secondConstraint;
     private CardView myGift;
     private LinearLayout linearSettings;
     private ImageView twitterBanner, twitterPhoto;
@@ -77,6 +78,7 @@ public class ProfileFragment extends Fragment {
         logo = v.findViewById(R.id.logo);
         twitterUsername = v.findViewById(R.id.twitterUsername);
         constraintLayout = v.findViewById(R.id.constraint);
+        secondConstraint = v.findViewById(R.id.secondConstraint);
         myGift = v.findViewById(R.id.myGift);
         linearSettings = v.findViewById(R.id.linearSettings);
         twitterPhoto = v.findViewById(R.id.twitterPhoto);
@@ -92,10 +94,10 @@ public class ProfileFragment extends Fragment {
                 MainActivity.token = MainActivity.session.getAuthToken().token;
                 MainActivity.tokenSecret = MainActivity.session.getAuthToken().secret;
 
-                Log.i("LOGLOGLO","Username: " + MainActivity.userName);
-                Log.i("LOGLOGLO","Userid: " + MainActivity.userId);
-                Log.i("LOGLOGLO","token: " + MainActivity.token);
-                Log.i("LOGLOGLO","tokenSecret: " + MainActivity.tokenSecret);
+//                Log.i("LOGLOGLO","Username: " + MainActivity.userName);
+//                Log.i("LOGLOGLO","Userid: " + MainActivity.userId);
+//                Log.i("LOGLOGLO","token: " + MainActivity.token);
+//                Log.i("LOGLOGLO","tokenSecret: " + MainActivity.tokenSecret);
 
                 updateUI(true);
             }
@@ -123,6 +125,18 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        myGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String myGiftFragmentTag = getResources().getString(R.string.mygift_fragment_tag);
+                MyGiftFragment myGiftFragment = new MyGiftFragment();
+                FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, myGiftFragment, myGiftFragmentTag).commit();
+                fragmentTransaction.addToBackStack(myGiftFragmentTag);
+                MainActivity.activeFragment = myGiftFragment;
+            }
+        });
+
 
         return v;
     }
@@ -144,12 +158,10 @@ public class ProfileFragment extends Fragment {
             text.setVisibility(View.GONE);
             logo.setVisibility(View.GONE);
             constraintLayout.setVisibility(View.VISIBLE);
-            myGift.setVisibility(View.VISIBLE);
-            linearSettings.setVisibility(View.VISIBLE);
+            secondConstraint.setVisibility(View.VISIBLE);
         } else {
             constraintLayout.setVisibility(View.GONE);
-            myGift.setVisibility(View.GONE);
-            linearSettings.setVisibility(View.GONE);
+            secondConstraint.setVisibility(View.GONE);
             loginButton.setVisibility(View.VISIBLE);
             text.setVisibility(View.VISIBLE);
             logo.setVisibility(View.VISIBLE);

@@ -27,7 +27,7 @@ public class TwitterRequests {
     private static final String TWEET_ARTICLE_HASHTAG = "#LAM_giftToMe_2020-article";
 
 
-    public static void getGiftName(final Context mContext, String tweetId, final VolleyListener volleyListener){
+    public static void getGiftName(final Context mContext, String tweetId, final VolleyListener volleyListener) {
 
         String url = "https://api.twitter.com/1.1/statuses/show.json";
 
@@ -37,7 +37,7 @@ public class TwitterRequests {
         String urlWithParams = url + id + extendedModeString;
 
         //ottengo l'header per l'autenticazione OAuth
-        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY) , mContext.getResources().getString(R.string.CONSUMER_SECRET) , MainActivity.token, MainActivity.tokenSecret);
+        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY), mContext.getResources().getString(R.string.CONSUMER_SECRET), MainActivity.token, MainActivity.tokenSecret);
         Map<String, String> requestParams = new HashMap<>();
 
         requestParams.put("id", tweetId);
@@ -55,9 +55,9 @@ public class TwitterRequests {
                             JSONObject jsonObject = new JSONObject(response);
                             String text = jsonObject.getString("full_text");
 
-                            if(text.contains(TWEET_ARTICLE_HASHTAG)){
+                            if (text.contains(TWEET_ARTICLE_HASHTAG)) {
 
-                                String tweetWithoutHashtag = text.replace(TWEET_ARTICLE_HASHTAG,"");
+                                String tweetWithoutHashtag = text.replace(TWEET_ARTICLE_HASHTAG, "");
 
                                 JSONObject tweetWithoutHashtagJSON = new JSONObject(tweetWithoutHashtag);
 
@@ -92,28 +92,76 @@ public class TwitterRequests {
         queue.add(getUserObjectRequest);
     }
 
-    public static void getUserTweets(Integer count, final Context mContext, final VolleyListener volleyListener){
+//    public static void getUserTweets(Integer count, final Context mContext, final VolleyListener volleyListener){
+//
+//        String url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
+//
+//        String screenName = MainActivity.userName;
+//        String screenNameString =  "?screen_name=" + Uri.encode(screenName);
+//        String countString = "&count=" + count;
+//        //to get full text instead a part of it and link to twitter post
+//        String extendedModeString = "&tweet_mode=extended"; //per avere tutto il testo del tweet poichè altrimenti sarebbe troncato
+//
+//        String urlWithParams = url + screenNameString + countString + extendedModeString;
+//
+//        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY) , mContext.getResources().getString(R.string.CONSUMER_SECRET) , MainActivity.token, MainActivity.tokenSecret);
+//        Map<String, String> requestParams = new HashMap<>();
+//        requestParams.put("screen_name", screenName);
+//        requestParams.put("count", String.valueOf(count));
+//        requestParams.put("tweet_mode", "extended");
+//
+//        final String header = generator.generateHeader("GET", url, requestParams);
+//
+//        RequestQueue queue = Volley.newRequestQueue(mContext);
+//        StringRequest getUserObjectRequest = new StringRequest(Request.Method.GET, urlWithParams,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        volleyListener.onResponse(response);
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // error
+//                        volleyListener.onError(error);
+//
+//                    }
+//                }
+//        ) {
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> headers = new HashMap<>();
+//                headers.put("Authorization", header);
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
+//        queue.add(getUserObjectRequest);
+//    }
+
+    public static void getUserTweets(Integer count, final Context mContext, final VolleyListener volleyListener) {
 
         String url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
 
-        String screenName = MainActivity.userName;
-        String screenNameString =  "?screen_name=" + Uri.encode(screenName);
+        String name = MainActivity.userName;
+        String nameString = "?screen_name=" + Uri.encode(name);
         String countString = "&count=" + count;
         //to get full text instead a part of it and link to twitter post
-        String extendedModeString = "&tweet_mode=extended"; //per avere tutto il testo del tweet poichè altrimenti sarebbe troncato
+        String fullTextTweetsString = "&tweet_mode=extended"; //per avere tutto il testo del tweet poichè altrimenti sarebbe troncato
 
-        String urlWithParams = url + screenNameString + countString + extendedModeString;
+        String urlWithParams = url + nameString + countString + fullTextTweetsString;
 
-        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY) , mContext.getResources().getString(R.string.CONSUMER_SECRET) , MainActivity.token, MainActivity.tokenSecret);
+        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY), mContext.getResources().getString(R.string.CONSUMER_SECRET), MainActivity.token, MainActivity.tokenSecret);
         Map<String, String> requestParams = new HashMap<>();
-        requestParams.put("screen_name", screenName);
+        requestParams.put("screen_name", name);
         requestParams.put("count", String.valueOf(count));
         requestParams.put("tweet_mode", "extended");
 
         final String header = generator.generateHeader("GET", url, requestParams);
-
         RequestQueue queue = Volley.newRequestQueue(mContext);
-        StringRequest getUserObjectRequest = new StringRequest(Request.Method.GET, urlWithParams,
+        StringRequest getUserTweetsRequest = new StringRequest(Request.Method.GET, urlWithParams,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -123,14 +171,12 @@ public class TwitterRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // error
                         volleyListener.onError(error);
-
                     }
                 }
-        ) {
+        ){
 
-            @Override
+        @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Authorization", header);
@@ -138,30 +184,32 @@ public class TwitterRequests {
                 return headers;
             }
         };
-        queue.add(getUserObjectRequest);
+
+        queue.add(getUserTweetsRequest);
+
     }
 
 
-    public static void postTweet(String message, String replyId, final Context mContext, final VolleyListener volleyListener){
+    public static void postTweet(String message, String replyId, final Context mContext, final VolleyListener volleyListener) {
 
         String url = "https://api.twitter.com/1.1/statuses/update.json";
         String status = "?status=";
 
         String urlWithParams = null;
         try {
-            urlWithParams = url + status  + URLEncoder.encode(message,"UTF-8");
+            urlWithParams = url + status + URLEncoder.encode(message, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY) , mContext.getResources().getString(R.string.CONSUMER_SECRET) , MainActivity.token, MainActivity.tokenSecret);
+        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY), mContext.getResources().getString(R.string.CONSUMER_SECRET), MainActivity.token, MainActivity.tokenSecret);
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("status", message);
 
-        if(!replyId.isEmpty()) {
+        if (!replyId.isEmpty()) {
             urlWithParams += "&in_reply_to_status_id=" + replyId + "&auto_populate_reply_metadata=true";
-            requestParams.put("in_reply_to_status_id",replyId);
-            requestParams.put("auto_populate_reply_metadata","true");
+            requestParams.put("in_reply_to_status_id", replyId);
+            requestParams.put("auto_populate_reply_metadata", "true");
         }
 
 
@@ -243,12 +291,12 @@ public class TwitterRequests {
     }
 
 
-    public static void getUserInfo(final Context mContext,String screenName, final VolleyListener volleyListener){
+    public static void getUserInfo(final Context mContext, String screenName, final VolleyListener volleyListener) {
         String url = "https://api.twitter.com/1.1/users/show.json";
-        String screenNameString =  "?screen_name=" + screenName;
+        String screenNameString = "?screen_name=" + screenName;
         String urlWithParams = url + screenNameString;
 
-        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY) , mContext.getResources().getString(R.string.CONSUMER_SECRET) , MainActivity.token, MainActivity.tokenSecret);
+        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY), mContext.getResources().getString(R.string.CONSUMER_SECRET), MainActivity.token, MainActivity.tokenSecret);
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("screen_name", screenName);
         final String header = generator.generateHeader("GET", url, requestParams);
@@ -282,10 +330,10 @@ public class TwitterRequests {
         queue.add(getUserObjectRequest);
     }
 
-    public static void removeGift(String id,Context mContext, final VolleyListener volleyListener){
-        String url = "https://api.twitter.com/1.1/statuses/destroy/"+id+".json";
+    public static void removeGift(String id, Context mContext, final VolleyListener volleyListener) {
+        String url = "https://api.twitter.com/1.1/statuses/destroy/" + id + ".json";
 
-        TwitterOAuth generator = new TwitterOAuth(mContext.getString(R.string.CONSUMER_KEY) , mContext.getResources().getString(R.string.CONSUMER_SECRET) , MainActivity.token, MainActivity.tokenSecret);
+        TwitterOAuth generator = new TwitterOAuth(mContext.getString(R.string.CONSUMER_KEY), mContext.getResources().getString(R.string.CONSUMER_SECRET), MainActivity.token, MainActivity.tokenSecret);
         Map<String, String> requestParams = new HashMap<>();
         final String header = generator.generateHeader("POST", url, requestParams);
 

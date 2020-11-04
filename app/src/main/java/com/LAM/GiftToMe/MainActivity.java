@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     public static String userName,token,tokenSecret;
     public static Long userId;
 
-    private String homeFragmentTag, listFragmentTag, messagesFragmentTag, profileFragmentTag, conversationFragmentTag, settingsFragmentTag, userRepliesFragmentTag;
+    private String homeFragmentTag, listFragmentTag, messagesFragmentTag, profileFragmentTag, conversationFragmentTag, settingsFragmentTag, myGiftFragmentTag;
 
     private static final int TIME_INTERVAL = 2000; // tempo che intercorre tra due back (millisecondi)
     private long mBackPressed;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         //primo fragment
         homeFragment = new HomeFragment();
         activeFragment = homeFragment;
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
 
         //get FragmentTags
         homeFragmentTag = getResources().getString(R.string.map_fragment_tag);
@@ -58,12 +59,17 @@ public class MainActivity extends AppCompatActivity {
         profileFragmentTag = getResources().getString(R.string.profile_fragment_tag);
         conversationFragmentTag = getResources().getString(R.string.conversation_fragment_tag);
         settingsFragmentTag = getResources().getString(R.string.settings_fragment_tag);
-        userRepliesFragmentTag = getResources().getString(R.string.user_replies_fragment_tag);
+        myGiftFragmentTag = getResources().getString(R.string.mygift_fragment_tag);
 
         sharedUsername = getResources().getString(R.string.shared_preferences_user_name);
         sharedUserId = getResources().getString(R.string.shared_preferences_user_id);
         sharedToken = getResources().getString(R.string.shared_preferences_token);
         sharedTokenSecret = getResources().getString(R.string.shared_preferences_token_secret);
+
+        Log.i("LOGLOG", "eccolo: " + sharedUsername);
+        Log.i("LOGLOG", "eccolo: " + sharedUserId);
+        Log.i("LOGLOG", "eccolo: " + sharedToken);
+        Log.i("LOGLOG", "eccolo: " + sharedTokenSecret);
 
         sharedPreferences = getSharedPreferences("loginPref", MODE_PRIVATE);
         isLogged = sharedPreferences.getBoolean("isLogged", false); //ritorna false se nn esiste quella chiave
@@ -125,45 +131,61 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-//    @Override
-//    public void onBackPressed() {
-//
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//
-//        if(activeFragment.equals(fragmentManager.findFragmentByTag(homeFragmentTag))) {
-//            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
-//                finishAndRemoveTask();
-//                return;
-//            }
-//            else {
-//                Toast.makeText(this, getResources().getString(R.string.double_tap_to_exit_message), Toast.LENGTH_SHORT).show();
-//            }
-//
-//            mBackPressed = System.currentTimeMillis();
-//        }
-//
-//        else if(activeFragment.equals(fragmentManager.findFragmentByTag(conversationFragmentTag))){
-//            fragmentTransaction.replace(R.id.fragment_container, chatFragment,messagesFragmentTag).commit();
-//            fragmentTransaction.addToBackStack(messagesFragmentTag);
-//            activeFragment = chatFragment;
-//            bottomNavigationView.setSelectedItemId(R.id.nav_chat);
-//        }
-//
-//        else if(activeFragment.equals(getSupportFragmentManager().findFragmentByTag(settingsFragmentTag)) || activeFragment.equals(getSupportFragmentManager().findFragmentByTag(userRepliesFragmentTag))){
-//            fragmentTransaction.replace(R.id.fragment_container, profileFragment,profileFragmentTag).commit();
-//            fragmentTransaction.addToBackStack(profileFragmentTag);
-//            activeFragment = profileFragment;
-//            bottomNavigationView.setSelectedItemId(R.id.nav_profile);
-//        }
-//
-//        else {
-//            fragmentTransaction.replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
-//            fragmentTransaction.addToBackStack(homeFragmentTag);
-//            activeFragment = homeFragment;
-//            bottomNavigationView.setSelectedItemId(R.id.nav_home);
-//        }
-//    }
+    @Override
+    public void onBackPressed() {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        if(activeFragment.equals(fragmentManager.findFragmentByTag(homeFragmentTag))) {
+            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
+                finishAndRemoveTask();
+                return;
+            }
+            else {
+                Toast.makeText(this, getResources().getString(R.string.double_tap_to_exit_message), Toast.LENGTH_SHORT).show();
+            }
+
+            mBackPressed = System.currentTimeMillis();
+        }
+
+        else if(activeFragment.equals(fragmentManager.findFragmentByTag(conversationFragmentTag))){
+            fragmentTransaction.replace(R.id.fragment_container, chatFragment, messagesFragmentTag).commit();
+            fragmentTransaction.addToBackStack(messagesFragmentTag);
+            activeFragment = chatFragment;
+            bottomNavigationView.setSelectedItemId(R.id.nav_chat);
+        }
+
+        else if(activeFragment.equals(getSupportFragmentManager().findFragmentByTag(settingsFragmentTag)) || activeFragment.equals(getSupportFragmentManager().findFragmentByTag(myGiftFragmentTag))){
+            fragmentTransaction.replace(R.id.fragment_container, profileFragment, profileFragmentTag).commit();
+            fragmentTransaction.addToBackStack(profileFragmentTag);
+            activeFragment = profileFragment;
+            bottomNavigationView.setSelectedItemId(R.id.nav_profile);
+        }
+
+        else {
+            fragmentTransaction.replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
+            fragmentTransaction.addToBackStack(homeFragmentTag);
+            activeFragment = homeFragment;
+            bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //Viene salvata la sessione utente per essere ancora loggato quando riapre l'app
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean("isLogged", isLogged).apply();
+
+        if(isLogged){
+            editor.putString(sharedUsername, userName).apply();
+            editor.putLong(sharedUserId, userId).apply();
+            editor.putString(sharedToken, token).apply();
+            editor.putString(sharedTokenSecret, tokenSecret).apply();
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

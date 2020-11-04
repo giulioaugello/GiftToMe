@@ -23,7 +23,7 @@
     <string name="messages_fragment_tag" translatable="false">MessagesFragment</string>
     <string name="profile_fragment_tag" translatable="false">ProfileFragment</string>
     <string name="conversation_fragment_tag" translatable="false">ConversationFragment</string>
-    <string name="user_replies_fragment_tag" translatable="false">UserRepliesFragment</string>
+    <string name="mygift_fragment_tag" translatable="false">UserRepliesFragment</string>
     <string name="settings_fragment_tag" translatable="false">SettingsFragment</string>
 
     <string name="double_tap_to_exit_message">Press back button again to exit</string>
