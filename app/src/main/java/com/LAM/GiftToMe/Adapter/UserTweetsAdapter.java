@@ -1,31 +1,53 @@
 package com.LAM.GiftToMe.Adapter;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.LAM.GiftToMe.R;
+import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
+import com.android.volley.VolleyError;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.ViewHolder> {
 
     private Context mContext;
+    private Activity activity;
+    private Fragment fragment;
     private ArrayList<MyGift> myGift;
     private ArrayList<MyGift> allGift;
+    private static final String TAG = "UserGiftRecyclerViewTAG";
+    private TextView nameLong, descriptionLong, addressLong;
+    private ImageView imageCategory;
 
-    public UserTweetsAdapter(Context mContext, ArrayList<MyGift> myGift, ArrayList<MyGift> allGift) {
+    public UserTweetsAdapter(Context mContext, ArrayList<MyGift> myGift, Activity activity, Fragment fragment) {
         this.mContext = mContext;
+        this.activity = activity;
+        this.fragment = fragment;
         this.myGift = myGift;
-        this.allGift = allGift;
     }
 
     @NonNull
@@ -36,27 +58,34 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) { //serve per recuperare i riferimenti agli elementi interni da popolare con i dati
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) { //serve per recuperare i riferimenti agli elementi interni da popolare con i dati
 
         holder.giftName.setText(myGift.get(position).getName());
-        holder.giftDescription.setText(myGift.get(position).getDescription());
-        holder.giftAddress.setText(myGift.get(position).getAddress());
-        ImageView imageCategory = holder.itemView.findViewById(R.id.img_category);
 
         String activeCategory = myGift.get(position).getCategory();
 
-        switch (activeCategory){
-            case "Sport":
-                imageCategory.setBackgroundResource(R.drawable.ic_launcher_foreground);
-            case "Clothing":
-                imageCategory.setBackgroundResource(R.drawable.ic_launcher_foreground);
-            case "Electronics":
-                imageCategory.setBackgroundResource(R.drawable.ic_launcher_foreground);
-            case "Music&Games":
-                imageCategory.setBackgroundResource(R.drawable.ic_launcher_foreground);
-            case "Other":
-                imageCategory.setBackgroundResource(R.drawable.ic_launcher_foreground);
-        }
+        changeCategoryImage(activeCategory, holder.imgCategory);
+
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeGift(myGift.get(position).getTweetId(), position);
+                myGift.remove(position);
+                notifyItemRemoved(position);
+                reloadFragment(fragment,activity);
+            }
+        });
+
+        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                showDialogLongClick(position);
+
+                return false;
+            }
+        });
+
     }
 
     @Override
@@ -67,7 +96,8 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     class ViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView deleteButton, editButton, imgCategory;
-        private TextView giftName, giftDescription, giftAddress;
+        private TextView giftName;
+        private CardView card;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +106,91 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
             editButton = itemView.findViewById(R.id.edit);
             imgCategory = itemView.findViewById(R.id.img_category);
             giftName = itemView.findViewById(R.id.gift_name);
+            card = itemView.findViewById(R.id.card_standard);
+        }
+    }
+
+    public void filter(String category){
+        //Empty string per rimuovere i filtri
+        if(category.equals("")) myGift = allGift;
+        else{
+            ArrayList<MyGift> filteredList = new ArrayList<>();
+            for(MyGift userGift : allGift){
+                if(userGift.getCategory().equals(category)) {
+                    filteredList.add(userGift);
+                }
+            }
+            myGift = filteredList;
+        }
+        notifyDataSetChanged();
+    }
+
+    private void removeGift(String id,final int position){
+        TwitterRequests.removeGift(id, mContext, new VolleyListener() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.i(TAG,response);
+                Toast.makeText(mContext, "Regalo rimosso", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                error.printStackTrace();
+
+            }
+        });
+    }
+
+    public static void reloadFragment(Fragment fragment, Activity activity){
+
+        FragmentManager fragmentManager = ((AppCompatActivity)activity).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.detach(fragment).attach(fragment).commit();
+
+    }
+
+    protected void showDialogLongClick(final int position){
+
+        final Dialog dialog = new Dialog(activity);
+        dialog.setCancelable(true);
+
+        View v  = activity.getLayoutInflater().inflate(R.layout.onlongclick_card_mygift,null);
+        dialog.setContentView(v);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        nameLong = v.findViewById(R.id.name_longclick);
+        descriptionLong = v.findViewById(R.id.gift_description);
+        addressLong = v.findViewById(R.id.gift_address);
+        imageCategory = v.findViewById(R.id.small_category);
+
+        nameLong.setText(myGift.get(position).getName());
+        descriptionLong.setText(myGift.get(position).getDescription());
+        addressLong.setText(myGift.get(position).getAddress());
+        String cat = myGift.get(position).getCategory();
+        changeCategoryImage(cat, imageCategory);
+
+        dialog.show();
+
+    }
+
+    private void changeCategoryImage(String category, ImageView imageView){
+        switch (category) {
+            case "Sport":
+                imageView.setBackgroundResource(R.drawable.sport);
+                break;
+            case "Electronics":
+                imageView.setBackgroundResource(R.drawable.electronic);
+                break;
+            case "Clothing":
+                imageView.setBackgroundResource(R.drawable.clothing);
+                break;
+            case "Music&Games":
+                imageView.setBackgroundResource(R.drawable.music);
+                break;
+            default:
+                imageView.setBackgroundResource(R.drawable.file);
+                break;
         }
     }
 }

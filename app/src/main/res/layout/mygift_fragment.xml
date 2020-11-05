@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
     android:orientation="vertical"
-    android:background="#E8E8E8"
+    android:background="#f8f8ff"
     >
 
 <!--    <TableLayout-->
@@ -95,19 +96,10 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userTweets"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/userTweets"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"/>
-
-        </LinearLayout>
-
+            android:layout_height="wrap_content" />
 
     </ScrollView>
 

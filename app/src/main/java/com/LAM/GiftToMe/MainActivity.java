@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.ListFragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private NewGiftFragment newGiftFragment;
     private ChatFragment chatFragment;
     private ProfileFragment profileFragment;
+    private ListFragment listFragment;
     public static Fragment activeFragment;
     public BottomNavigationView bottomNavigationView;
 

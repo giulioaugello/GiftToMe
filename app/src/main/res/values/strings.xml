@@ -13,6 +13,26 @@
 
     <!--    UserGift Parsing-->
     <string name="user_gift_parsing_name" translatable="false">name</string>
+    <string name="user_gift_parsing_category" translatable="false">category</string>
+    <string name="user_gift_parsing_description" translatable="false">description</string>
+    <string name="user_gift_parsing_lat" translatable="false">lat</string>
+    <string name="user_gift_parsing_lon" translatable="false">lon</string>
+
+    <!--    Strings to parse JSON-->
+    <string name="json_id" translatable="false">id</string>
+    <string name="json_text" translatable="false">text</string>
+    <string name="json_full_text" translatable="false">full_text</string>
+    <string name="json_sender" translatable="false">sender</string>
+    <string name="json_receiver" translatable="false">receiver</string>
+    <string name="json_message" translatable="false">message</string>
+    <string name="json_statuses" translatable="false">statuses</string>
+    <string name="json_hashtags" translatable="false">hashtags</string>
+    <string name="json_entities" translatable="false">entities</string>
+    <string name="json_issuer" translatable="false">issuer</string>
+    <string name="json_target" translatable="false">target</string>
+    <string name="json_errors" translatable="false">errors</string>
+    <string name="json_code" translatable="false">code</string>
+    <string name="json_in_reply_to_status_id" translatable="false">in_reply_to_status_id</string>
     <string name="json_profile_image_url_https" translatable="false">profile_image_url_https</string>
     <string name="json_profile_image_normal" translatable="false">_normal</string>
     <string name="json_profile_banner_url" translatable="false">profile_banner_url</string>
@@ -23,7 +43,7 @@
     <string name="messages_fragment_tag" translatable="false">MessagesFragment</string>
     <string name="profile_fragment_tag" translatable="false">ProfileFragment</string>
     <string name="conversation_fragment_tag" translatable="false">ConversationFragment</string>
-    <string name="mygift_fragment_tag" translatable="false">UserRepliesFragment</string>
+    <string name="mygift_fragment_tag" translatable="false">MyGiftFragment</string>
     <string name="settings_fragment_tag" translatable="false">SettingsFragment</string>
 
     <string name="double_tap_to_exit_message">Press back button again to exit</string>
