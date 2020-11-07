@@ -332,7 +332,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         }
         notifyDataSetChanged();
     }
-    
+
     public static void reloadFragment(Fragment fragment, Activity activity){
 
         FragmentManager fragmentManager = ((AppCompatActivity)activity).getSupportFragmentManager();

@@ -94,6 +94,8 @@ public class ProfileFragment extends Fragment {
                 MainActivity.token = MainActivity.session.getAuthToken().token;
                 MainActivity.tokenSecret = MainActivity.session.getAuthToken().secret;
 
+                MainActivity.isLogged = true;
+
 //                Log.i("LOGLOGLO","Username: " + MainActivity.userName);
 //                Log.i("LOGLOGLO","Userid: " + MainActivity.userId);
 //                Log.i("LOGLOGLO","token: " + MainActivity.token);
@@ -109,6 +111,8 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(mContext, exception.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+
+        if(MainActivity.isLogged) updateUI(true);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override

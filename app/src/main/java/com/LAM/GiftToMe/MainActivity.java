@@ -181,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
 
         editor.putBoolean("isLogged", isLogged).apply();
 
+        Log.i("loggedlogged", isLogged + "");
+
         if(isLogged){
             editor.putString(sharedUsername, userName).apply();
             editor.putLong(sharedUserId, userId).apply();
