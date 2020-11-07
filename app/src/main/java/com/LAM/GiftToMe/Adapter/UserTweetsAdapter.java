@@ -74,10 +74,8 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeGift(myGift.get(position).getTweetId(), position);
-                myGift.remove(position);
-                notifyItemRemoved(position);
-                reloadFragment(fragment,activity);
+                //removeGift(myGift.get(position).getTweetId(), position);
+                showRemoveDialog(myGift.get(position).getTweetId(), position);
             }
         });
 
@@ -122,22 +120,42 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         }
     }
 
-    public void filter(String category){
-        //Empty string per rimuovere i filtri
-        if(category.equals("")) myGift = allGift;
-        else{
-            ArrayList<MyGift> filteredList = new ArrayList<>();
-            for(MyGift userGift : allGift){
-                if(userGift.getCategory().equals(category)) {
-                    filteredList.add(userGift);
-                }
+
+    private void showRemoveDialog(final String id, final int position){
+        final Dialog dialog = new Dialog(activity);
+        dialog.setCancelable(false);
+
+        final View v  = activity.getLayoutInflater().inflate(R.layout.delete_mygift_dialog,null);
+        dialog.setContentView(v);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button cancelDelete, confirmDelete;
+        cancelDelete = v.findViewById(R.id.cancel_delete);
+        confirmDelete = v.findViewById(R.id.delete_button);
+
+        cancelDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
-            myGift = filteredList;
-        }
-        notifyDataSetChanged();
+        });
+
+       confirmDelete.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               removeGift(id, position);
+               myGift.remove(position);
+               notifyItemRemoved(position);
+               reloadFragment(fragment,activity);
+               dialog.dismiss();
+           }
+       });
+
+        dialog.show();
     }
 
-    private void removeGift(String id,final int position){
+    private void removeGift(final String id, final int position){
+
         TwitterRequests.removeGift(id, mContext, new VolleyListener() {
 
             @Override
@@ -149,9 +167,9 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
             @Override
             public void onError(VolleyError error) {
                 error.printStackTrace();
-
             }
         });
+
     }
 
     public void editGift(final int position) {
@@ -159,7 +177,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         final Dialog dialog = new Dialog(activity);
         dialog.setCancelable(false);
 
-        final View v  = activity.getLayoutInflater().inflate(R.layout.modify_mygift_dialog,null);
+        final View v  = activity.getLayoutInflater().inflate(R.layout.edit_mygift_dialog,null);
         dialog.setContentView(v);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -276,14 +294,6 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         dialog.show();
     }
 
-    public static void reloadFragment(Fragment fragment, Activity activity){
-
-        FragmentManager fragmentManager = ((AppCompatActivity)activity).getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.detach(fragment).attach(fragment).commit();
-
-    }
-
     protected void showDialogLongClick(final int position){
 
         final Dialog dialog = new Dialog(activity);
@@ -305,6 +315,29 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         changeCategoryImage(cat, imageCategory);
 
         dialog.show();
+
+    }
+
+    public void filter(String category){
+        //Empty string per rimuovere i filtri
+        if(category.equals("")) myGift = allGift;
+        else{
+            ArrayList<MyGift> filteredList = new ArrayList<>();
+            for(MyGift userGift : allGift){
+                if(userGift.getCategory().equals(category)) {
+                    filteredList.add(userGift);
+                }
+            }
+            myGift = filteredList;
+        }
+        notifyDataSetChanged();
+    }
+    
+    public static void reloadFragment(Fragment fragment, Activity activity){
+
+        FragmentManager fragmentManager = ((AppCompatActivity)activity).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.detach(fragment).attach(fragment).commit();
 
     }
 
