@@ -21,7 +21,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="#f8f8ff"
         app:elevation="0dp"
-        app:itemIconTint="@drawable/bottom_navigation_color_selector"
-        app:itemTextColor="@drawable/bottom_navigation_color_selector"/>
+        app:itemIconTint="#56ab2f"
+        app:itemTextColor="#F44336"
+        app:labelVisibilityMode="labeled"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

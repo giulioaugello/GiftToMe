@@ -9,20 +9,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
+import com.LAM.GiftToMe.UsefulClass.AddressUtils;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
+import com.LAM.GiftToMe.UsefulClass.NormalizeString;
 import com.android.volley.VolleyError;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +44,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     private static final String TAG = "UserGiftRecyclerViewTAG";
     private TextView nameLong, descriptionLong, addressLong;
     private ImageView imageCategory;
+    private String nameString,addressString,descriptionString,categoryString, issuer;
 
     public UserTweetsAdapter(Context mContext, ArrayList<MyGift> myGift, Activity activity, Fragment fragment) {
         this.mContext = mContext;
@@ -63,6 +66,8 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         holder.giftName.setText(myGift.get(position).getName());
 
         String activeCategory = myGift.get(position).getCategory();
+        //String add = myGift.get(position).getAddress();
+        //Log.i("add", add);
 
         changeCategoryImage(activeCategory, holder.imgCategory);
 
@@ -73,6 +78,13 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
                 myGift.remove(position);
                 notifyItemRemoved(position);
                 reloadFragment(fragment,activity);
+            }
+        });
+
+        holder.editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editGift(position);
             }
         });
 
@@ -131,7 +143,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
             @Override
             public void onResponse(String response) {
                 Log.i(TAG,response);
-                Toast.makeText(mContext, "Regalo rimosso", Toast.LENGTH_LONG).show();
+                //Toast.makeText(mContext, "Regalo rimosso", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -140,6 +152,128 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
 
             }
         });
+    }
+
+    public void editGift(final int position) {
+
+        final Dialog dialog = new Dialog(activity);
+        dialog.setCancelable(false);
+
+        final View v  = activity.getLayoutInflater().inflate(R.layout.modify_mygift_dialog,null);
+        dialog.setContentView(v);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        nameLong = v.findViewById(R.id.name_edit);
+        descriptionLong = v.findViewById(R.id.descr_edit);
+        addressLong = v.findViewById(R.id.addr_edit);
+
+        nameLong.setText(myGift.get(position).getName());
+        descriptionLong.setText(myGift.get(position).getDescription());
+        addressLong.setText(myGift.get(position).getAddress());
+
+        issuer = myGift.get(position).getIssuer();
+
+        final RadioButton sport, electronics, clothing, music, other;
+        Button editButton = v.findViewById(R.id.edit);
+        Button cancelButton = v.findViewById(R.id.cancel);
+        RadioGroup radioGroup = v.findViewById(R.id.myRadioGroup);
+        sport = v.findViewById(R.id.sportRadio);
+        electronics = v.findViewById(R.id.electronicsRadio);
+        clothing = v.findViewById(R.id.clothingRadio);
+        music = v.findViewById(R.id.musicRadio);
+        other = v.findViewById(R.id.otherRadio);
+
+        categoryString = myGift.get(position).getCategory();
+
+        int selectedId = radioGroup.getCheckedRadioButtonId();
+        switch (categoryString) {
+            case "Sport":
+                selectedId = sport.getId();
+                break;
+            case "Electronics":
+                selectedId = electronics.getId();
+                break;
+            case "Clothing":
+                selectedId = clothing.getId();
+                break;
+            case "Music&Games":
+                selectedId = music.getId();
+                break;
+            case "Other":
+                selectedId = other.getId();
+                break;
+        }
+        RadioButton radioButtonActive = v.findViewById(selectedId);
+        radioButtonActive.setChecked(true);
+        //Toast.makeText(mContext, radioButtonActive.getText(), Toast.LENGTH_SHORT).show();
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                RadioButton radioChecked = v.findViewById(checkedId);
+                //Log.i("chk", "id " + radioChecked.getText());
+
+                switch (checkedId){
+                    case R.id.sportRadio:
+                    case R.id.electronicsRadio:
+                    case R.id.clothingRadio:
+                    case R.id.musicRadio:
+                    case R.id.otherRadio:
+                        categoryString = (String) radioChecked.getText();
+                        //Log.i("chk", "Nuova categoria " + categoryString);
+                        break;
+                }
+
+            }
+        });
+
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                nameString = nameLong.getText().toString();
+                descriptionString = descriptionLong.getText().toString();
+                addressString = addressLong.getText().toString();
+                ArrayList<Double> addressCoords = AddressUtils.getCoordsFromAddress(addressString, mContext);
+
+                if(nameString.isEmpty() || descriptionString.isEmpty() || addressString.isEmpty()){
+                    Toast.makeText(mContext, "Inserisci tutti i campi", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                String task = "";
+                task = NormalizeString.normalizeTask(addressCoords.get(0), addressCoords.get(1), nameString, descriptionString, categoryString, issuer);
+
+                removeGift(myGift.get(position).getTweetId(),position);
+                myGift.remove(position);
+                notifyItemRemoved(position);
+
+                TwitterRequests.postTweet(task, "", mContext, new VolleyListener() {
+                    @Override
+                    public void onError(VolleyError message) {
+                        message.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        reloadFragment(fragment,activity);
+                        dialog.dismiss();
+
+                    }
+                });
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     public static void reloadFragment(Fragment fragment, Activity activity){
