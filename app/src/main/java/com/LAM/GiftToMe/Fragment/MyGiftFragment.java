@@ -17,6 +17,7 @@ import com.LAM.GiftToMe.UsefulClass.AddressUtils;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
 import com.airbnb.lottie.utils.Utils;
 import com.android.volley.VolleyError;
+import com.google.android.material.chip.Chip;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -122,6 +123,56 @@ public class MyGiftFragment extends Fragment {
             }
         });
 
+        final Chip sportChip, electronicChip, clothingChip, musicChip, otherChip;
+
+        sportChip = v.findViewById(R.id.sport_chip);
+        electronicChip = v.findViewById(R.id.electronic_chip);
+        clothingChip = v.findViewById(R.id.clothing_chip);
+        musicChip = v.findViewById(R.id.music_chip);
+        otherChip = v.findViewById(R.id.other_chip);
+
+        final ArrayList<String> arrayActive = new ArrayList<>();
+
+        sportChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFilter("Sport", sportChip);
+                if(!sportChip.isChecked()){
+                    arrayActive.add("Sport");
+                }else{
+                    arrayActive.remove("Sport");
+                }
+            }
+        });
+        electronicChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFilter("Electronics", electronicChip);
+                arrayActive.add("Electronics");
+            }
+        });
+        clothingChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFilter("Clothing", clothingChip);
+                arrayActive.add("Clothing");
+            }
+        });
+        musicChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFilter("Music&Games", musicChip);
+                arrayActive.add("Music&Games");
+            }
+        });
+        otherChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFilter("Other", otherChip);
+                arrayActive.add("Other");
+            }
+        });
+
         return v;
     }
 
@@ -131,15 +182,17 @@ public class MyGiftFragment extends Fragment {
         recyclerView.setAdapter(userTweetsAdapter);
     }
 
-    private void setFilter(String category){
+    private void setFilter(String category, Chip chip){
         if(activeFilter.equals(category)){
             activeFilter = "";
             userTweetsAdapter.filter("");
-
+            //chip.setChipBackgroundColorResource(R.color.ghost_white);
         }
         else{
             activeFilter = category;
             userTweetsAdapter.filter(category);
+            //chip.setChipBackgroundColorResource(R.color.colorChipSelected);
+
         }
     }
 

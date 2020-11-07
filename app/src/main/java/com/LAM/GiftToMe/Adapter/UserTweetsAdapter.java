@@ -51,6 +51,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         this.activity = activity;
         this.fragment = fragment;
         this.myGift = myGift;
+        this.allGift = myGift;
     }
 
     @NonNull
@@ -319,9 +320,9 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     }
 
     public void filter(String category){
-        //Empty string per rimuovere i filtri
-        if(category.equals("")) myGift = allGift;
-        else{
+        if(category.equals("")) {
+            myGift = allGift;
+        }else{
             ArrayList<MyGift> filteredList = new ArrayList<>();
             for(MyGift userGift : allGift){
                 if(userGift.getCategory().equals(category)) {

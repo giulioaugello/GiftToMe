@@ -6,81 +6,84 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:background="#f8f8ff"
+    android:background="#56ab2f"
     >
 
-<!--    <TableLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:stretchColumns="*"-->
-<!--        android:background="#FFFFFF"-->
-<!--        >-->
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        android:layout_marginTop="10dp"
+        >
 
-<!--        <TableRow-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            >-->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
 
-<!--            <com.google.android.material.chip.Chip-->
-<!--                android:id="@+id/sport"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="4dp"-->
-<!--                android:padding="12dp"-->
-<!--                android:textAlignment="center"-->
-<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
-<!--                app:chipBackgroundColor="@color/sport"-->
-<!--                app:chipIcon="@drawable/gym"-->
-<!--                app:iconStartPadding="5dp" />-->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/sport_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:padding="12dp"
+                android:textAlignment="center"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                app:chipIcon="@drawable/sport"
+                app:chipBackgroundColor="#F8F8FF"
+                app:iconStartPadding="5dp" />
 
-<!--            <com.google.android.material.chip.Chip-->
-<!--                android:id="@+id/electronics"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="4dp"-->
-<!--                android:padding="12dp"-->
-<!--                app:chipBackgroundColor="@color/electronics"-->
-<!--                android:textAlignment="center"-->
-<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
-<!--                app:chipIcon="@drawable/computer"-->
-<!--                app:iconStartPadding="5dp"/>-->
-<!--            <com.google.android.material.chip.Chip-->
-<!--                android:id="@+id/home_and_office"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="4dp"-->
-<!--                android:padding="12dp"-->
-<!--                app:chipBackgroundColor="@color/home_and_office"-->
-<!--                android:textAlignment="center"-->
-<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
-<!--                app:chipIcon="@drawable/chair"-->
-<!--                app:iconStartPadding="5dp"/>-->
-<!--            <com.google.android.material.chip.Chip-->
-<!--                android:id="@+id/toys"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="4dp"-->
-<!--                android:padding="12dp"-->
-<!--                app:chipBackgroundColor="@color/toys"-->
-<!--                android:textAlignment="center"-->
-<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
-<!--                app:chipIcon="@drawable/lego"-->
-<!--                app:iconStartPadding="5dp"/>-->
-<!--            <com.google.android.material.chip.Chip-->
-<!--                android:id="@+id/other"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="4dp"-->
-<!--                android:padding="12dp"-->
-<!--                app:chipBackgroundColor="@color/other"-->
-<!--                android:textAlignment="center"-->
-<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
-<!--                app:chipIcon="@drawable/box"-->
-<!--                app:iconStartPadding="5dp"/>-->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/electronic_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:padding="12dp"
+                android:textAlignment="center"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                app:chipIcon="@drawable/electronic"
+                app:chipBackgroundColor="#F8F8FF"
+                app:iconStartPadding="5dp"/>
 
-<!--        </TableRow>-->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/clothing_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:padding="12dp"
+                android:textAlignment="center"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                app:chipIcon="@drawable/clothing"
+                app:chipBackgroundColor="#F8F8FF"
+                app:iconStartPadding="5dp"/>
 
-<!--    </TableLayout>-->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/music_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:padding="12dp"
+                android:textAlignment="center"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                app:chipIcon="@drawable/music"
+                app:chipBackgroundColor="#F8F8FF"
+                app:iconStartPadding="5dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/other_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:padding="12dp"
+                android:textAlignment="center"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                app:chipIcon="@drawable/file"
+                app:chipBackgroundColor="#F8F8FF"
+                app:iconStartPadding="5dp"/>
+
+        </TableRow>
+
+    </TableLayout>
 
     <!--    <pl.droidsonroids.gif.GifImageView-->
     <!--        android:id="@+id/list_fragment_loader"-->
@@ -94,12 +97,18 @@
         android:id="@+id/scrollGift"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="56dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/round_corner_profile">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/userTweets"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
 
     </ScrollView>
 

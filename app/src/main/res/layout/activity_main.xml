@@ -10,7 +10,9 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+    </FrameLayout>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -24,5 +26,9 @@
         app:itemIconTint="#56ab2f"
         app:itemTextColor="#F44336"
         app:labelVisibilityMode="labeled"/>
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
