@@ -1,5 +1,6 @@
 package com.LAM.GiftToMe.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -61,6 +63,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         return new ViewHolder(view); //il ViewHolder fornisce il layout da popolare con i dati e viene utilizzato dalla RecyclerView per ridurre il numero di layout da creare
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) { //serve per recuperare i riferimenti agli elementi interni da popolare con i dati
 
@@ -87,15 +90,19 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
             }
         });
 
-        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+        showDialogLongClick(position, holder.card);
 
-                showDialogLongClick(position);
-
-                return false;
-            }
-        });
+//        holder.card.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    //Show the dialog
+//                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    //Dismiss the dialog
+//                }
+//                return true;
+//            }
+//        });
 
     }
 
@@ -295,7 +302,8 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         dialog.show();
     }
 
-    protected void showDialogLongClick(final int position){
+    @SuppressLint("ClickableViewAccessibility")
+    protected void showDialogLongClick(final int position, CardView cardView){
 
         final Dialog dialog = new Dialog(activity);
         dialog.setCancelable(true);
@@ -304,18 +312,30 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         dialog.setContentView(v);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+
         nameLong = v.findViewById(R.id.name_longclick);
         descriptionLong = v.findViewById(R.id.gift_description);
         addressLong = v.findViewById(R.id.gift_address);
         imageCategory = v.findViewById(R.id.small_category);
 
-        nameLong.setText(myGift.get(position).getName());
-        descriptionLong.setText(myGift.get(position).getDescription());
-        addressLong.setText(myGift.get(position).getAddress());
-        String cat = myGift.get(position).getCategory();
-        changeCategoryImage(cat, imageCategory);
+        cardView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
 
-        dialog.show();
+                    nameLong.setText(myGift.get(position).getName());
+                    descriptionLong.setText(myGift.get(position).getDescription());
+                    addressLong.setText(myGift.get(position).getAddress());
+                    String cat = myGift.get(position).getCategory();
+                    changeCategoryImage(cat, imageCategory);
+
+                    dialog.show();
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    dialog.dismiss();
+                }
+                return true;
+            }
+        });
 
     }
 

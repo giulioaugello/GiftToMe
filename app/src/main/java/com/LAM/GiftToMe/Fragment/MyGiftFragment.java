@@ -131,45 +131,45 @@ public class MyGiftFragment extends Fragment {
         musicChip = v.findViewById(R.id.music_chip);
         otherChip = v.findViewById(R.id.other_chip);
 
-        final ArrayList<String> arrayActive = new ArrayList<>();
+        //final ArrayList<String> arrayActive = new ArrayList<>();
 
         sportChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setFilter("Sport", sportChip);
-                if(!sportChip.isChecked()){
-                    arrayActive.add("Sport");
-                }else{
-                    arrayActive.remove("Sport");
-                }
+//                if(!sportChip.isChecked()){
+//                    arrayActive.add("Sport");
+//                }else{
+//                    arrayActive.remove("Sport");
+//                }
             }
         });
         electronicChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setFilter("Electronics", electronicChip);
-                arrayActive.add("Electronics");
+                //arrayActive.add("Electronics");
             }
         });
         clothingChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setFilter("Clothing", clothingChip);
-                arrayActive.add("Clothing");
+                //arrayActive.add("Clothing");
             }
         });
         musicChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setFilter("Music&Games", musicChip);
-                arrayActive.add("Music&Games");
+                //arrayActive.add("Music&Games");
             }
         });
         otherChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setFilter("Other", otherChip);
-                arrayActive.add("Other");
+                //arrayActive.add("Other");
             }
         });
 
