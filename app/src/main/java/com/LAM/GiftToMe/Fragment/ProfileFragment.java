@@ -135,6 +135,7 @@ public class ProfileFragment extends Fragment {
                 String myGiftFragmentTag = getResources().getString(R.string.mygift_fragment_tag);
                 MyGiftFragment myGiftFragment = new MyGiftFragment();
                 FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.none);
                 fragmentTransaction.replace(R.id.fragment_container, myGiftFragment, myGiftFragmentTag).commit();
                 fragmentTransaction.addToBackStack(myGiftFragmentTag);
                 MainActivity.activeFragment = myGiftFragment;
