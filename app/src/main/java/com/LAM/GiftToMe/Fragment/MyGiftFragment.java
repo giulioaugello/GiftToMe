@@ -18,12 +18,14 @@ import com.LAM.GiftToMe.UsefulClass.MyGift;
 import com.airbnb.lottie.utils.Utils;
 import com.android.volley.VolleyError;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,15 +36,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MyGiftFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     private Context mContext;
-    private ScrollView scrollView;
+    public static ScrollView scrollView;
     private ArrayList<MyGift> userGifts;
-    private String activeFilter = "";
     private UserTweetsAdapter userTweetsAdapter;
+    public static ArrayList<String> arrayActive;
+
+    private boolean sportBool, electronicsBool, clothingBool, musicBool, otherBool;
 
     private static final int NUMBER_OF_TWEET = 200;
-    private static final String TAG = "ListFragmentTAG";
     private static final String TWEET_ARTICLE_HASHTAG = "#LAM_giftToMe_2020-article";
 
     @Nullable
@@ -101,8 +104,6 @@ public class MyGiftFragment extends Fragment {
 
                             userGifts.add(userGift);
 
-
-
                         }
                     }
                     for(MyGift c: userGifts){
@@ -131,49 +132,113 @@ public class MyGiftFragment extends Fragment {
         musicChip = v.findViewById(R.id.music_chip);
         otherChip = v.findViewById(R.id.other_chip);
 
-        //final ArrayList<String> arrayActive = new ArrayList<>();
+        sportBool = sportChip.isChecked();
+        electronicsBool = electronicChip.isChecked();
+        clothingBool = clothingChip.isChecked();
+        musicBool = musicChip.isChecked();
+        otherBool = musicChip.isChecked();
+
+        arrayActive = new ArrayList<>();
 
         sportChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFilter("Sport", sportChip);
-//                if(!sportChip.isChecked()){
-//                    arrayActive.add("Sport");
-//                }else{
-//                    arrayActive.remove("Sport");
-//                }
+                if(!sportBool){
+                    arrayActive.add("Sport");
+                    sportBool = true;
+                    sportChip.setChipBackgroundColorResource(R.color.colorChipSelected);
+                }else{
+                    arrayActive.remove("Sport");
+                    sportBool = false;
+                    sportChip.setChipBackgroundColorResource(R.color.ghost_white);
+                }
+                userTweetsAdapter.filter(arrayActive);
+                //Log.i("checkedchecked", arrayActive + "");
             }
         });
         electronicChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFilter("Electronics", electronicChip);
-                //arrayActive.add("Electronics");
+                if(!electronicsBool){
+                    arrayActive.add("Electronics");
+                    electronicsBool = true;
+                    electronicChip.setChipBackgroundColorResource(R.color.colorChipSelected);
+                }else{
+                    arrayActive.remove("Electronics");
+                    electronicsBool = false;
+                    electronicChip.setChipBackgroundColorResource(R.color.ghost_white);
+                }
+                userTweetsAdapter.filter(arrayActive);
+                //Log.i("checkedchecked", arrayActive + "");
             }
         });
         clothingChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFilter("Clothing", clothingChip);
-                //arrayActive.add("Clothing");
+                if(!clothingBool){
+                    arrayActive.add("Clothing");
+                    clothingBool = true;
+                    clothingChip.setChipBackgroundColorResource(R.color.colorChipSelected);
+                }else{
+                    arrayActive.remove("Clothing");
+                    clothingBool = false;
+                    clothingChip.setChipBackgroundColorResource(R.color.ghost_white);
+                }
+                userTweetsAdapter.filter(arrayActive);
+                //Log.i("checkedchecked", arrayActive + "");
             }
         });
         musicChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFilter("Music&Games", musicChip);
-                //arrayActive.add("Music&Games");
+                if(!musicBool){
+                    arrayActive.add("Music&Games");
+                    musicBool = true;
+                    musicChip.setChipBackgroundColorResource(R.color.colorChipSelected);
+                }else{
+                    arrayActive.remove("Music&Games");
+                    musicBool = false;
+                    musicChip.setChipBackgroundColorResource(R.color.ghost_white);
+                }
+                userTweetsAdapter.filter(arrayActive);
+                //Log.i("checkedchecked", arrayActive + "");
             }
         });
         otherChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFilter("Other", otherChip);
-                //arrayActive.add("Other");
+//                if(!otherBool){
+//                    arrayActive.add("Other");
+//                    otherBool = true;
+//                    otherChip.setChipBackgroundColorResource(R.color.colorChipSelected);
+//                }else{
+//                    arrayActive.remove("Other");
+//                    otherBool = false;
+//                    otherChip.setChipBackgroundColorResource(R.color.ghost_white);
+//                }
+                activeFilter(otherBool, otherChip, "Other");
+                userTweetsAdapter.filter(arrayActive);
+                //Log.i("checkedchecked", arrayActive + "");
             }
         });
 
         return v;
+    }
+
+    private void activeFilter(boolean bool, Chip chipSelected, String category){
+        Log.i("checkedchecked", "Fuori sopra " + bool);
+        if (!bool){
+            arrayActive.add(category);
+            bool = true;
+            Log.i("checkedchecked", "Dentro sopra " + bool);
+            chipSelected.setChipBackgroundColorResource(R.color.colorChipSelected);
+        }else{
+            arrayActive.remove(category);
+            bool = false;
+            Log.i("checkedchecked", "Dentro sotto " + bool);
+            chipSelected.setChipBackgroundColorResource(R.color.ghost_white);
+        }
+        Log.i("checkedchecked", "Fuori sotto " + bool);
     }
 
     private void setupRecyclerView(ArrayList<MyGift> uGiftsList){
@@ -181,20 +246,5 @@ public class MyGiftFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         recyclerView.setAdapter(userTweetsAdapter);
     }
-
-    private void setFilter(String category, Chip chip){
-        if(activeFilter.equals(category)){
-            activeFilter = "";
-            userTweetsAdapter.filter("");
-            //chip.setChipBackgroundColorResource(R.color.ghost_white);
-        }
-        else{
-            activeFilter = category;
-            userTweetsAdapter.filter(category);
-            //chip.setChipBackgroundColorResource(R.color.colorChipSelected);
-
-        }
-    }
-
 
 }

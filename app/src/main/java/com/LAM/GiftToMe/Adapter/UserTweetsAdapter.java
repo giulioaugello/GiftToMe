@@ -15,9 +15,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.Fragment.MyGiftFragment;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
@@ -47,6 +49,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     private TextView nameLong, descriptionLong, addressLong;
     private ImageView imageCategory;
     private String nameString,addressString,descriptionString,categoryString, issuer;
+    private ScrollView scroll;
 
     public UserTweetsAdapter(Context mContext, ArrayList<MyGift> myGift, Activity activity, Fragment fragment) {
         this.mContext = mContext;
@@ -78,7 +81,6 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //removeGift(myGift.get(position).getTweetId(), position);
                 showRemoveDialog(myGift.get(position).getTweetId(), position);
             }
         });
@@ -92,17 +94,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
 
         showDialogLongClick(position, holder.card);
 
-//        holder.card.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    //Show the dialog
-//                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-//                    //Dismiss the dialog
-//                }
-//                return true;
-//            }
-//        });
+
 
     }
 
@@ -116,6 +108,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         private ImageView deleteButton, editButton, imgCategory;
         private TextView giftName;
         private CardView card;
+        private ScrollView scrollView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -169,7 +162,6 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
             @Override
             public void onResponse(String response) {
                 Log.i(TAG,response);
-                //Toast.makeText(mContext, "Regalo rimosso", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -308,49 +300,61 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         final Dialog dialog = new Dialog(activity);
         dialog.setCancelable(true);
 
-        View v  = activity.getLayoutInflater().inflate(R.layout.onlongclick_card_mygift,null);
-        dialog.setContentView(v);
+        View view  = activity.getLayoutInflater().inflate(R.layout.onlongclick_card_mygift,null);
+        dialog.setContentView(view);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+        nameLong = view.findViewById(R.id.name_longclick);
+        descriptionLong = view.findViewById(R.id.gift_description);
+        addressLong = view.findViewById(R.id.gift_address);
+        imageCategory = view.findViewById(R.id.small_category);
 
-        nameLong = v.findViewById(R.id.name_longclick);
-        descriptionLong = v.findViewById(R.id.gift_description);
-        addressLong = v.findViewById(R.id.gift_address);
-        imageCategory = v.findViewById(R.id.small_category);
+        nameLong.setText(myGift.get(position).getName());
+        descriptionLong.setText(myGift.get(position).getDescription());
+        addressLong.setText(myGift.get(position).getAddress());
+        String cat = myGift.get(position).getCategory();
+        changeCategoryImage(cat, imageCategory);
+
+        View v  = activity.getLayoutInflater().inflate(R.layout.mygift_fragment,null);
+        scroll = v.findViewById(R.id.scrollGift);
+
+        cardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                dialog.show();
+                return true;
+            }
+        });
 
         cardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    nameLong.setText(myGift.get(position).getName());
-                    descriptionLong.setText(myGift.get(position).getDescription());
-                    addressLong.setText(myGift.get(position).getAddress());
-                    String cat = myGift.get(position).getCategory();
-                    changeCategoryImage(cat, imageCategory);
-
-                    dialog.show();
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     dialog.dismiss();
                 }
-                return true;
+                return false;
             }
         });
 
     }
 
-    public void filter(String category){
-        if(category.equals("")) {
+    public void filter(ArrayList<String> arrayList){
+
+        if (arrayList.size() == 0){ //mi serve per far visualizzare tutti i regali
             myGift = allGift;
         }else{
             ArrayList<MyGift> filteredList = new ArrayList<>();
-            for(MyGift userGift : allGift){
-                if(userGift.getCategory().equals(category)) {
-                    filteredList.add(userGift);
+
+            for(String userCategory : arrayList){
+                for(MyGift userGift : allGift) {
+                    if (userGift.getCategory().equals(userCategory)) {
+                        filteredList.add(userGift);
+                    }
                 }
             }
             myGift = filteredList;
         }
+
         notifyDataSetChanged();
     }
 

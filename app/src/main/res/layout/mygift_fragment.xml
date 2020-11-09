@@ -9,17 +9,94 @@
     android:background="#56ab2f"
     >
 
-    <TableLayout
+<!--    <TableLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:stretchColumns="*"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        >-->
+
+<!--        <TableRow-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            >-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/sport_chip"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="4dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:textAlignment="center"-->
+<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
+<!--                app:chipIcon="@drawable/sport"-->
+<!--                app:chipBackgroundColor="#F8F8FF"-->
+<!--                app:iconStartPadding="5dp" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/electronic_chip"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="4dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:textAlignment="center"-->
+<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
+<!--                app:chipIcon="@drawable/electronic"-->
+<!--                app:chipBackgroundColor="#F8F8FF"-->
+<!--                app:iconStartPadding="5dp"/>-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/clothing_chip"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="4dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:textAlignment="center"-->
+<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
+<!--                app:chipIcon="@drawable/clothing"-->
+<!--                app:chipBackgroundColor="#F8F8FF"-->
+<!--                app:iconStartPadding="5dp"/>-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/music_chip"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="4dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:textAlignment="center"-->
+<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
+<!--                app:chipIcon="@drawable/music"-->
+<!--                app:chipBackgroundColor="#F8F8FF"-->
+<!--                app:iconStartPadding="5dp"/>-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/other_chip"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="4dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:textAlignment="center"-->
+<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
+<!--                app:chipIcon="@drawable/file"-->
+<!--                app:chipBackgroundColor="#F8F8FF"-->
+<!--                app:iconStartPadding="5dp"/>-->
+
+<!--        </TableRow>-->
+
+<!--    </TableLayout>-->
+
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="*"
-        android:layout_marginTop="10dp"
-        >
+        android:scrollbars="none"
+        android:layout_marginTop="10dp">
 
-        <TableRow
-            android:layout_width="match_parent"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_filters"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            >
+            app:singleLine="true"
+            app:singleSelection="false">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/sport_chip"
@@ -31,7 +108,8 @@
                 android:theme="@style/Theme.MaterialComponents.Light"
                 app:chipIcon="@drawable/sport"
                 app:chipBackgroundColor="#F8F8FF"
-                app:iconStartPadding="5dp" />
+                app:iconStartPadding="5dp"
+                android:text="Sport"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/electronic_chip"
@@ -43,7 +121,8 @@
                 android:theme="@style/Theme.MaterialComponents.Light"
                 app:chipIcon="@drawable/electronic"
                 app:chipBackgroundColor="#F8F8FF"
-                app:iconStartPadding="5dp"/>
+                app:iconStartPadding="5dp"
+                android:text="Electronics"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/clothing_chip"
@@ -55,7 +134,8 @@
                 android:theme="@style/Theme.MaterialComponents.Light"
                 app:chipIcon="@drawable/clothing"
                 app:chipBackgroundColor="#F8F8FF"
-                app:iconStartPadding="5dp"/>
+                app:iconStartPadding="5dp"
+                android:text="Clothing"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/music_chip"
@@ -67,7 +147,8 @@
                 android:theme="@style/Theme.MaterialComponents.Light"
                 app:chipIcon="@drawable/music"
                 app:chipBackgroundColor="#F8F8FF"
-                app:iconStartPadding="5dp"/>
+                app:iconStartPadding="5dp"
+                android:text="Music&amp;Games"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/other_chip"
@@ -79,11 +160,15 @@
                 android:theme="@style/Theme.MaterialComponents.Light"
                 app:chipIcon="@drawable/file"
                 app:chipBackgroundColor="#F8F8FF"
-                app:iconStartPadding="5dp"/>
+                app:iconStartPadding="5dp"
+                android:text="Other"/>
 
-        </TableRow>
 
-    </TableLayout>
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
+
+
 
     <!--    <pl.droidsonroids.gif.GifImageView-->
     <!--        android:id="@+id/list_fragment_loader"-->
