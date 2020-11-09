@@ -207,16 +207,16 @@ public class MyGiftFragment extends Fragment {
         otherChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(!otherBool){
-//                    arrayActive.add("Other");
-//                    otherBool = true;
-//                    otherChip.setChipBackgroundColorResource(R.color.colorChipSelected);
-//                }else{
-//                    arrayActive.remove("Other");
-//                    otherBool = false;
-//                    otherChip.setChipBackgroundColorResource(R.color.ghost_white);
-//                }
-                activeFilter(otherBool, otherChip, "Other");
+                if(!otherBool){
+                    arrayActive.add("Other");
+                    otherBool = true;
+                    otherChip.setChipBackgroundColorResource(R.color.colorChipSelected);
+                }else{
+                    arrayActive.remove("Other");
+                    otherBool = false;
+                    otherChip.setChipBackgroundColorResource(R.color.ghost_white);
+                }
+//                activeFilter(otherBool, otherChip, "Other");
                 userTweetsAdapter.filter(arrayActive);
                 //Log.i("checkedchecked", arrayActive + "");
             }
@@ -225,21 +225,28 @@ public class MyGiftFragment extends Fragment {
         return v;
     }
 
-    private void activeFilter(boolean bool, Chip chipSelected, String category){
-        Log.i("checkedchecked", "Fuori sopra " + bool);
-        if (!bool){
-            arrayActive.add(category);
-            bool = true;
-            Log.i("checkedchecked", "Dentro sopra " + bool);
-            chipSelected.setChipBackgroundColorResource(R.color.colorChipSelected);
-        }else{
-            arrayActive.remove(category);
-            bool = false;
-            Log.i("checkedchecked", "Dentro sotto " + bool);
-            chipSelected.setChipBackgroundColorResource(R.color.ghost_white);
-        }
-        Log.i("checkedchecked", "Fuori sotto " + bool);
-    }
+//    private void activeFilter(boolean bool, final Chip chipSelected, final String category){
+//
+//        chipSelected.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i("checkedchecked", "Fuori sopra " + bool);
+//                if (!bool){
+//                    arrayActive.add(category);
+//                    bool = true;
+//                    Log.i("checkedchecked", "Dentro sopra " + bool);
+//                    chipSelected.setChipBackgroundColorResource(R.color.colorChipSelected);
+//                }else{
+//                    arrayActive.remove(category);
+//                    bool = false;
+//                    Log.i("checkedchecked", "Dentro sotto " + bool);
+//                    chipSelected.setChipBackgroundColorResource(R.color.ghost_white);
+//                }
+//                Log.i("checkedchecked", "Fuori sotto " + bool);
+//            }
+//        });
+//
+//    }
 
     private void setupRecyclerView(ArrayList<MyGift> uGiftsList){
         userTweetsAdapter = new UserTweetsAdapter(mContext, uGiftsList, getActivity(),this);
