@@ -92,55 +92,6 @@ public class TwitterRequests {
         queue.add(getUserObjectRequest);
     }
 
-//    public static void getUserTweets(Integer count, final Context mContext, final VolleyListener volleyListener){
-//
-//        String url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
-//
-//        String screenName = MainActivity.userName;
-//        String screenNameString =  "?screen_name=" + Uri.encode(screenName);
-//        String countString = "&count=" + count;
-//        //to get full text instead a part of it and link to twitter post
-//        String extendedModeString = "&tweet_mode=extended"; //per avere tutto il testo del tweet poichè altrimenti sarebbe troncato
-//
-//        String urlWithParams = url + screenNameString + countString + extendedModeString;
-//
-//        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY) , mContext.getResources().getString(R.string.CONSUMER_SECRET) , MainActivity.token, MainActivity.tokenSecret);
-//        Map<String, String> requestParams = new HashMap<>();
-//        requestParams.put("screen_name", screenName);
-//        requestParams.put("count", String.valueOf(count));
-//        requestParams.put("tweet_mode", "extended");
-//
-//        final String header = generator.generateHeader("GET", url, requestParams);
-//
-//        RequestQueue queue = Volley.newRequestQueue(mContext);
-//        StringRequest getUserObjectRequest = new StringRequest(Request.Method.GET, urlWithParams,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        volleyListener.onResponse(response);
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // error
-//                        volleyListener.onError(error);
-//
-//                    }
-//                }
-//        ) {
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", header);
-//                headers.put("Content-Type", "application/json");
-//                return headers;
-//            }
-//        };
-//        queue.add(getUserObjectRequest);
-//    }
-
     public static void getUserTweets(Integer count, final Context mContext, final VolleyListener volleyListener) {
 
         String url = "https://api.twitter.com/1.1/statuses/user_timeline.json";

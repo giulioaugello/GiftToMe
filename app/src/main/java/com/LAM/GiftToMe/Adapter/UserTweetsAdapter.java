@@ -66,15 +66,12 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         return new ViewHolder(view); //il ViewHolder fornisce il layout da popolare con i dati e viene utilizzato dalla RecyclerView per ridurre il numero di layout da creare
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) { //serve per recuperare i riferimenti agli elementi interni da popolare con i dati
 
         holder.giftName.setText(myGift.get(position).getName());
 
         String activeCategory = myGift.get(position).getCategory();
-        //String add = myGift.get(position).getAddress();
-        //Log.i("add", add);
 
         changeCategoryImage(activeCategory, holder.imgCategory);
 
@@ -93,8 +90,6 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         });
 
         showDialogLongClick(position, holder.card);
-
-
 
     }
 
@@ -161,7 +156,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
 
             @Override
             public void onResponse(String response) {
-                Log.i(TAG,response);
+                Log.i(TAG, response);
             }
 
             @Override
@@ -278,7 +273,6 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
                     public void onResponse(String response) {
                         reloadFragment(fragment,activity);
                         dialog.dismiss();
-
                     }
                 });
             }

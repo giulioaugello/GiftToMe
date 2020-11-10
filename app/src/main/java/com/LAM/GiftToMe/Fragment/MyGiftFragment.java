@@ -136,7 +136,7 @@ public class MyGiftFragment extends Fragment {
         electronicsBool = electronicChip.isChecked();
         clothingBool = clothingChip.isChecked();
         musicBool = musicChip.isChecked();
-        otherBool = musicChip.isChecked();
+        otherBool = otherChip.isChecked();
 
         arrayActive = new ArrayList<>();
 

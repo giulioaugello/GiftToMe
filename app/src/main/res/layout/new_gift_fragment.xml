@@ -1,7 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/design_default_color_secondary">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:chipcloud="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#56ab2f"
+    android:layout_gravity="center">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:id="@+id/scrollNewGift"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="56dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/round_corner_profile">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nuovo Regalo"
+                android:textColor="#F44336"
+                android:gravity="center"
+                android:textSize="30sp"
+                android:padding="4dp"/>
+
+
+            <EditText
+                android:id="@+id/name_gift"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:hint="Nome Regalo"
+                android:textColor="#F44336"
+                android:textColorHint="#F44336"
+                android:backgroundTint="#F44336"/>
+
+            <EditText
+                android:id="@+id/descr_gift"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:fontFamily="sans-serif"
+                android:hint="Descrizione"
+                android:textColor="#F44336"
+                android:textColorHint="#F44336"
+                android:backgroundTint="#F44336"/>
+
+            <EditText
+                android:id="@+id/addr_gift"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif"
+                android:hint="Indirizzo"
+                android:textColor="#F44336"
+                android:textColorHint="#F44336"
+                android:backgroundTint="#F44336"/>
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_new_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:singleLine="false"
+                app:singleSelection="true">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/sport_chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sport"
+                        android:textAlignment="center"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:chipBackgroundColor="#56ab2f"
+                        app:chipIcon="@drawable/sport"
+                        app:iconStartPadding="5dp"
+                        android:layout_margin="4dp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/electronic_chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Electronics"
+                        android:textAlignment="center"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:chipBackgroundColor="#56ab2f"
+                        app:chipIcon="@drawable/electronic"
+                        app:iconStartPadding="5dp"
+                        android:layout_margin="4dp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/clothing_chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clothing"
+                        android:textAlignment="center"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:chipBackgroundColor="#56ab2f"
+                        app:chipIcon="@drawable/clothing"
+                        app:iconStartPadding="5dp"
+                        android:layout_margin="4dp"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+                    
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/music_chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:text="Music&amp;Games"
+                        android:textAlignment="center"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:chipBackgroundColor="#56ab2f"
+                        app:chipIcon="@drawable/music"
+                        app:iconStartPadding="5dp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/other_chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:text="Other"
+                        android:textAlignment="center"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:chipBackgroundColor="#56ab2f"
+                        app:chipIcon="@drawable/file"
+                        app:iconStartPadding="5dp" />
+
+                </TableRow>
+
+            </com.google.android.material.chip.ChipGroup>
+            
+            <Button
+                android:id="@+id/add_gift"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Aggiungi Regalo"
+                android:textColor="#F8F8FF"
+                android:textSize="15sp"
+                android:background="@drawable/button_addgift"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

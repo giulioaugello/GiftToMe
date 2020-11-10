@@ -88,8 +88,8 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:scrollbars="none">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chip_filters"
@@ -104,12 +104,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:padding="12dp"
+                android:text="Sport"
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipIcon="@drawable/sport"
                 app:chipBackgroundColor="#F8F8FF"
-                app:iconStartPadding="5dp"
-                android:text="Sport"/>
+                app:chipIcon="@drawable/sport"
+                app:iconStartPadding="5dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/electronic_chip"
@@ -117,12 +117,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:padding="12dp"
+                android:text="Electronics"
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipIcon="@drawable/electronic"
                 app:chipBackgroundColor="#F8F8FF"
-                app:iconStartPadding="5dp"
-                android:text="Electronics"/>
+                app:chipIcon="@drawable/electronic"
+                app:iconStartPadding="5dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/clothing_chip"
@@ -130,12 +130,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:padding="12dp"
+                android:text="Clothing"
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipIcon="@drawable/clothing"
                 app:chipBackgroundColor="#F8F8FF"
-                app:iconStartPadding="5dp"
-                android:text="Clothing"/>
+                app:chipIcon="@drawable/clothing"
+                app:iconStartPadding="5dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/music_chip"
@@ -143,12 +143,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:padding="12dp"
+                android:text="Music&amp;Games"
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipIcon="@drawable/music"
                 app:chipBackgroundColor="#F8F8FF"
-                app:iconStartPadding="5dp"
-                android:text="Music&amp;Games"/>
+                app:chipIcon="@drawable/music"
+                app:iconStartPadding="5dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/other_chip"
@@ -156,27 +156,17 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:padding="12dp"
+                android:text="Other"
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipIcon="@drawable/file"
                 app:chipBackgroundColor="#F8F8FF"
-                app:iconStartPadding="5dp"
-                android:text="Other"/>
+                app:chipIcon="@drawable/file"
+                app:iconStartPadding="5dp" />
 
 
         </com.google.android.material.chip.ChipGroup>
 
     </HorizontalScrollView>
-
-
-
-    <!--    <pl.droidsonroids.gif.GifImageView-->
-    <!--        android:id="@+id/list_fragment_loader"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:src="@drawable/loader"-->
-    <!--        android:layout_gravity="center"-->
-    <!--        android:layout_marginTop="250dp"/>-->
 
     <ScrollView
         android:id="@+id/scrollGift"
