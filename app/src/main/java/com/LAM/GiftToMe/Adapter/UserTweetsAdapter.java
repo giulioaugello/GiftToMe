@@ -142,7 +142,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
                removeGift(id, position);
                myGift.remove(position);
                notifyItemRemoved(position);
-               reloadFragment(fragment,activity);
+               reloadFragment(fragment, activity);
                dialog.dismiss();
            }
        });
@@ -360,7 +360,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
 
     }
 
-    private void changeCategoryImage(String category, ImageView imageView){
+    public static void changeCategoryImage(String category, ImageView imageView){
         switch (category) {
             case "Sport":
                 imageView.setBackgroundResource(R.drawable.sport);

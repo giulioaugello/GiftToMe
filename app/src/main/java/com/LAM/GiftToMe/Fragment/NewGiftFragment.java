@@ -1,12 +1,17 @@
 package com.LAM.GiftToMe.Fragment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,13 +36,18 @@ import androidx.fragment.app.Fragment;
 public class NewGiftFragment extends Fragment {
 
     private Context mContext;
+    private Fragment fragment;
 
-    private TextView nameForm, descriptionForm, addressForm;
-    private String newGiftCategory, newGiftName, newGiftDescription, newGiftAddress;
     private ArrayList<Double> newGiftCoords;
     private Button addGift;
     private String activeCategory = "";
-    //private Fragment fragment = new NewGiftFragment();
+    private TextView nameForm, descriptionForm, addressForm;
+
+    private TextView recapCategory, recapName, recapDescription, recapAddress;
+    private ImageView recapImg;
+    private Button back, uploadGift;
+
+
 
     private static final String TAG = "NewGiftFragmentTAG";
 
@@ -47,6 +57,7 @@ public class NewGiftFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.new_gift_fragment, container, false);
+
         mContext = getActivity().getApplicationContext();
 
         nameForm = v.findViewById(R.id.name_gift);
@@ -87,32 +98,128 @@ public class NewGiftFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                newGiftName = nameForm.getText().toString();
-                newGiftDescription = descriptionForm.getText().toString();
-                newGiftAddress = addressForm.getText().toString();
+//                if(newGiftCoords == null) {
+//                    Toast.makeText(mContext, "Inserisci un indirizzo valido",Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                //Poichè la lunghezza massima di tutto il tweet è di 280 caratteri
+//                if(newGiftDescription.length() > 90){
+//                    Toast.makeText(mContext, "Inserisci una descrizione di al massimo 90 caratteri",Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                //Controllo se tutti i campi stono stati inseriti correttamente
+//                if (newGiftName.isEmpty() || newGiftDescription.isEmpty() || newGiftAddress.isEmpty() || newGiftCategory.equals("")){
+//                    Toast.makeText(mContext, "Inserisci tutti i campi",Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
 
-                newGiftCategory = activeCategory;
+                showDialogRecap();
 
-                newGiftCoords = AddressUtils.getCoordsFromAddress(newGiftAddress, mContext);
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                builder.setView(view);
+//
+//                final Dialog alertDialog = builder.create();
+//                alertDialog.setCanceledOnTouchOutside(false);
+//                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//                recapCategory = view.findViewById(R.id.recap_category);
+//                recapName = view.findViewById(R.id.recap_name);
+//                recapDescription = view.findViewById(R.id.recap_descr);
+//                recapAddress = view.findViewById(R.id.recap_addr);
+//                recapImg = view.findViewById(R.id.recap_img);
+//                back = view.findViewById(R.id.back_button);
+//                uploadGift = view.findViewById(R.id.post_tweet);
+//
+//                recapCategory.setText(activeCategory);
+//                recapName.setText(nameForm.getText().toString());
+//                recapDescription.setText(descriptionForm.getText().toString());
+//                recapAddress.setText(addressForm.getText().toString());
+//                UserTweetsAdapter.changeCategoryImage(activeCategory, recapImg);
+//                newGiftCoords = AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext);
+//
+//                alertDialog.show();
+//
+//                back.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        alertDialog.dismiss();
+//                    }
+//                });
+//
+//                uploadGift.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        String tweet = NormalizeString.normalizeTask(newGiftCoords.get(0), newGiftCoords.get(1), nameForm.getText().toString(), descriptionForm.getText().toString(), activeCategory, MainActivity.userName);
+//
+//                        TwitterRequests.postTweet(tweet, "", mContext, new VolleyListener() {
+//                            @Override
+//                            public void onError(VolleyError error) {
+//                                error.printStackTrace();
+//
+//                            }
+//
+//                            @Override
+//                            public void onResponse(String response) {
+//                                Log.i(TAG,response);
+//                                //UserTweetsAdapter.reloadFragment(fragment, getActivity());
+//                            }
+//                        });
+//
+//                    }
+//                });
 
-                if(newGiftCoords == null) {
-                    Toast.makeText(mContext, "Inserisci un indirizzo valido",Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
-                //Poichè la lunghezza massima di tutto il tweet è di 280 caratteri
-                if(newGiftDescription.length() > 90){
-                    Toast.makeText(mContext, "Inserisci una descrizione di al massimo 90 caratteri",Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
-                //Controllo se tutti i campi stono stati inseriti correttamente
-                if (newGiftName.isEmpty() || newGiftDescription.isEmpty() || newGiftAddress.isEmpty() || newGiftCategory.equals("")){
-                    Toast.makeText(mContext, "Inserisci tutti i campi",Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
-                String tweet = NormalizeString.normalizeTask(newGiftCoords.get(0), newGiftCoords.get(1), newGiftName, newGiftDescription, newGiftCategory, MainActivity.userName);
+            }
+        });
+
+        return v;
+    }
+
+    private void showDialogRecap(){
+
+        final Dialog dialog = new Dialog(getActivity());
+        View view = getActivity().getLayoutInflater().inflate(R.layout.recap_newgift_dialog,null);
+        dialog.setCancelable(true);
+        dialog.setContentView(view);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        recapCategory = view.findViewById(R.id.recap_category);
+        recapName = view.findViewById(R.id.recap_name);
+        recapDescription = view.findViewById(R.id.recap_descr);
+        recapAddress = view.findViewById(R.id.recap_addr);
+        recapImg = view.findViewById(R.id.recap_img);
+        back = view.findViewById(R.id.back_button);
+        uploadGift = view.findViewById(R.id.post_tweet);
+
+        recapCategory.setText(activeCategory);
+        recapName.setText(nameForm.getText().toString());
+        recapDescription.setText(descriptionForm.getText().toString());
+        recapAddress.setText(addressForm.getText().toString());
+
+        UserTweetsAdapter.changeCategoryImage(activeCategory, recapImg);
+        newGiftCoords = AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext);
+
+
+        //alertDialog.show();
+        dialog.show();
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        uploadGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String tweet = NormalizeString.normalizeTask(newGiftCoords.get(0), newGiftCoords.get(1), nameForm.getText().toString(), descriptionForm.getText().toString(), activeCategory, MainActivity.userName);
 
                 TwitterRequests.postTweet(tweet, "", mContext, new VolleyListener() {
                     @Override
@@ -124,15 +231,12 @@ public class NewGiftFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Log.i(TAG,response);
-                        nameForm.clearComposingText();
-                        //UserTweetsAdapter.reloadFragment(fragment, getActivity());
+                        UserTweetsAdapter.reloadFragment(fragment, getActivity());
                     }
                 });
 
             }
         });
-
-        return v;
     }
 
     private void onClickChip(Chip chip, final List<Chip> list, final String category){
