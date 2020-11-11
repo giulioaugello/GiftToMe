@@ -106,27 +106,27 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTag = homeFragmentTag;
                     break;
                 case R.id.nav_newGift:
-                    if (isLogged){
+//                    if (isLogged){
                         if(newGiftFragment == null) {
                             newGiftFragment = new NewGiftFragment();
                         }
                         selectedFragment = newGiftFragment;
-                    }else{
-                        Toast.makeText(getApplicationContext(), "Devi accedere per poter aggiungere un regalo",Toast.LENGTH_LONG).show();
-                        return false;
-                    }
+//                    }else{
+//                        Toast.makeText(getApplicationContext(), "Devi accedere per poter aggiungere un regalo",Toast.LENGTH_LONG).show();
+//                        return false;
+//                    }
                     break;
                 case R.id.nav_chat:
-                    if (isLogged){
+//                    if (isLogged){
                         if(chatFragment == null) {
                             chatFragment = new ChatFragment();
                         }
                         selectedFragment = chatFragment;
                         fragmentTag = messagesFragmentTag;
-                    }else{
-                        Toast.makeText(getApplicationContext(), "Devi accedere per poter entrare in questa sezione",Toast.LENGTH_LONG).show();
-                        return false;
-                    }
+//                    }else{
+//                        Toast.makeText(getApplicationContext(), "Devi accedere per poter entrare in questa sezione",Toast.LENGTH_LONG).show();
+//                        return false;
+//                    }
                     break;
                 case R.id.nav_profile:
                     if(profileFragment == null) {

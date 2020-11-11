@@ -76,7 +76,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:singleLine="false"
-                app:singleSelection="true">
+                app:singleSelection="true"
+                app:selectionRequired="true">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -84,7 +85,7 @@
                     android:gravity="center">
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/sport_chip"
+                        android:id="@+id/sport_chip_new"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sport"
@@ -96,7 +97,7 @@
                         android:layout_margin="4dp"/>
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/electronic_chip"
+                        android:id="@+id/electronic_chip_new"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Electronics"
@@ -108,7 +109,7 @@
                         android:layout_margin="4dp"/>
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/clothing_chip"
+                        android:id="@+id/clothing_chip_new"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Clothing"
@@ -127,7 +128,7 @@
                     android:gravity="center">
                     
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/music_chip"
+                        android:id="@+id/music_chip_new"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
@@ -139,7 +140,7 @@
                         app:iconStartPadding="5dp"/>
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/other_chip"
+                        android:id="@+id/other_chip_new"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"

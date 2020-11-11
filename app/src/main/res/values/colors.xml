@@ -6,4 +6,5 @@
 
     <color name="colorChipSelected">#F44336</color>
     <color name="ghost_white">#F8F8FF</color>
+    <color name="chipUnchecked">#56ab2f</color>
 </resources>
