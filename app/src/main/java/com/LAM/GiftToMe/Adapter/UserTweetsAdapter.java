@@ -255,6 +255,10 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
                     Toast.makeText(mContext, "Inserisci tutti i campi", Toast.LENGTH_LONG).show();
                     return;
                 }
+                if(AddressUtils.getCoordsFromAddress(addressString, mContext) == null) {
+                    Toast.makeText(mContext, "Inserisci un indirizzo valido", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 String task = "";
                 task = NormalizeString.normalizeTask(addressCoords.get(0), addressCoords.get(1), nameString, descriptionString, categoryString, issuer);
@@ -374,7 +378,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
                 imageView.setBackgroundResource(R.drawable.clothing);
                 break;
             case "Music&Books":
-                imageView.setBackgroundResource(R.drawable.music);
+                imageView.setBackgroundResource(R.drawable.musicbook);
                 break;
             default:
                 imageView.setBackgroundResource(R.drawable.file);

@@ -147,7 +147,7 @@
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
                 app:chipBackgroundColor="#F8F8FF"
-                app:chipIcon="@drawable/music"
+                app:chipIcon="@drawable/musicbook"
                 app:iconStartPadding="5dp" />
 
             <com.google.android.material.chip.Chip
