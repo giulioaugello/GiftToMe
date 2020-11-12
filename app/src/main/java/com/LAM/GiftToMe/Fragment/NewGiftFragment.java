@@ -107,29 +107,8 @@ public class NewGiftFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //Controllo se tutti i campi stono stati inseriti correttamente
-                Log.i("formform", "Nome: " + nameForm.getText().toString());
-                if (nameForm.getText().toString().equals("") || descriptionForm.getText().toString().equals("") || addressForm.getText().toString().equals("")){
-                    Toast.makeText(mContext, "Inserisci tutti i campi", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //Poichè la lunghezza massima di tutto il tweet è di 280 caratteri
-                Log.i("formform", "Lunghezza descrizione: " + descriptionForm.getText().length());
-                if(descriptionForm.getText().length() > 90){
-                    Toast.makeText(mContext, "Inserisci una descrizione di al massimo 90 caratteri", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Log.i("formform", "Indirizzo: " + AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext));
-                if(AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext) == null) {
-                    Toast.makeText(mContext, "Inserisci un indirizzo valido", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Log.i("formform", "Categoria: " + activeCategory);
-                if (activeCategory.equals("")){
-                    Toast.makeText(mContext, "Spunta una categoria", Toast.LENGTH_SHORT).show();
+                //controlli su form e chip
+                if (checkFormAndChip()){
                     return;
                 }
 
@@ -141,6 +120,40 @@ public class NewGiftFragment extends Fragment {
         Log.i("categorycategory", activeCategory);
 
         return v;
+    }
+
+    private boolean checkFormAndChip(){
+        boolean isReturn = false;
+        //Controllo se tutti i campi stono stati inseriti correttamente
+        Log.i("formform", "Nome: " + nameForm.getText().toString());
+        if (nameForm.getText().toString().equals("") || descriptionForm.getText().toString().equals("") || addressForm.getText().toString().equals("")){
+            Toast.makeText(mContext, "Inserisci tutti i campi", Toast.LENGTH_SHORT).show();
+            isReturn = true;
+            return isReturn;
+        }
+
+        //Poichè la lunghezza massima di tutto il tweet è di 280 caratteri
+        Log.i("formform", "Lunghezza descrizione: " + descriptionForm.getText().length());
+        if(descriptionForm.getText().length() > 90){
+            Toast.makeText(mContext, "Inserisci una descrizione di al massimo 90 caratteri", Toast.LENGTH_SHORT).show();
+            isReturn = true;
+            return isReturn;
+        }
+
+        Log.i("formform", "Indirizzo: " + AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext));
+        if(AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext) == null) {
+            Toast.makeText(mContext, "Inserisci un indirizzo valido", Toast.LENGTH_SHORT).show();
+            isReturn = true;
+            return isReturn;
+        }
+
+        Log.i("formform", "Categoria: " + activeCategory);
+        if (activeCategory.equals("")){
+            Toast.makeText(mContext, "Spunta una categoria", Toast.LENGTH_SHORT).show();
+            isReturn = true;
+            return isReturn;
+        }
+        return isReturn;
     }
 
     @Override
