@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +33,9 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class NewGiftFragment extends Fragment {
 
@@ -47,6 +51,8 @@ public class NewGiftFragment extends Fragment {
     private ImageView recapImg;
     private Button back, uploadGift;
 
+    private LinearLayout linearLayout;
+
 
 
     private static final String TAG = "NewGiftFragmentTAG";
@@ -59,6 +65,7 @@ public class NewGiftFragment extends Fragment {
         View v = inflater.inflate(R.layout.new_gift_fragment, container, false);
 
         mContext = getActivity().getApplicationContext();
+        linearLayout = v.findViewById(R.id.linear_edit);
 
         nameForm = v.findViewById(R.id.name_gift);
         descriptionForm = v.findViewById(R.id.descr_gift);
@@ -94,90 +101,52 @@ public class NewGiftFragment extends Fragment {
 //            }
 //        });
 
+
+
         addGift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-//                if(newGiftCoords == null) {
-//                    Toast.makeText(mContext, "Inserisci un indirizzo valido",Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                //Poichè la lunghezza massima di tutto il tweet è di 280 caratteri
-//                if(newGiftDescription.length() > 90){
-//                    Toast.makeText(mContext, "Inserisci una descrizione di al massimo 90 caratteri",Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                //Controllo se tutti i campi stono stati inseriti correttamente
-//                if (newGiftName.isEmpty() || newGiftDescription.isEmpty() || newGiftAddress.isEmpty() || newGiftCategory.equals("")){
-//                    Toast.makeText(mContext, "Inserisci tutti i campi",Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
+                //Controllo se tutti i campi stono stati inseriti correttamente
+                Log.i("formform", "Nome: " + nameForm.getText().toString());
+                if (nameForm.getText().toString().equals("") || descriptionForm.getText().toString().equals("") || addressForm.getText().toString().equals("")){
+                    Toast.makeText(mContext, "Inserisci tutti i campi", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //Poichè la lunghezza massima di tutto il tweet è di 280 caratteri
+                Log.i("formform", "Lunghezza descrizione: " + descriptionForm.getText().length());
+                if(descriptionForm.getText().length() > 90){
+                    Toast.makeText(mContext, "Inserisci una descrizione di al massimo 90 caratteri", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Log.i("formform", "Indirizzo: " + AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext));
+                if(AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext) == null) {
+                    Toast.makeText(mContext, "Inserisci un indirizzo valido", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Log.i("formform", "Categoria: " + activeCategory);
+                if (activeCategory.equals("")){
+                    Toast.makeText(mContext, "Spunta una categoria", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 showDialogRecap();
-
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setView(view);
-//
-//                final Dialog alertDialog = builder.create();
-//                alertDialog.setCanceledOnTouchOutside(false);
-//                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//
-//                recapCategory = view.findViewById(R.id.recap_category);
-//                recapName = view.findViewById(R.id.recap_name);
-//                recapDescription = view.findViewById(R.id.recap_descr);
-//                recapAddress = view.findViewById(R.id.recap_addr);
-//                recapImg = view.findViewById(R.id.recap_img);
-//                back = view.findViewById(R.id.back_button);
-//                uploadGift = view.findViewById(R.id.post_tweet);
-//
-//                recapCategory.setText(activeCategory);
-//                recapName.setText(nameForm.getText().toString());
-//                recapDescription.setText(descriptionForm.getText().toString());
-//                recapAddress.setText(addressForm.getText().toString());
-//                UserTweetsAdapter.changeCategoryImage(activeCategory, recapImg);
-//                newGiftCoords = AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext);
-//
-//                alertDialog.show();
-//
-//                back.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        alertDialog.dismiss();
-//                    }
-//                });
-//
-//                uploadGift.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        String tweet = NormalizeString.normalizeTask(newGiftCoords.get(0), newGiftCoords.get(1), nameForm.getText().toString(), descriptionForm.getText().toString(), activeCategory, MainActivity.userName);
-//
-//                        TwitterRequests.postTweet(tweet, "", mContext, new VolleyListener() {
-//                            @Override
-//                            public void onError(VolleyError error) {
-//                                error.printStackTrace();
-//
-//                            }
-//
-//                            @Override
-//                            public void onResponse(String response) {
-//                                Log.i(TAG,response);
-//                                //UserTweetsAdapter.reloadFragment(fragment, getActivity());
-//                            }
-//                        });
-//
-//                    }
-//                });
-
-
-
 
             }
         });
 
+        Log.i("categorycategory", activeCategory);
+
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        activeCategory = "";
     }
 
     private void showDialogRecap(){
@@ -204,8 +173,6 @@ public class NewGiftFragment extends Fragment {
         UserTweetsAdapter.changeCategoryImage(activeCategory, recapImg);
         newGiftCoords = AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext);
 
-
-        //alertDialog.show();
         dialog.show();
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -231,12 +198,28 @@ public class NewGiftFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Log.i(TAG,response);
+                        dialog.dismiss();
+                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.newGiftFragmentTag);
                         UserTweetsAdapter.reloadFragment(fragment, getActivity());
+                        clearForm(linearLayout);
                     }
                 });
 
             }
         });
+    }
+
+    private void clearForm(ViewGroup group) {
+        for (int i = 0, count = group.getChildCount(); i < count; ++i) {
+            View view = group.getChildAt(i);
+            if (view instanceof EditText) {
+                ((EditText)view).setText("");
+            }
+
+            if(view instanceof ViewGroup && (((ViewGroup)view).getChildCount() > 0))
+                clearForm((ViewGroup)view);
+        }
+        activeCategory = "";
     }
 
     private void onClickChip(Chip chip, final List<Chip> list, final String category){

@@ -354,6 +354,8 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
 
     public static void reloadFragment(Fragment fragment, Activity activity){
 
+        Log.i("fragmentfragment", "Sono in " + fragment.getTag());
+
         FragmentManager fragmentManager = ((AppCompatActivity)activity).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.detach(fragment).attach(fragment).commit();

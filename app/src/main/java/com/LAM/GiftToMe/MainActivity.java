@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static String userName,token,tokenSecret;
     public static Long userId;
 
-    private String homeFragmentTag, listFragmentTag, messagesFragmentTag, profileFragmentTag, conversationFragmentTag, settingsFragmentTag, myGiftFragmentTag;
+    public static String homeFragmentTag, listFragmentTag, messagesFragmentTag, newGiftFragmentTag, profileFragmentTag, conversationFragmentTag, settingsFragmentTag, myGiftFragmentTag;
 
     private static final int TIME_INTERVAL = 2000; // tempo che intercorre tra due back (millisecondi)
     private long mBackPressed;
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         //get FragmentTags
         homeFragmentTag = getResources().getString(R.string.map_fragment_tag);
         listFragmentTag = getResources().getString(R.string.list_fragment_tag);
+        newGiftFragmentTag = getResources().getString(R.string.newgift_fragment_tag);
         messagesFragmentTag = getResources().getString(R.string.messages_fragment_tag);
         profileFragmentTag = getResources().getString(R.string.profile_fragment_tag);
         conversationFragmentTag = getResources().getString(R.string.conversation_fragment_tag);
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                             newGiftFragment = new NewGiftFragment();
                         }
                         selectedFragment = newGiftFragment;
+                        fragmentTag = newGiftFragmentTag;
 //                    }else{
 //                        Toast.makeText(getApplicationContext(), "Devi accedere per poter aggiungere un regalo",Toast.LENGTH_LONG).show();
 //                        return false;
