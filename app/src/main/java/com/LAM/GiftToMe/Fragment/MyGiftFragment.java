@@ -192,11 +192,11 @@ public class MyGiftFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!musicBool){
-                    arrayActive.add("Music&Games");
+                    arrayActive.add("Music&Books");
                     musicBool = true;
                     musicChip.setChipBackgroundColorResource(R.color.colorChipSelected);
                 }else{
-                    arrayActive.remove("Music&Games");
+                    arrayActive.remove("Music&Books");
                     musicBool = false;
                     musicChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }

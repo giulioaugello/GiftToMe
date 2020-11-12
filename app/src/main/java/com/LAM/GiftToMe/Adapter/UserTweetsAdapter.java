@@ -209,7 +209,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
             case "Clothing":
                 selectedId = clothing.getId();
                 break;
-            case "Music&Games":
+            case "Music&Books":
                 selectedId = music.getId();
                 break;
             case "Other":
@@ -373,7 +373,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
             case "Clothing":
                 imageView.setBackgroundResource(R.drawable.clothing);
                 break;
-            case "Music&Games":
+            case "Music&Books":
                 imageView.setBackgroundResource(R.drawable.music);
                 break;
             default:

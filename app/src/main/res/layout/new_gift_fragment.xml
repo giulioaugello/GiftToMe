@@ -133,7 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Music&amp;Games"
+                        android:text="Music&amp;Books"
                         android:textAlignment="center"
                         android:theme="@style/Theme.MaterialComponents.Light"
                         app:chipBackgroundColor="#56ab2f"

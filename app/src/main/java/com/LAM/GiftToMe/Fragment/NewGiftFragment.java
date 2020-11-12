@@ -1,6 +1,5 @@
 package com.LAM.GiftToMe.Fragment;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -33,9 +32,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 public class NewGiftFragment extends Fragment {
 
@@ -43,18 +40,15 @@ public class NewGiftFragment extends Fragment {
     private Fragment fragment;
 
     private ArrayList<Double> newGiftCoords;
-    private Button addGift;
+    private Button recapGift;
     private String activeCategory = "";
     private TextView nameForm, descriptionForm, addressForm;
 
-    private TextView recapCategory, recapName, recapDescription, recapAddress;
-    private ImageView recapImg;
-    private Button back, uploadGift;
+//    private TextView recapCategory, recapName, recapDescription, recapAddress;
+//    private ImageView recapImg;
+//    private Button back, uploadGift;
 
     private LinearLayout linearLayout;
-
-
-
     private static final String TAG = "NewGiftFragmentTAG";
 
 
@@ -70,7 +64,7 @@ public class NewGiftFragment extends Fragment {
         nameForm = v.findViewById(R.id.name_gift);
         descriptionForm = v.findViewById(R.id.descr_gift);
         addressForm = v.findViewById(R.id.addr_gift);
-        addGift = v.findViewById(R.id.add_gift);
+        recapGift = v.findViewById(R.id.add_gift);
 
         Chip sportChip, electronicChip, clothingChip, musicChip, otherChip;
         sportChip = v.findViewById(R.id.sport_chip_new);
@@ -84,7 +78,7 @@ public class NewGiftFragment extends Fragment {
         onClickChip(sportChip, listChip, "Sport");
         onClickChip(electronicChip, listChip, "Electronics");
         onClickChip(clothingChip, listChip, "Clothing");
-        onClickChip(musicChip, listChip, "Music&Games");
+        onClickChip(musicChip, listChip, "Music&Books");
         onClickChip(otherChip, listChip, "Other");
 
 //        sportChip.setOnClickListener(new View.OnClickListener() {
@@ -101,9 +95,7 @@ public class NewGiftFragment extends Fragment {
 //            }
 //        });
 
-
-
-        addGift.setOnClickListener(new View.OnClickListener() {
+        recapGift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -117,9 +109,13 @@ public class NewGiftFragment extends Fragment {
             }
         });
 
-        Log.i("categorycategory", activeCategory);
-
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        activeCategory = "";
     }
 
     private boolean checkFormAndChip(){
@@ -156,12 +152,6 @@ public class NewGiftFragment extends Fragment {
         return isReturn;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        activeCategory = "";
-    }
-
     private void showDialogRecap(){
 
         final Dialog dialog = new Dialog(getActivity());
@@ -170,13 +160,13 @@ public class NewGiftFragment extends Fragment {
         dialog.setContentView(view);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        recapCategory = view.findViewById(R.id.recap_category);
-        recapName = view.findViewById(R.id.recap_name);
-        recapDescription = view.findViewById(R.id.recap_descr);
-        recapAddress = view.findViewById(R.id.recap_addr);
-        recapImg = view.findViewById(R.id.recap_img);
-        back = view.findViewById(R.id.back_button);
-        uploadGift = view.findViewById(R.id.post_tweet);
+        TextView recapCategory = view.findViewById(R.id.recap_category);
+        TextView recapName = view.findViewById(R.id.recap_name);
+        TextView recapDescription = view.findViewById(R.id.recap_descr);
+        TextView recapAddress = view.findViewById(R.id.recap_addr);
+        ImageView recapImg = view.findViewById(R.id.recap_img);
+        Button back = view.findViewById(R.id.back_button);
+        Button uploadGift = view.findViewById(R.id.post_tweet);
 
         recapCategory.setText(activeCategory);
         recapName.setText(nameForm.getText().toString());
@@ -271,7 +261,7 @@ public class NewGiftFragment extends Fragment {
                 }
                 list.get(2).setChipBackgroundColorResource(R.color.colorChipSelected);
                 break;
-            case "Music&Games":
+            case "Music&Books":
                 for (Chip chip: list){
                     chip.setChipBackgroundColorResource(R.color.chipUnchecked);
                 }

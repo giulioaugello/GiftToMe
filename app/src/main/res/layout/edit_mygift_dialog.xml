@@ -113,7 +113,7 @@
                         android:id="@+id/musicRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Music&amp;Games"
+                        android:text="Music&amp;Books"
                         android:textColor="#FFFFFF"/>
 
                     <RadioButton
