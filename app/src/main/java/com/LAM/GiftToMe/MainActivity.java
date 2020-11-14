@@ -7,9 +7,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -21,6 +23,9 @@ import com.LAM.GiftToMe.Fragment.NewGiftFragment;
 import com.LAM.GiftToMe.Fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.twitter.sdk.android.core.TwitterSession;
+
+import org.osmdroid.config.Configuration;
+import org.osmdroid.views.MapView;
 
 public class MainActivity extends AppCompatActivity {
 

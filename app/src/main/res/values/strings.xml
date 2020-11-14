@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GiftToMe</string>
+    <string name="app_name">GiftToMeApp</string>
 
     <!--  Twitter API credentials -->
     <string name="CONSUMER_KEY" translatable="false">FDuIWWAoNzMAgJFnJFOKVGvAe</string>
