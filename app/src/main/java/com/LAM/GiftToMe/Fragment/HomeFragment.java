@@ -134,13 +134,6 @@ public class HomeFragment extends Fragment implements LocationListener {
         GeoPoint startPoint = new GeoPoint(44.4932655, 11.3370644);
         mapController.setCenter(startPoint);
 
-        requestPermissionsIfNecessary(new String[] {
-
-                Manifest.permission.ACCESS_FINE_LOCATION, //serve per la posizione dell'utente
-
-                Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
-        });
-
         myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(mContext), map); //overlay per la posizione dell'utente
         myLocationNewOverlay.enableMyLocation();
         map.getOverlays().add(myLocationNewOverlay);
@@ -161,26 +154,9 @@ public class HomeFragment extends Fragment implements LocationListener {
             }
         });
 
+        gps();
+
         return v;
-    }
-
-    private boolean canGetLocation(){
-        boolean gpsEnabled = false;
-        boolean networkEnabled = false;
-
-        try {
-            gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        }catch (Exception e){
-            Log.i("gpsgps", "1 " + e.getMessage());
-        }
-
-        try {
-            networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        }catch (Exception e){
-            Log.i("gpsgps", "1 " + e.getMessage());
-        }
-
-        return gpsEnabled && networkEnabled;
     }
 
     public void gps(){
@@ -213,17 +189,15 @@ public class HomeFragment extends Fragment implements LocationListener {
                 enableUserLocation();
             }
 
-        }
+        }else {
+            //Richiedo i permessi e richiamo gps() per far uscire il dialog del gps
+            requestPermissionsIfNecessary(new String[] {
 
-        else {
-            //Richiesta permessi
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-                //mostro dialog per la richiesta dei permessi
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
+                    Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
 
-            }
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
+            });
+            gps();
         }
     }
 
@@ -236,7 +210,6 @@ public class HomeFragment extends Fragment implements LocationListener {
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsLocationModeHigh() == 3) {
                 enableUserLocation();
             }
-            gps();
         }
 
     }
@@ -244,18 +217,15 @@ public class HomeFragment extends Fragment implements LocationListener {
     private void enableUserLocation() {
 
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            myLocationNewOverlay.enableFollowLocation();
-            //gMap.setMyLocationEnabled(true);
-            //getGifts();
-
+            myLocationNewOverlay.enableFollowLocation(); //segue la posizione dell'utente
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
+            //richiedo i permessi
+            requestPermissionsIfNecessary(new String[] {
 
-            }
+                    Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
+
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
+            });
         }
     }
 
