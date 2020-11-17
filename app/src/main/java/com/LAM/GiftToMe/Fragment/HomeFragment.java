@@ -1,11 +1,13 @@
 package com.LAM.GiftToMe.Fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,15 +26,6 @@ import android.widget.ImageView;
 
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
-import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.LAM.GiftToMe.UsefulClass.AddressUtils;
-import com.LAM.GiftToMe.UsefulClass.UsersGift;
-import com.android.volley.VolleyError;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -45,6 +38,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,6 +53,8 @@ public class HomeFragment extends Fragment implements LocationListener {
     private Context mContext;
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
+    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private int GPS_SETTING_CODE = 1003;
     private MapView map = null;
     private IMapController mapController;
     private MyLocationNewOverlay myLocationNewOverlay;
@@ -72,6 +68,7 @@ public class HomeFragment extends Fragment implements LocationListener {
     protected boolean gps_enabled, network_enabled;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private int FINE_LOCATION_ACCESS_REQUEST_CODE = 1001;
+    private boolean isDown = false;
 
     @Nullable
     @Override
@@ -80,8 +77,31 @@ public class HomeFragment extends Fragment implements LocationListener {
         v = inflater.inflate(R.layout.home_fragment, container, false);
         Configuration.getInstance().load(mContext, PreferenceManager.getDefaultSharedPreferences(mContext));
 
-        ImageView zoomIn = v.findViewById(R.id.zoom_in);
-        ImageView zoomOut = v.findViewById(R.id.zoom_out);
+        final ImageView dropdown, zoomIn, zoomOut, userPos;
+        dropdown = v.findViewById(R.id.dropdown_option);
+        zoomIn = v.findViewById(R.id.zoom_in);
+        zoomOut = v.findViewById(R.id.zoom_out);
+        userPos = v.findViewById(R.id.position);
+
+
+        dropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isDown){
+                    zoomIn.setVisibility(View.VISIBLE);
+                    zoomOut.setVisibility(View.VISIBLE);
+                    userPos.setVisibility(View.VISIBLE);
+                    dropdown.setImageResource(R.drawable.ic_baseline_arrow_drop_up_24);
+                    isDown = true;
+                }else{
+                    zoomIn.setVisibility(View.GONE);
+                    zoomOut.setVisibility(View.GONE);
+                    userPos.setVisibility(View.GONE);
+                    dropdown.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24);
+                    isDown = false;
+                }
+            }
+        });
 
         map = v.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -130,7 +150,122 @@ public class HomeFragment extends Fragment implements LocationListener {
         Bitmap bitmapMoving = BitmapFactory.decodeResource(getResources(), R.drawable.position); //icona per utente in movimento
         myLocationNewOverlay.setDirectionArrow(bitmapNotMoving, bitmapMoving);
 
+        userPos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsLocationModeHigh() != 3) {
+                    gps();
+                }else{
+                    myLocationNewOverlay.enableFollowLocation();
+                }
+            }
+        });
+
         return v;
+    }
+
+    private boolean canGetLocation(){
+        boolean gpsEnabled = false;
+        boolean networkEnabled = false;
+
+        try {
+            gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        }catch (Exception e){
+            Log.i("gpsgps", "1 " + e.getMessage());
+        }
+
+        try {
+            networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        }catch (Exception e){
+            Log.i("gpsgps", "1 " + e.getMessage());
+        }
+
+        return gpsEnabled && networkEnabled;
+    }
+
+    public void gps(){
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            Log.i("gpsgps", "Dentro");
+            String message = "";
+            if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) message = "devi attivare la posizione";
+            else if(checkIsLocationModeHigh() != 3) message = "la posizione deve essere in modalità alta";
+            else message = "altro";
+
+            //qui il gps non è attivo quindi mostro dialog
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsLocationModeHigh() != 3) {
+                // Build the alert dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Attiva la posizione");
+                builder.setMessage(message);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Show location settings when the user acknowledges the alert dialog
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, 1003);
+                    }
+                });
+                Dialog alertDialog = builder.create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+            }
+            else {
+                enableUserLocation();
+            }
+
+        }
+
+        else {
+            //Richiesta permessi
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+                //mostro dialog per la richiesta dei permessi
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
+            } else {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
+
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GPS_SETTING_CODE) {
+            Log.i("gpsgps", String.valueOf(requestCode));
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsLocationModeHigh() == 3) {
+                enableUserLocation();
+            }
+            gps();
+        }
+
+    }
+
+    private void enableUserLocation() {
+
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            myLocationNewOverlay.enableFollowLocation();
+            //gMap.setMyLocationEnabled(true);
+            //getGifts();
+
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
+            } else {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_ACCESS_REQUEST_CODE);
+
+            }
+        }
+    }
+
+    private int checkIsLocationModeHigh(){
+        try {
+            return (Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.LOCATION_MODE));
+        } catch (Exception exception) {
+            Log.i("gpsgps", "check " + exception.getMessage());
+        }
+        return 0;
     }
 
     @Override

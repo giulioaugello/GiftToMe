@@ -1,10 +1,12 @@
 package com.LAM.GiftToMe.Fragment;
 
+import android.animation.Animator;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +25,11 @@ import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.AddressUtils;
 import com.LAM.GiftToMe.UsefulClass.NormalizeString;
+import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.VolleyError;
 import com.google.android.material.chip.Chip;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,7 +161,7 @@ public class NewGiftFragment extends Fragment {
 
         final Dialog dialog = new Dialog(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.recap_newgift_dialog,null);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         dialog.setContentView(view);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -202,14 +207,61 @@ public class NewGiftFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.i(TAG,response);
                         dialog.dismiss();
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.newGiftFragmentTag);
-                        UserTweetsAdapter.reloadFragment(fragment, getActivity());
-                        clearForm(linearLayout);
+                        onSuccessDialog();
                     }
                 });
 
             }
         });
+    }
+
+    private void onSuccessDialog(){
+        final Dialog dialog = new Dialog(getActivity());
+        View view = getActivity().getLayoutInflater().inflate(R.layout.gift_upload_animation,null);
+        dialog.setCancelable(false);
+        dialog.setContentView(view);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        LottieAnimationView lottieAnimationView = view.findViewById(R.id.animationViewNewGift);
+        TextView textView = view.findViewById(R.id.success);
+
+        dialog.show();
+
+        lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                Log.e("Animation:","start");
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+                Handler handler = new Handler(); //serve per ritardare la chiusura del dialog
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.newGiftFragmentTag);
+                        UserTweetsAdapter.reloadFragment(fragment, getActivity());
+                        clearForm(linearLayout);
+                    }
+
+                }, 1600);
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                Log.e("Animation:","cancel");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                Log.e("Animation:","repeat");
+            }
+        });
+
     }
 
     private void clearForm(ViewGroup group) {

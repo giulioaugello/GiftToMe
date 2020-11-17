@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,7 @@ import com.LAM.GiftToMe.Fragment.ChatFragment;
 import com.LAM.GiftToMe.Fragment.HomeFragment;
 import com.LAM.GiftToMe.Fragment.NewGiftFragment;
 import com.LAM.GiftToMe.Fragment.ProfileFragment;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.twitter.sdk.android.core.TwitterSession;
 
@@ -216,6 +218,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         FragmentManager fragment = getSupportFragmentManager();
-        fragment.findFragmentByTag(profileFragmentTag).onActivityResult(requestCode, resultCode, data);
+//        FragmentManager fragment = getSupportFragmentManager();
+//        fragment.findFragmentByTag(profileFragmentTag).onActivityResult(requestCode, resultCode, data);
+        if (activeFragment == fragment.findFragmentByTag(profileFragmentTag)){
+            fragment.findFragmentByTag(profileFragmentTag).onActivityResult(requestCode, resultCode, data);
+        }
+
     }
 }

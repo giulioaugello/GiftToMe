@@ -25,13 +25,24 @@
         android:padding="10dp">
 
         <ImageView
+            android:id="@+id/dropdown_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_drop_down_24"
+            android:padding="3dp"
+            android:background="@drawable/button_addgift"
+            app:tint="#FFFFFF" />
+
+        <ImageView
             android:id="@+id/zoom_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_add_24"
+            android:layout_marginTop="10dp"
             android:padding="3dp"
             android:background="@drawable/zoom_background"
-            app:tint="#FFFFFF" />
+            app:tint="#FFFFFF"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/zoom_out"
@@ -41,7 +52,8 @@
             android:layout_marginTop="10dp"
             android:padding="3dp"
             android:background="@drawable/zoom_background"
-            app:tint="#FFFFFF" />
+            app:tint="#FFFFFF"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/position"
@@ -51,7 +63,8 @@
             android:layout_marginTop="10dp"
             android:padding="3dp"
             android:background="@drawable/zoom_background"
-            app:tint="#FFFFFF" />
+            app:tint="#FFFFFF"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

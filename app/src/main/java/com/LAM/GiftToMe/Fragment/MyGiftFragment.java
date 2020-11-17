@@ -1,6 +1,7 @@
 package com.LAM.GiftToMe.Fragment;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -250,7 +251,16 @@ public class MyGiftFragment extends Fragment {
 
     private void setupRecyclerView(ArrayList<MyGift> uGiftsList){
         userTweetsAdapter = new UserTweetsAdapter(mContext, uGiftsList, getActivity(),this);
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
+
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // In landscape (orizzontale)
+            recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
+        } else {
+            // In portrait (verticale)
+            recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
+        }
+
         recyclerView.setAdapter(userTweetsAdapter);
     }
 
