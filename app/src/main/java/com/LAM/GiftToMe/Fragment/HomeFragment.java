@@ -1,13 +1,11 @@
 package com.LAM.GiftToMe.Fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,53 +20,57 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
+import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.VolleyListener;
+import com.LAM.GiftToMe.UsefulClass.AddressUtils;
+import com.LAM.GiftToMe.UsefulClass.UsersGift;
+import com.android.volley.VolleyError;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
-import org.osmdroid.views.CustomZoomButtonsDisplay;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.TilesOverlay;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 public class HomeFragment extends Fragment implements LocationListener {
 
     private View v;
     private Context mContext;
+    private boolean isDown = false;
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     private int GPS_SETTING_CODE = 1003;
+    private static final String TWEET_ARTICLE_HASHTAG = "#LAM_giftToMe_2020-article";
+
     private MapView map = null;
     private IMapController mapController;
     private MyLocationNewOverlay myLocationNewOverlay;
 
     protected LocationManager locationManager;
-    protected LocationListener locationListener;
 
-    String lat;
-    String provider;
-    protected String latitude, longitude;
-    protected boolean gps_enabled, network_enabled;
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    private int FINE_LOCATION_ACCESS_REQUEST_CODE = 1001;
-    private boolean isDown = false;
+    private ArrayList<UsersGift> arrayUsersGifts;
+    private double[] coordMarker = new double[2];
+
 
     @Nullable
     @Override
@@ -78,10 +80,12 @@ public class HomeFragment extends Fragment implements LocationListener {
         Configuration.getInstance().load(mContext, PreferenceManager.getDefaultSharedPreferences(mContext));
 
         final ImageView dropdown, zoomIn, zoomOut, userPos;
+        final EditText addPosition;
         dropdown = v.findViewById(R.id.dropdown_option);
         zoomIn = v.findViewById(R.id.zoom_in);
         zoomOut = v.findViewById(R.id.zoom_out);
         userPos = v.findViewById(R.id.position);
+        addPosition = v.findViewById(R.id.add_position);
 
 
         dropdown.setOnClickListener(new View.OnClickListener() {
@@ -146,30 +150,170 @@ public class HomeFragment extends Fragment implements LocationListener {
         userPos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsLocationModeHigh() != 3) {
-                    gps();
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) { //se non ho i permessi li attivo
+                    enablePermissionsAndGPS();
                 }else{
-                    myLocationNewOverlay.enableFollowLocation();
+                    myLocationNewOverlay.enableFollowLocation(); //altrimenti mette il focus sulla posizione dell'utente
                 }
             }
         });
 
-        gps();
+        enablePermissionsAndGPS();
+
+        getUsersGifts();
 
         return v;
     }
 
-    public void gps(){
+    public void getUsersGifts() {
+        TwitterRequests.searchTweets(mContext, TWEET_ARTICLE_HASHTAG, new VolleyListener() {
+
+            @Override
+            public void onResponse(String response) {
+                arrayUsersGifts = new ArrayList<>();
+
+                String id, text, hashtag = "";
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    JSONArray jsonArray = (JSONArray) jObj.get(getResources().getString(R.string.json_statuses));
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        String idString = getResources().getString(R.string.json_id);
+
+                        id = jsonObject.getString(idString);
+                        text = jsonObject.getString(getResources().getString(R.string.json_full_text));
+
+                        UsersGift userGift = new UsersGift();
+                        userGift.setTweetId(id);
+
+                        String tweetWithoutHashtag = text.replace(TWEET_ARTICLE_HASHTAG, "");
+                        String lat = getResources().getString(R.string.user_gift_parsing_lat);
+                        String lon = getResources().getString(R.string.user_gift_parsing_lon);
+
+                        JSONObject tweetWithoutHashtagJSON  = null;
+
+                        try{
+                            tweetWithoutHashtagJSON = new JSONObject(tweetWithoutHashtag);
+                        }
+                        catch (JSONException e){
+//                            e.printStackTrace();
+                            continue;
+                        }
+
+                        userGift.setGiftId(tweetWithoutHashtagJSON.getString(idString));
+                        userGift.setName(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
+                        userGift.setCategory(String.valueOf(Html.fromHtml(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
+                        userGift.setDescription(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
+                        userGift.setLat(tweetWithoutHashtagJSON.getString(lat));
+                        userGift.setLon(tweetWithoutHashtagJSON.getString(lon));
+                        userGift.setAddress(AddressUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
+                        userGift.setIssuer(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
+
+                        if (!userGift.getIssuer().equals(MainActivity.userName)) {
+                            arrayUsersGifts.add(userGift);
+                            Log.i("giftgift", "array " + userGift.getName());
+                        }
+
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                for (UsersGift userGift : arrayUsersGifts) {
+//                    LatLng latLng = new LatLng(Double.parseDouble(userGift.getLat()), Double.parseDouble(userGift.getLon()));
+//                    addMarker(latLng, userGift.getCategory());
+                    coordMarker[0] = Double.parseDouble(userGift.getLat());
+                    coordMarker[1] = Double.parseDouble(userGift.getLon());
+                    addMarker(coordMarker, userGift.getCategory());
+                }
+
+//                bCallback.onLoadComplete();
+//
+//
+//                viewPagerAdapter = new PageViewAdapter(mContext, usersGifts,activity);
+//                viewPager.setAdapter(viewPagerAdapter);
+//                viewPager.setPadding(0, 0, 300, 0);
+//                viewPager.setClipToPadding(false);
+//
+//
+//                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//                    @Override
+//                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onPageSelected(int position) {
+//                        LatLng latLng = new LatLng(Double.parseDouble(usersGifts.get(position).getLat()), Double.parseDouble(usersGifts.get(position).getLon()));
+//                        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.5f), 1000, null); //1000 is animation time
+//                    }
+//
+//                    @Override
+//                    public void onPageScrollStateChanged(int state) {
+//
+//                    }
+//                });
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        //moveCameraToUserLocation();
+    }
+
+    private void addMarker(double[] array, String category) {
+
+        int markerIcon = 0;
+
+        switch (category) {
+            case "Sport":
+                markerIcon = R.drawable.sport_marker;
+                break;
+            case "Electronics":
+                markerIcon = R.drawable.electronic_marker;
+                break;
+            case "Clothing":
+                markerIcon = R.drawable.clothing_marker;
+                break;
+            case "Music&Books":
+                markerIcon = R.drawable.music_marker;
+                break;
+            case "Other":
+                markerIcon = R.drawable.other_marker;
+                break;
+        }
+
+        GeoPoint startPoint = new GeoPoint(array[0], array[1]);
+        Marker marker = new Marker(map);
+        marker.setIcon(ContextCompat.getDrawable(mContext, markerIcon));
+        marker.setPosition(startPoint);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        map.getOverlays().add(marker);
+
+//        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(marker);
+//
+//        gMap.addMarker(new MarkerOptions().position(latLng).icon(icon));
+//
+//        addGeofence(latLng, MainActivity.radius);
+
+    }
+
+    public void enablePermissionsAndGPS(){
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             Log.i("gpsgps", "Dentro");
             String message = "";
-            if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) message = "devi attivare la posizione";
-            else if(checkIsLocationModeHigh() != 3) message = "la posizione deve essere in modalità alta";
+            if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) message = "Devi attivare la posizione";
+            else if(checkIsHighAccuracy() != 3) message = "La posizione deve essere in modalità alta";
             else message = "altro";
 
             //qui il gps non è attivo quindi mostro dialog
-            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsLocationModeHigh() != 3) {
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) {
                 // Build the alert dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Attiva la posizione");
@@ -184,20 +328,20 @@ public class HomeFragment extends Fragment implements LocationListener {
                 Dialog alertDialog = builder.create();
                 alertDialog.setCanceledOnTouchOutside(false);
                 alertDialog.show();
-            }
-            else {
-                enableUserLocation();
+
+            }else {
+                checkUserLocation();
             }
 
         }else {
-            //Richiedo i permessi e richiamo gps() per far uscire il dialog del gps
+            //Richiedo i permessi e richiamo enablePermissionsAndGPS() per far uscire il dialog del gps
             requestPermissionsIfNecessary(new String[] {
 
                     Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
 
                     Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
             });
-            gps();
+            enablePermissionsAndGPS();
         }
     }
 
@@ -207,14 +351,14 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         if (requestCode == GPS_SETTING_CODE) {
             Log.i("gpsgps", String.valueOf(requestCode));
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsLocationModeHigh() == 3) {
-                enableUserLocation();
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3) {
+                checkUserLocation();
             }
         }
 
     }
 
-    private void enableUserLocation() {
+    private void checkUserLocation() {
 
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             myLocationNewOverlay.enableFollowLocation(); //segue la posizione dell'utente
@@ -229,7 +373,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         }
     }
 
-    private int checkIsLocationModeHigh(){
+    private int checkIsHighAccuracy(){
         try {
             return (Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.LOCATION_MODE));
         } catch (Exception exception) {
