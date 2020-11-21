@@ -1,8 +1,12 @@
 package com.LAM.GiftToMe.UsefulClass;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+
 import java.util.UUID;
 
-public class NormalizeString {
+public class EditString {
 
     public static String normalizeTask(Double lat, Double lon, String name, String description, String category, String username){
 
@@ -17,5 +21,6 @@ public class NormalizeString {
                 "\"lat\":" + lat + "," + "\"lon\":" + lon + "," +
                 "\"description\":" + "\"" + description + "\"}";
     }
+
 
 }

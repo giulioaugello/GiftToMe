@@ -24,12 +24,10 @@ import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.AddressUtils;
-import com.LAM.GiftToMe.UsefulClass.NormalizeString;
+import com.LAM.GiftToMe.UsefulClass.EditString;
 import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.VolleyError;
 import com.google.android.material.chip.Chip;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -194,7 +192,7 @@ public class NewGiftFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                String tweet = NormalizeString.normalizeTask(newGiftCoords.get(0), newGiftCoords.get(1), nameForm.getText().toString(), descriptionForm.getText().toString(), activeCategory, MainActivity.userName);
+                String tweet = EditString.normalizeTask(newGiftCoords.get(0), newGiftCoords.get(1), nameForm.getText().toString(), descriptionForm.getText().toString(), activeCategory, MainActivity.userName);
 
                 TwitterRequests.postTweet(tweet, "", mContext, new VolleyListener() {
                     @Override

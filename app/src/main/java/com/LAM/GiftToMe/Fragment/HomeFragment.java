@@ -22,12 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.AddressUtils;
+import com.LAM.GiftToMe.UsefulClass.EditString;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
 import com.android.volley.VolleyError;
 
@@ -43,6 +45,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay;
 
 import java.util.ArrayList;
 
@@ -71,6 +74,10 @@ public class HomeFragment extends Fragment implements LocationListener {
     private ArrayList<UsersGift> arrayUsersGifts;
     private double[] coordMarker = new double[2];
 
+    private EditText addPosition;
+    private ImageView searchPosition;
+    private ArrayList<Marker> removeFirstMarker = new ArrayList<>();
+
 
     @Nullable
     @Override
@@ -80,12 +87,12 @@ public class HomeFragment extends Fragment implements LocationListener {
         Configuration.getInstance().load(mContext, PreferenceManager.getDefaultSharedPreferences(mContext));
 
         final ImageView dropdown, zoomIn, zoomOut, userPos;
-        final EditText addPosition;
         dropdown = v.findViewById(R.id.dropdown_option);
         zoomIn = v.findViewById(R.id.zoom_in);
         zoomOut = v.findViewById(R.id.zoom_out);
         userPos = v.findViewById(R.id.position);
         addPosition = v.findViewById(R.id.add_position);
+        searchPosition = v.findViewById(R.id.search_position);
 
 
         dropdown.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +149,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         myLocationNewOverlay.enableMyLocation();
         map.getOverlays().add(myLocationNewOverlay);
         myLocationNewOverlay.enableFollowLocation(); //segue l'overlay della posizione dell'utente, anche quando si muove
+        myLocationNewOverlay.setDrawAccuracyEnabled(false); //non disegna il cerchio dell'utente
         mapController.setZoom(17.50);
         Bitmap bitmapNotMoving = BitmapFactory.decodeResource(getResources(), R.drawable.position); //icona per utente fermo
         Bitmap bitmapMoving = BitmapFactory.decodeResource(getResources(), R.drawable.position); //icona per utente in movimento
@@ -164,6 +172,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         return v;
     }
+
+
 
     public void getUsersGifts() {
         TwitterRequests.searchTweets(mContext, TWEET_ARTICLE_HASHTAG, new VolleyListener() {
@@ -292,7 +302,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         Marker marker = new Marker(map);
         marker.setIcon(ContextCompat.getDrawable(mContext, markerIcon));
         marker.setPosition(startPoint);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        //marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(marker);
 
 //        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(marker);
@@ -300,6 +310,49 @@ public class HomeFragment extends Fragment implements LocationListener {
 //        gMap.addMarker(new MarkerOptions().position(latLng).icon(icon));
 //
 //        addGeofence(latLng, MainActivity.radius);
+
+    }
+
+    //mette il marker nella posizione cercata se il gps non è attivo
+    private void setMarkerPosition(){
+        Toast.makeText(mContext, "Inserisci una posizione che ti interessa",Toast.LENGTH_LONG).show();
+        searchPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!addPosition.getText().toString().equals("")){
+                    if (AddressUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext) != null) {
+                        ArrayList<Double> coord = AddressUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext);
+
+                        GeoPoint startPoint = new GeoPoint(coord.get(0), coord.get(1));
+                        Log.i("geogeo", "coord " + coord.get(0) + " " + coord.get(1));
+
+                        Marker marker = new Marker(map);
+                        removeFirstMarker.add(marker);
+                        marker.setIcon(ContextCompat.getDrawable(mContext, R.drawable.position));
+                        marker.setPosition(startPoint);
+                        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                        Log.i("geogeo", "coord " + marker.getPosition());
+
+                        map.getOverlays().add(marker);
+                        mapController.setCenter(startPoint);
+
+                        if (removeFirstMarker.size() > 1){ //mi serve per rimuovere il marker precedente
+                            if (startPoint.toString().equals(removeFirstMarker.get(removeFirstMarker.size() - 1).getPosition().toString())){
+                                map.getOverlayManager().remove(removeFirstMarker.get(removeFirstMarker.size() - 2));
+                                map.invalidate();
+                            }
+                        }
+
+                        addPosition.setText("");
+
+                    }else{
+                        Toast.makeText(mContext, "Inserisci una posizione valida",Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(mContext, "Inserisci una posizione che ti interessa",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
     }
 
@@ -311,7 +364,6 @@ public class HomeFragment extends Fragment implements LocationListener {
             if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) message = "Devi attivare la posizione";
             else if(checkIsHighAccuracy() != 3) message = "La posizione deve essere in modalità alta";
             else message = "altro";
-
             //qui il gps non è attivo quindi mostro dialog
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) {
                 // Build the alert dialog
@@ -325,6 +377,14 @@ public class HomeFragment extends Fragment implements LocationListener {
                         startActivityForResult(intent, 1003);
                     }
                 });
+
+                builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setMarkerPosition();
+                    }
+                });
+
                 Dialog alertDialog = builder.create();
                 alertDialog.setCanceledOnTouchOutside(false);
                 alertDialog.show();

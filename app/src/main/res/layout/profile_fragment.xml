@@ -2,12 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#f8f8ff"
+    android:background="@color/colorPrimary"
     android:id="@+id/firstLinear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint"
@@ -17,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:padding="5dp"
         android:visibility="gone">
 
         <ImageView
@@ -58,7 +58,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_gravity="bottom"
                 android:textSize="25sp"
-                android:textColor="#000000"/>
+                android:textColor="#F8F8FF"/>
 
         </LinearLayout>
 
@@ -76,6 +76,7 @@
         android:layout_marginTop="10dp"
         android:paddingBottom="20dp"
         android:layout_marginBottom="20dp"
+        android:background="@drawable/round_corner_profile"
         android:visibility="gone">
 
         <LinearLayout
@@ -100,7 +101,10 @@
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="5dp">
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:cardBackgroundColor="@color/colorPrimary">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -120,7 +124,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="Impostazioni"
-                        android:textColor="#000000"
+                        android:textColor="#F8F8FF"
                         android:textSize="20sp" />
 
                     <com.airbnb.lottie.LottieAnimationView
@@ -129,7 +133,8 @@
                         android:layout_height="50dp"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/settings" />
+                        app:lottie_rawRes="@raw/settings"
+                        android:background="@drawable/bottom_navigation_background"/>
 
                 </LinearLayout>
 
@@ -143,7 +148,10 @@
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="5dp">
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:cardBackgroundColor="@color/colorPrimary">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -158,7 +166,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="Esci"
-                        android:textColor="#000000"
+                        android:textColor="#F8F8FF"
                         android:textSize="20sp" />
 
                     <!--                <ImageView-->
@@ -172,7 +180,8 @@
                         android:layout_height="50dp"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/exit1" />
+                        app:lottie_rawRes="@raw/exit1"
+                        android:background="@drawable/bottom_navigation_background"/>
 
                 </LinearLayout>
 
@@ -185,14 +194,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="5dp"
             android:visibility="visible"
             app:cardCornerRadius="20dp"
-            app:cardElevation="5dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:cardBackgroundColor="@color/colorPrimary">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -207,8 +219,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="I Miei Regali"
-                    android:textColor="#000000"
-                    android:textSize="25sp" />
+                    android:textColor="#F8F8FF"
+                    android:textSize="30sp" />
 
                 <!--            <ImageView-->
                 <!--                android:layout_width="70dp"-->
@@ -219,6 +231,7 @@
                     android:id="@+id/animationViewMyGift"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:background="@drawable/bottom_navigation_background"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/mygift1" />
@@ -230,46 +243,60 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@mipmap/ic_launcher"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_beginning"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1"
-        android:visibility="visible"/>
+        android:layout_marginTop="35dp"
+        android:background="@drawable/round_corner_profile"
+        android:visibility="visible">
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:textColor="#000000"
-        android:layout_gravity="center"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo"
-        app:layout_constraintVertical_bias="0.1"
-        android:visibility="visible"
-        android:text="Per ottenere gli oggetti che ti interessano o pubblicarne nuovi:"/>
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2"
+            android:visibility="visible"/>
 
-    <com.twitter.sdk.android.core.identity.TwitterLoginButton
-        android:id="@+id/login_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text"
-        app:layout_constraintVertical_bias="0.1"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:visibility="visible"/>
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textColor="#000000"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo"
+            app:layout_constraintVertical_bias="0.1"
+            android:visibility="visible"
+            android:text="Per ottenere gli oggetti che ti interessano o pubblicarne nuovi:"/>
+
+        <com.twitter.sdk.android.core.identity.TwitterLoginButton
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text"
+            app:layout_constraintVertical_bias="0.1"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:visibility="visible"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -55,7 +55,7 @@ public class ProfileFragment extends Fragment {
     private TextView text;
     private ImageView logo;
     private TextView twitterUsername;
-    private ConstraintLayout constraintLayout, secondConstraint;
+    private ConstraintLayout constraintLayout, secondConstraint, constraintBeginning;
     private CardView myGift;
     private LinearLayout linearSettings;
     private ImageView twitterBanner, twitterPhoto;
@@ -83,6 +83,7 @@ public class ProfileFragment extends Fragment {
         linearSettings = v.findViewById(R.id.linearSettings);
         twitterPhoto = v.findViewById(R.id.twitterPhoto);
         twitterBanner = v.findViewById(R.id.twitterBanner);
+        constraintBeginning = v.findViewById(R.id.constraint_beginning);
 
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
@@ -159,17 +160,13 @@ public class ProfileFragment extends Fragment {
         if (signedIn) {
             setPageWithUserInfo();
             Log.i("wewewe","wewe");
-            loginButton.setVisibility(View.GONE);
-            text.setVisibility(View.GONE);
-            logo.setVisibility(View.GONE);
+            constraintBeginning.setVisibility(View.GONE);
             constraintLayout.setVisibility(View.VISIBLE);
             secondConstraint.setVisibility(View.VISIBLE);
         } else {
             constraintLayout.setVisibility(View.GONE);
             secondConstraint.setVisibility(View.GONE);
-            loginButton.setVisibility(View.VISIBLE);
-            text.setVisibility(View.VISIBLE);
-            logo.setVisibility(View.VISIBLE);
+            constraintBeginning.setVisibility(View.VISIBLE);
         }
     }
 

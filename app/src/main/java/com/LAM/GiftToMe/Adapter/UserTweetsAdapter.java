@@ -19,13 +19,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.LAM.GiftToMe.Fragment.MyGiftFragment;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.AddressUtils;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
-import com.LAM.GiftToMe.UsefulClass.NormalizeString;
+import com.LAM.GiftToMe.UsefulClass.EditString;
 import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
@@ -261,7 +260,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
                 }
 
                 String task = "";
-                task = NormalizeString.normalizeTask(addressCoords.get(0), addressCoords.get(1), nameString, descriptionString, categoryString, issuer);
+                task = EditString.normalizeTask(addressCoords.get(0), addressCoords.get(1), nameString, descriptionString, categoryString, issuer);
 
                 removeGift(myGift.get(position).getTweetId(),position);
                 myGift.remove(position);
