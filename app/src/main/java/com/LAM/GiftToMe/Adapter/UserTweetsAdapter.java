@@ -1,18 +1,25 @@
 package com.LAM.GiftToMe.Adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 
@@ -49,11 +56,18 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.nameGift.setText(usersGifts.get(position).getName());
 
         String category = usersGifts.get(position).getCategory();
         MyGiftTweetsAdapter.changeCategoryImage(category, holder.imageCategory);
+
+        holder.cardUserGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDetailsGift(position);
+            }
+        });
 
     }
 
@@ -64,18 +78,51 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        private CardView cardView;
+        private CardView cardUserGift;
         private ImageView imageCategory;
         private TextView nameGift;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            cardView = itemView.findViewById(R.id.card_list);
+            cardUserGift = itemView.findViewById(R.id.card_list);
             imageCategory = itemView.findViewById(R.id.img_category_list);
             nameGift = itemView.findViewById(R.id.gift_name);
 
         }
+    }
+
+    private void showDetailsGift(final int position){
+
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.BottomSheetDialogTheme);
+
+        View bottomSheetView = LayoutInflater.from(mContext).inflate(R.layout.users_gift_bottom_dialog, null);
+
+        Button contactUser = bottomSheetView.findViewById(R.id.contact_user_button);
+        ImageView categoryUserGift = bottomSheetView.findViewById(R.id.category_user_gift);
+
+        String categoryString = usersGifts.get(position).getCategory();
+
+        TextView nameUserGift, descriptionUserGift, addressUserGift;
+        nameUserGift = bottomSheetView.findViewById(R.id.name_user_gift);
+        descriptionUserGift = bottomSheetView.findViewById(R.id.description_user_gift);
+        addressUserGift = bottomSheetView.findViewById(R.id.address_user_gift);
+
+        nameUserGift.setText(usersGifts.get(position).getName());
+        descriptionUserGift.setText(usersGifts.get(position).getDescription());
+        addressUserGift.setText(usersGifts.get(position).getAddress());
+        MyGiftTweetsAdapter.changeCategoryImage(categoryString, categoryUserGift);
+
+        contactUser.setText("Contatta " + usersGifts.get(position).getIssuer());
+        contactUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "bello", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
     }
 
 }

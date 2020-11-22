@@ -7,34 +7,26 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.LAM.GiftToMe.Fragment.ChatFragment;
 import com.LAM.GiftToMe.Fragment.HomeFragment;
 import com.LAM.GiftToMe.Fragment.NewGiftFragment;
 import com.LAM.GiftToMe.Fragment.ProfileFragment;
 import com.LAM.GiftToMe.Fragment.UserTweetsFragment;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.twitter.sdk.android.core.TwitterSession;
-
-import org.osmdroid.config.Configuration;
-import org.osmdroid.views.MapView;
 
 public class MainActivity extends AppCompatActivity {
 
     private HomeFragment homeFragment;
     private NewGiftFragment newGiftFragment;
-    private UserTweetsFragment chatFragment;
+    private UserTweetsFragment chatFragment; //rimettere ChatFragment
     private ProfileFragment profileFragment;
     private ListFragment listFragment;
     public static Fragment activeFragment;
@@ -48,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static String userName,token,tokenSecret;
     public static Long userId;
 
-    public static String homeFragmentTag, listFragmentTag, messagesFragmentTag, newGiftFragmentTag, profileFragmentTag, conversationFragmentTag, settingsFragmentTag, myGiftFragmentTag;
+    public static String homeFragmentTag, usersGiftListFragmentTag, messagesFragmentTag, newGiftFragmentTag, profileFragmentTag, conversationFragmentTag, settingsFragmentTag, myGiftFragmentTag;
 
     private static final int TIME_INTERVAL = 2000; // tempo che intercorre tra due back (millisecondi)
     private long mBackPressed;
@@ -67,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         //get FragmentTags
         homeFragmentTag = getResources().getString(R.string.map_fragment_tag);
-        listFragmentTag = getResources().getString(R.string.list_fragment_tag);
+        usersGiftListFragmentTag = getResources().getString(R.string.list_fragment_tag);
         newGiftFragmentTag = getResources().getString(R.string.newgift_fragment_tag);
         messagesFragmentTag = getResources().getString(R.string.messages_fragment_tag);
         profileFragmentTag = getResources().getString(R.string.profile_fragment_tag);
@@ -129,10 +121,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_chat:
 //                    if (isLogged){
                         if(chatFragment == null) {
-                            chatFragment = new UserTweetsFragment();
+                            chatFragment = new UserTweetsFragment(); //rimettere ChatFragment()
                         }
                         selectedFragment = chatFragment;
-                        fragmentTag = messagesFragmentTag;
+                        fragmentTag = usersGiftListFragmentTag; //rimettere il tag della chat
 //                    }else{
 //                        Toast.makeText(getApplicationContext(), "Devi accedere per poter entrare in questa sezione",Toast.LENGTH_LONG).show();
 //                        return false;
@@ -223,6 +215,8 @@ public class MainActivity extends AppCompatActivity {
 //        fragment.findFragmentByTag(profileFragmentTag).onActivityResult(requestCode, resultCode, data);
         if (activeFragment == fragment.findFragmentByTag(profileFragmentTag)){
             fragment.findFragmentByTag(profileFragmentTag).onActivityResult(requestCode, resultCode, data);
+        }else if (activeFragment == fragment.findFragmentByTag(usersGiftListFragmentTag)){
+            fragment.findFragmentByTag(usersGiftListFragmentTag).onActivityResult(requestCode, resultCode, data);
         }
 
     }

@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment implements LocationListener {
     private boolean isDown = false;
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private int GPS_SETTING_CODE = 1003;
+    public static int GPS_SETTING_CODE = 1003;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final String TWEET_ARTICLE_HASHTAG = "#LAM_giftToMe_2020-article";
 
@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment implements LocationListener {
     private IMapController mapController;
     private MyLocationNewOverlay myLocationNewOverlay;
 
-    protected LocationManager locationManager;
+    public static LocationManager locationManager;
 
     private ArrayList<UsersGift> arrayUsersGifts;
     private double[] coordMarker = new double[2];

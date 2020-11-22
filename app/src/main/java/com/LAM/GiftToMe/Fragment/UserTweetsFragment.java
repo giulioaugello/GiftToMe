@@ -1,7 +1,15 @@
 package com.LAM.GiftToMe.Fragment;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,8 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.Adapter.UserTweetsAdapter;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
@@ -23,11 +33,13 @@ import com.android.volley.VolleyError;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mapsforge.map.rendertheme.renderinstruction.Line;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,9 +50,12 @@ public class UserTweetsFragment extends Fragment {
     private Context mContext;
     private ScrollView scrollView;
     private EditText searchLocation;
-    private ImageView searchButtonLocation;
-    private ArrayList<UsersGift> usersGifts, sportA, electronicsA, clothingA, musicA, otherA;
+    private ImageView searchButtonLocation, turnOnGps;
+    private LinearLayout linearGpsOff;
+    private ArrayList<UsersGift> sportA, electronicsA, clothingA, musicA, otherA;
     private UserTweetsAdapter userTweetsAdapter;
+
+    private Fragment fragment;
 
     private static final String TWEET_ARTICLE_HASHTAG = "#LAM_giftToMe_2020-article";
     private ArrayList<UsersGift> arrayUsersGifts;
@@ -68,6 +83,34 @@ public class UserTweetsFragment extends Fragment {
         clothingA = new ArrayList<>();
         musicA = new ArrayList<>();
         otherA = new ArrayList<>();
+
+        linearGpsOff = v.findViewById(R.id.linear_gps_off);
+        turnOnGps = v.findViewById(R.id.turn_on_gps);
+        scrollView = v.findViewById(R.id.scroll_tweets_list);
+
+        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.usersGiftListFragmentTag);
+
+        final float density = mContext.getResources().getDisplayMetrics().density;
+
+        if (HomeFragment.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            linearGpsOff.setVisibility(View.GONE);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            );
+            int top = (int) (25 * density);
+            params.setMargins(0, top, 0, 0);
+            scrollView.setLayoutParams(params);
+        }
+
+        turnOnGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enableGPS();
+
+            }
+        });
 
 
         TwitterRequests.searchTweets(mContext, TWEET_ARTICLE_HASHTAG, new VolleyListener() {
@@ -199,6 +242,41 @@ public class UserTweetsFragment extends Fragment {
 
 
         return v;
+    }
+
+    private void enableGPS(){
+
+        // Build the alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Attiva la posizione");
+        builder.setMessage("Devi attivare la posizione con modalità alta");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Show location settings when the user acknowledges the alert dialog
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(intent, 1003);
+            }
+        });
+
+        Dialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("permperm", String.valueOf(requestCode));
+
+        if (requestCode == HomeFragment.GPS_SETTING_CODE) {
+            if (HomeFragment.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                //linearGpsOff.setVisibility(View.GONE);
+                MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
+            }
+        }
+
+
     }
 
     private void setupRecyclerView(ArrayList<UsersGift> usersGiftsList, RecyclerView recyclerView){

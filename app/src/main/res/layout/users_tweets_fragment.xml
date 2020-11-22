@@ -135,19 +135,31 @@
         android:background="@drawable/round_corner_profile">
 
         <LinearLayout
+            android:id="@+id/linear_gps_off"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Puoi cercare una posizione che ti interessa"
-                android:textSize="23sp"
+                android:text="Puoi cercare una posizione che ti interessa o attivare il GPS premendo il pulsante al lato"
+                android:textSize="19sp"
                 android:gravity="center"
                 android:textColor="#F44336"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:layout_weight="2"/>
+
+            <ImageView
+                android:id="@+id/turn_on_gps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_gps_fixed_24"
+                android:layout_weight="0"
+                android:layout_gravity="bottom"
+                app:tint="@color/colorPrimary" />
 
         </LinearLayout>
 
