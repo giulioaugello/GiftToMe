@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="#56ab2f"
+    >
+
+<!--    <HorizontalScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:scrollbars="none">-->
+
+<!--        <com.google.android.material.chip.ChipGroup-->
+<!--            android:id="@+id/chip_filters"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:singleLine="true"-->
+<!--            app:singleSelection="false">-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/sport_chip"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="4dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:text="Sport"-->
+<!--                android:textAlignment="center"-->
+<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
+<!--                app:chipBackgroundColor="#F8F8FF"-->
+<!--                app:chipIcon="@drawable/sport"-->
+<!--                app:iconStartPadding="5dp" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/electronic_chip"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="4dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:text="Electronics"-->
+<!--                android:textAlignment="center"-->
+<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
+<!--                app:chipBackgroundColor="#F8F8FF"-->
+<!--                app:chipIcon="@drawable/electronic"-->
+<!--                app:iconStartPadding="5dp" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/clothing_chip"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="4dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:text="Clothing"-->
+<!--                android:textAlignment="center"-->
+<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
+<!--                app:chipBackgroundColor="#F8F8FF"-->
+<!--                app:chipIcon="@drawable/clothing"-->
+<!--                app:iconStartPadding="5dp" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/music_chip"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="4dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:text="Music&amp;Books"-->
+<!--                android:textAlignment="center"-->
+<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
+<!--                app:chipBackgroundColor="#F8F8FF"-->
+<!--                app:chipIcon="@drawable/musicbook"-->
+<!--                app:iconStartPadding="5dp" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/other_chip"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="4dp"-->
+<!--                android:padding="12dp"-->
+<!--                android:text="Other"-->
+<!--                android:textAlignment="center"-->
+<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
+<!--                app:chipBackgroundColor="#F8F8FF"-->
+<!--                app:chipIcon="@drawable/file"-->
+<!--                app:iconStartPadding="5dp" />-->
+
+
+<!--        </com.google.android.material.chip.ChipGroup>-->
+
+<!--    </HorizontalScrollView>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_margin="10dp"
+        android:background="@drawable/bottom_navigation_background">
+
+        <EditText
+            android:id="@+id/add_position_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="Inserisci una posizione"
+            android:padding="10dp"
+            android:textColor="#56ab2f"
+            android:textColorHint="#56ab2f"
+            android:backgroundTint="#56ab2f"
+            android:layout_weight="1"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/search_position_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_baseline_navigation_24"
+            app:tint="#56ab2f" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:background="@drawable/round_corner_profile">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Puoi cercare una posizione che ti interessa"
+                android:textSize="23sp"
+                android:gravity="center"
+                android:textColor="#F44336"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scroll_tweets_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="56dp"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sport"
+                    android:textSize="30sp"
+                    android:textColor="#F44336"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/user_tweets_sport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Electronics"
+                    android:textSize="30sp"
+                    android:textColor="#F44336"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/user_tweets_electronics"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Clothing"
+                    android:textSize="30sp"
+                    android:textColor="#F44336"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/user_tweets_clothing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Music&amp;Books"
+                    android:textSize="30sp"
+                    android:textColor="#F44336"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/user_tweets_music"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Other"
+                    android:textSize="30sp"
+                    android:textColor="#F44336"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/user_tweets_other"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                </HorizontalScrollView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"/>
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>

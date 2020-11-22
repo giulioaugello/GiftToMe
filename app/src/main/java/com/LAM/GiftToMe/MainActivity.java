@@ -22,6 +22,7 @@ import com.LAM.GiftToMe.Fragment.ChatFragment;
 import com.LAM.GiftToMe.Fragment.HomeFragment;
 import com.LAM.GiftToMe.Fragment.NewGiftFragment;
 import com.LAM.GiftToMe.Fragment.ProfileFragment;
+import com.LAM.GiftToMe.Fragment.UserTweetsFragment;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.twitter.sdk.android.core.TwitterSession;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private HomeFragment homeFragment;
     private NewGiftFragment newGiftFragment;
-    private ChatFragment chatFragment;
+    private UserTweetsFragment chatFragment;
     private ProfileFragment profileFragment;
     private ListFragment listFragment;
     public static Fragment activeFragment;
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_chat:
 //                    if (isLogged){
                         if(chatFragment == null) {
-                            chatFragment = new ChatFragment();
+                            chatFragment = new UserTweetsFragment();
                         }
                         selectedFragment = chatFragment;
                         fragmentTag = messagesFragmentTag;

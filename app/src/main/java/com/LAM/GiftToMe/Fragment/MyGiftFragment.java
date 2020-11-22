@@ -10,29 +10,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 
-import com.LAM.GiftToMe.Adapter.UserTweetsAdapter;
+import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.AddressUtils;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
-import com.airbnb.lottie.utils.Utils;
 import com.android.volley.VolleyError;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MyGiftFragment extends Fragment {
@@ -41,7 +37,7 @@ public class MyGiftFragment extends Fragment {
     private Context mContext;
     public static ScrollView scrollView;
     private ArrayList<MyGift> userGifts;
-    private UserTweetsAdapter userTweetsAdapter;
+    private MyGiftTweetsAdapter myGiftTweetsAdapter;
     public static ArrayList<String> arrayActive;
 
     private boolean sportBool, electronicsBool, clothingBool, musicBool, otherBool;
@@ -153,7 +149,7 @@ public class MyGiftFragment extends Fragment {
                     sportBool = false;
                     sportChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }
-                userTweetsAdapter.filter(arrayActive);
+                myGiftTweetsAdapter.filter(arrayActive);
                 //Log.i("checkedchecked", arrayActive + "");
             }
         });
@@ -169,7 +165,7 @@ public class MyGiftFragment extends Fragment {
                     electronicsBool = false;
                     electronicChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }
-                userTweetsAdapter.filter(arrayActive);
+                myGiftTweetsAdapter.filter(arrayActive);
                 //Log.i("checkedchecked", arrayActive + "");
             }
         });
@@ -185,7 +181,7 @@ public class MyGiftFragment extends Fragment {
                     clothingBool = false;
                     clothingChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }
-                userTweetsAdapter.filter(arrayActive);
+                myGiftTweetsAdapter.filter(arrayActive);
                 //Log.i("checkedchecked", arrayActive + "");
             }
         });
@@ -201,7 +197,7 @@ public class MyGiftFragment extends Fragment {
                     musicBool = false;
                     musicChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }
-                userTweetsAdapter.filter(arrayActive);
+                myGiftTweetsAdapter.filter(arrayActive);
                 //Log.i("checkedchecked", arrayActive + "");
             }
         });
@@ -218,7 +214,7 @@ public class MyGiftFragment extends Fragment {
                     otherChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }
 //                activeFilter(otherBool, otherChip, "Other");
-                userTweetsAdapter.filter(arrayActive);
+                myGiftTweetsAdapter.filter(arrayActive);
                 //Log.i("checkedchecked", arrayActive + "");
             }
         });
@@ -250,7 +246,7 @@ public class MyGiftFragment extends Fragment {
 //    }
 
     private void setupRecyclerView(ArrayList<MyGift> uGiftsList){
-        userTweetsAdapter = new UserTweetsAdapter(mContext, uGiftsList, getActivity(),this);
+        myGiftTweetsAdapter = new MyGiftTweetsAdapter(mContext, uGiftsList, getActivity(),this);
 
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -261,7 +257,7 @@ public class MyGiftFragment extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         }
 
-        recyclerView.setAdapter(userTweetsAdapter);
+        recyclerView.setAdapter(myGiftTweetsAdapter);
     }
 
 }

@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.LAM.GiftToMe.Adapter.UserTweetsAdapter;
+import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
@@ -176,7 +176,7 @@ public class NewGiftFragment extends Fragment {
         recapDescription.setText(descriptionForm.getText().toString());
         recapAddress.setText(addressForm.getText().toString());
 
-        UserTweetsAdapter.changeCategoryImage(activeCategory, recapImg);
+        MyGiftTweetsAdapter.changeCategoryImage(activeCategory, recapImg);
         newGiftCoords = AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext);
 
         dialog.show();
@@ -241,7 +241,7 @@ public class NewGiftFragment extends Fragment {
                     public void run() {
                         dialog.dismiss();
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.newGiftFragmentTag);
-                        UserTweetsAdapter.reloadFragment(fragment, getActivity());
+                        MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
                         clearForm(linearLayout);
                     }
 
