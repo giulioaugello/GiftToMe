@@ -108,7 +108,6 @@ public class UserTweetsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 enableGPS();
-
             }
         });
 
@@ -271,7 +270,6 @@ public class UserTweetsFragment extends Fragment {
 
         if (requestCode == HomeFragment.GPS_SETTING_CODE) {
             if (HomeFragment.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                //linearGpsOff.setVisibility(View.GONE);
                 MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
             }
         }
