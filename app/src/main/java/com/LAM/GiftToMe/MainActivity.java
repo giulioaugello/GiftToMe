@@ -2,13 +2,19 @@ package com.LAM.GiftToMe;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -24,6 +30,9 @@ import com.twitter.sdk.android.core.TwitterSession;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int FINE_LOCATION_ACCESS_REQUEST_CODE = 0x1;
+    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private HomeFragment homeFragment;
     private NewGiftFragment newGiftFragment;
     private UserTweetsFragment chatFragment; //rimettere ChatFragment
@@ -59,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         //get FragmentTags
         homeFragmentTag = getResources().getString(R.string.map_fragment_tag);
-        usersGiftListFragmentTag = getResources().getString(R.string.list_fragment_tag);
+        usersGiftListFragmentTag = getResources().getString(R.string.users_tweets_fragment_tag);
         newGiftFragmentTag = getResources().getString(R.string.newgift_fragment_tag);
         messagesFragmentTag = getResources().getString(R.string.messages_fragment_tag);
         profileFragmentTag = getResources().getString(R.string.profile_fragment_tag);
@@ -154,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if(activeFragment.equals(fragmentManager.findFragmentByTag(homeFragmentTag))) {
+        if(activeFragment.equals(fragmentManager.findFragmentByTag(homeFragmentTag)) || activeFragment.equals(fragmentManager.findFragmentByTag(usersGiftListFragmentTag))) {
             if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
                 finishAndRemoveTask();
                 return;
@@ -186,6 +195,28 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.addToBackStack(homeFragmentTag);
             activeFragment = homeFragment;
             bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //Toast.makeText(this, String.valueOf(requestCode), Toast.LENGTH_LONG).show();
+
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
+                //            String userTweetsFragmentTag = getResources().getString(R.string.users_tweets_fragment_tag);
+                UserTweetsFragment userTweetsFragment = new UserTweetsFragment();
+                FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.none);
+                fragmentTransaction.replace(R.id.fragment_container, userTweetsFragment, usersGiftListFragmentTag).commit();
+                fragmentTransaction.addToBackStack(usersGiftListFragmentTag);
+                activeFragment = userTweetsFragment;
+
+            }
         }
     }
 
