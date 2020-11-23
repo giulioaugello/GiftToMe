@@ -1,7 +1,6 @@
 package com.LAM.GiftToMe.Fragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -22,7 +21,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,7 +29,7 @@ import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.LAM.GiftToMe.UsefulClass.AddressUtils;
+import com.LAM.GiftToMe.UsefulClass.AddressAndPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
 import com.android.volley.VolleyError;
 
@@ -52,10 +50,8 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 public class HomeFragment extends Fragment implements LocationListener {
 
@@ -63,7 +59,7 @@ public class HomeFragment extends Fragment implements LocationListener {
     private Context mContext;
     private boolean isDown = false;
 
-    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
+    public static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     public static int GPS_SETTING_CODE = 1003;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final String TWEET_ARTICLE_HASHTAG = "#LAM_giftToMe_2020-article";
@@ -96,7 +92,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         userPos = v.findViewById(R.id.position);
         addPosition = v.findViewById(R.id.add_position);
         searchPosition = v.findViewById(R.id.search_position);
-        
+
         dropdown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,12 +292,12 @@ public class HomeFragment extends Fragment implements LocationListener {
             //qui ho sia permessi che gps: quindi visualizzo mappa e lista
         } else {
             //richiedo i permessi
-            requestPermissionsIfNecessary(new String[] {
+            AddressAndPermissionUtils.requestPermissionsIfNecessary(new String[] {
 
                     Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
 
                     Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
-            });
+            }, mContext, v);
 
             //qui ho gps e non ho permessi: quindi
         }
@@ -324,8 +320,8 @@ public class HomeFragment extends Fragment implements LocationListener {
         checkUserLocation();
 
         if (!addPosition.getText().toString().equals("")){
-            if (AddressUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext) != null) {
-                ArrayList<Double> coord = AddressUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext);
+            if (AddressAndPermissionUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext) != null) {
+                ArrayList<Double> coord = AddressAndPermissionUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext);
 
                 final GeoPoint start = new GeoPoint(coord.get(0), coord.get(1));
                 Log.i("geogeo", "coord " + coord.get(0) + " " + coord.get(1));
@@ -391,23 +387,23 @@ public class HomeFragment extends Fragment implements LocationListener {
     }
 
 
-    private void requestPermissionsIfNecessary(String[] permissions) {
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(mContext, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // Permission is not granted
-                permissionsToRequest.add(permission);
-
-            }
-        }
-        if (permissionsToRequest.size() > 0) {
-            ActivityCompat.requestPermissions(
-                    getActivity(),
-                    permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE); //mette in REQUEST_PERMISSIONS_REQUEST_CODE i permessi da richiedere
-        }
-    }
+//    private void requestPermissionsIfNecessary(String[] permissions) {
+//        ArrayList<String> permissionsToRequest = new ArrayList<>();
+//        for (String permission : permissions) {
+//            if (ContextCompat.checkSelfPermission(mContext, permission)
+//                    != PackageManager.PERMISSION_GRANTED) {
+//                // Permission is not granted
+//                permissionsToRequest.add(permission);
+//
+//            }
+//        }
+//        if (permissionsToRequest.size() > 0) {
+//            ActivityCompat.requestPermissions(
+//                    getActivity(),
+//                    permissionsToRequest.toArray(new String[0]),
+//                    REQUEST_PERMISSIONS_REQUEST_CODE); //mette in REQUEST_PERMISSIONS_REQUEST_CODE i permessi da richiedere
+//        }
+//    }
 
     public void getUsersGifts() {
         TwitterRequests.searchTweets(mContext, TWEET_ARTICLE_HASHTAG, new VolleyListener() {
@@ -451,7 +447,7 @@ public class HomeFragment extends Fragment implements LocationListener {
                         userGift.setDescription(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
                         userGift.setLat(tweetWithoutHashtagJSON.getString(lat));
                         userGift.setLon(tweetWithoutHashtagJSON.getString(lon));
-                        userGift.setAddress(AddressUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
+                        userGift.setAddress(AddressAndPermissionUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
                         userGift.setIssuer(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
 
                         if (!userGift.getIssuer().equals(MainActivity.userName)) {

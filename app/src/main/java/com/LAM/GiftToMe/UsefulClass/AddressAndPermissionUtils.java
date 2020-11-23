@@ -1,16 +1,24 @@
 package com.LAM.GiftToMe.UsefulClass;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
+import android.view.View;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class AddressUtils {
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import static com.LAM.GiftToMe.Fragment.HomeFragment.REQUEST_PERMISSIONS_REQUEST_CODE;
+
+public class AddressAndPermissionUtils {
 
     public static String addressString(Context mContext, double LATITUDE, double LONGITUDE) {
         String strAdd = "";
@@ -64,6 +72,24 @@ public class AddressUtils {
         Log.i("coordinates","coordsize: " + coords.size());
 
         return coords;
+    }
+
+    public static void requestPermissionsIfNecessary(String[] permissions, Context context, View view) {
+        ArrayList<String> permissionsToRequest = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(context, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                // Permission is not granted
+                permissionsToRequest.add(permission);
+
+            }
+        }
+        if (permissionsToRequest.size() > 0) {
+            ActivityCompat.requestPermissions(
+                    (Activity) view.getContext(),
+                    permissionsToRequest.toArray(new String[0]),
+                    REQUEST_PERMISSIONS_REQUEST_CODE); //mette in REQUEST_PERMISSIONS_REQUEST_CODE i permessi da richiedere
+        }
     }
 
 }

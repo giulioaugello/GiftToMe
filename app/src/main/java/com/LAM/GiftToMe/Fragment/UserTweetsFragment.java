@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -26,20 +25,20 @@ import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.LAM.GiftToMe.UsefulClass.AddressUtils;
+import com.LAM.GiftToMe.UsefulClass.AddressAndPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
 import com.android.volley.VolleyError;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mapsforge.map.rendertheme.renderinstruction.Line;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,6 +54,7 @@ public class UserTweetsFragment extends Fragment {
     private ArrayList<UsersGift> sportA, electronicsA, clothingA, musicA, otherA;
     private UserTweetsAdapter userTweetsAdapter;
 
+
     private Fragment fragment;
 
     private static final String TWEET_ARTICLE_HASHTAG = "#LAM_giftToMe_2020-article";
@@ -66,6 +66,7 @@ public class UserTweetsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v =  inflater.inflate(R.layout.users_tweets_fragment, container, false);
+        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.usersGiftListFragmentTag);
 
         mContext = getActivity().getApplicationContext();
 
@@ -88,14 +89,15 @@ public class UserTweetsFragment extends Fragment {
         turnOnGps = v.findViewById(R.id.turn_on_gps);
         scrollView = v.findViewById(R.id.scroll_tweets_list);
 
-        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.usersGiftListFragmentTag);
+        FloatingActionButton fab = v.findViewById(R.id.return_to_map);
+
 
         final float density = mContext.getResources().getDisplayMetrics().density;
 
         if (HomeFragment.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             linearGpsOff.setVisibility(View.GONE);
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
             );
@@ -108,6 +110,19 @@ public class UserTweetsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 enableGPS();
+            }
+        });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddressAndPermissionUtils.requestPermissionsIfNecessary(new String[] {
+
+                        Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
+
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
+                }, mContext, v);
+
             }
         });
 
@@ -153,7 +168,7 @@ public class UserTweetsFragment extends Fragment {
                         userGift.setDescription(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
                         userGift.setLat(tweetWithoutHashtagJSON.getString(lat));
                         userGift.setLon(tweetWithoutHashtagJSON.getString(lon));
-                        userGift.setAddress(AddressUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
+                        userGift.setAddress(AddressAndPermissionUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
                         userGift.setIssuer(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
 
                         if (!userGift.getIssuer().equals(MainActivity.userName)) {

@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -207,8 +208,7 @@ public class MainActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                //            String userTweetsFragmentTag = getResources().getString(R.string.users_tweets_fragment_tag);
+                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE); //continua a chiedere sempre i permessi che non dai
                 UserTweetsFragment userTweetsFragment = new UserTweetsFragment();
                 FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.none);
@@ -216,6 +216,13 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.addToBackStack(usersGiftListFragmentTag);
                 activeFragment = userTweetsFragment;
 
+            }else{
+                HomeFragment homeFragment = new HomeFragment();
+                FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.none);
+                fragmentTransaction.replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
+                fragmentTransaction.addToBackStack(homeFragmentTag);
+                activeFragment = homeFragment;
             }
         }
     }

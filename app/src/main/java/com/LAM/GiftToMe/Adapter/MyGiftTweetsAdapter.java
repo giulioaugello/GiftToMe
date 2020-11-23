@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.LAM.GiftToMe.UsefulClass.AddressUtils;
+import com.LAM.GiftToMe.UsefulClass.AddressAndPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
 import com.LAM.GiftToMe.UsefulClass.EditString;
 import com.android.volley.VolleyError;
@@ -248,13 +248,13 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
                 nameString = nameLong.getText().toString();
                 descriptionString = descriptionLong.getText().toString();
                 addressString = addressLong.getText().toString();
-                ArrayList<Double> addressCoords = AddressUtils.getCoordsFromAddress(addressString, mContext);
+                ArrayList<Double> addressCoords = AddressAndPermissionUtils.getCoordsFromAddress(addressString, mContext);
 
                 if(nameString.isEmpty() || descriptionString.isEmpty() || addressString.isEmpty()){
                     Toast.makeText(mContext, "Inserisci tutti i campi", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(AddressUtils.getCoordsFromAddress(addressString, mContext) == null) {
+                if(AddressAndPermissionUtils.getCoordsFromAddress(addressString, mContext) == null) {
                     Toast.makeText(mContext, "Inserisci un indirizzo valido", Toast.LENGTH_SHORT).show();
                     return;
                 }

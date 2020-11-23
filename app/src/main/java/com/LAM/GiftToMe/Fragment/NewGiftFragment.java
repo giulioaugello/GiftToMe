@@ -23,7 +23,7 @@ import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.LAM.GiftToMe.UsefulClass.AddressUtils;
+import com.LAM.GiftToMe.UsefulClass.AddressAndPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.EditString;
 import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.VolleyError;
@@ -139,8 +139,8 @@ public class NewGiftFragment extends Fragment {
             return isReturn;
         }
 
-        Log.i("formform", "Indirizzo: " + AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext));
-        if(AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext) == null) {
+        Log.i("formform", "Indirizzo: " + AddressAndPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext));
+        if(AddressAndPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext) == null) {
             Toast.makeText(mContext, "Inserisci un indirizzo valido", Toast.LENGTH_SHORT).show();
             isReturn = true;
             return isReturn;
@@ -177,7 +177,7 @@ public class NewGiftFragment extends Fragment {
         recapAddress.setText(addressForm.getText().toString());
 
         MyGiftTweetsAdapter.changeCategoryImage(activeCategory, recapImg);
-        newGiftCoords = AddressUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext);
+        newGiftCoords = AddressAndPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext);
 
         dialog.show();
 
