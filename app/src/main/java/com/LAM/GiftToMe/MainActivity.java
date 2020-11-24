@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE); //continua a chiedere sempre i permessi che non dai
                 UserTweetsFragment userTweetsFragment = new UserTweetsFragment();
                 FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.none);
+                fragmentTransaction.setCustomAnimations(R.anim.righttoleft, R.anim.none);
                 fragmentTransaction.replace(R.id.fragment_container, userTweetsFragment, usersGiftListFragmentTag).commit();
                 fragmentTransaction.addToBackStack(usersGiftListFragmentTag);
                 activeFragment = userTweetsFragment;
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 HomeFragment homeFragment = new HomeFragment();
                 FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.none);
+                fragmentTransaction.setCustomAnimations(R.anim.lefttoright, R.anim.none);
                 fragmentTransaction.replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
                 fragmentTransaction.addToBackStack(homeFragmentTag);
                 activeFragment = homeFragment;

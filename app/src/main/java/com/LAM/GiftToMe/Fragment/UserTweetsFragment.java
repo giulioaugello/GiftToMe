@@ -25,7 +25,7 @@ import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.LAM.GiftToMe.UsefulClass.AddressAndPermissionUtils;
+import com.LAM.GiftToMe.UsefulClass.AddressPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
 import com.android.volley.VolleyError;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -116,7 +116,7 @@ public class UserTweetsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddressAndPermissionUtils.requestPermissionsIfNecessary(new String[] {
+                AddressPermissionUtils.requestPermissionsIfNecessary(new String[] {
 
                         Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
 
@@ -168,7 +168,7 @@ public class UserTweetsFragment extends Fragment {
                         userGift.setDescription(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
                         userGift.setLat(tweetWithoutHashtagJSON.getString(lat));
                         userGift.setLon(tweetWithoutHashtagJSON.getString(lon));
-                        userGift.setAddress(AddressAndPermissionUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
+                        userGift.setAddress(AddressPermissionUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
                         userGift.setIssuer(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
 
                         if (!userGift.getIssuer().equals(MainActivity.userName)) {

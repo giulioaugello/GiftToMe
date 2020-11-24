@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat;
 
 import static com.LAM.GiftToMe.Fragment.HomeFragment.REQUEST_PERMISSIONS_REQUEST_CODE;
 
-public class AddressAndPermissionUtils {
+public class AddressPermissionUtils {
 
     public static String addressString(Context mContext, double LATITUDE, double LONGITUDE) {
         String strAdd = "";

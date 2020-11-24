@@ -1,6 +1,7 @@
 package com.LAM.GiftToMe.Fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,7 +31,8 @@ import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.LAM.GiftToMe.UsefulClass.AddressAndPermissionUtils;
+import com.LAM.GiftToMe.UsefulClass.AddressPermissionUtils;
+import com.LAM.GiftToMe.UsefulClass.CustomInfoWindow;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
 import com.android.volley.VolleyError;
 
@@ -43,6 +46,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -292,11 +296,12 @@ public class HomeFragment extends Fragment implements LocationListener {
             //qui ho sia permessi che gps: quindi visualizzo mappa e lista
         } else {
             //richiedo i permessi
-            AddressAndPermissionUtils.requestPermissionsIfNecessary(new String[] {
+            AddressPermissionUtils.requestPermissionsIfNecessary(new String[] {
 
                     Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
 
                     Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
+
             }, mContext, v);
 
             //qui ho gps e non ho permessi: quindi
@@ -320,8 +325,8 @@ public class HomeFragment extends Fragment implements LocationListener {
         checkUserLocation();
 
         if (!addPosition.getText().toString().equals("")){
-            if (AddressAndPermissionUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext) != null) {
-                ArrayList<Double> coord = AddressAndPermissionUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext);
+            if (AddressPermissionUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext) != null) {
+                ArrayList<Double> coord = AddressPermissionUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext);
 
                 final GeoPoint start = new GeoPoint(coord.get(0), coord.get(1));
                 Log.i("geogeo", "coord " + coord.get(0) + " " + coord.get(1));
@@ -447,7 +452,7 @@ public class HomeFragment extends Fragment implements LocationListener {
                         userGift.setDescription(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
                         userGift.setLat(tweetWithoutHashtagJSON.getString(lat));
                         userGift.setLon(tweetWithoutHashtagJSON.getString(lon));
-                        userGift.setAddress(AddressAndPermissionUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
+                        userGift.setAddress(AddressPermissionUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
                         userGift.setIssuer(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
 
                         if (!userGift.getIssuer().equals(MainActivity.userName)) {
@@ -466,7 +471,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 //                    addMarker(latLng, userGift.getCategory());
                     coordMarker[0] = Double.parseDouble(userGift.getLat());
                     coordMarker[1] = Double.parseDouble(userGift.getLon());
-                    addMarker(coordMarker, userGift.getCategory());
+                    addMarker(coordMarker, userGift.getCategory(), userGift.getName(), userGift.getDescription(), userGift.getIssuer());
                 }
 
 //                bCallback.onLoadComplete();
@@ -506,33 +511,52 @@ public class HomeFragment extends Fragment implements LocationListener {
         //moveCameraToUserLocation();
     }
 
-    private void addMarker(double[] array, String category) {
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void addMarker(double[] array, String category, String title, String description, String issuer) {
 
         int markerIcon = 0;
+        Drawable drawable = null;
 
         switch (category) {
             case "Sport":
                 markerIcon = R.drawable.sport_marker;
+                drawable = getResources().getDrawable(R.drawable.sport, null);
                 break;
             case "Electronics":
                 markerIcon = R.drawable.electronic_marker;
+                drawable = getResources().getDrawable(R.drawable.electronic, null);
                 break;
             case "Clothing":
                 markerIcon = R.drawable.clothing_marker;
+                drawable = getResources().getDrawable(R.drawable.clothing, null);
                 break;
             case "Music&Books":
                 markerIcon = R.drawable.music_marker;
+                drawable = getResources().getDrawable(R.drawable.musicbook, null);
                 break;
             case "Other":
                 markerIcon = R.drawable.other_marker;
+                drawable = getResources().getDrawable(R.drawable.file, null);
                 break;
         }
 
         GeoPoint startPoint = new GeoPoint(array[0], array[1]);
+
+        //MarkerInfoWindow markerInfoWindow = new MarkerInfoWindow(R.layout.popup_marker, map);
+        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, title, description, issuer, mContext);
+
         Marker marker = new Marker(map);
         marker.setIcon(ContextCompat.getDrawable(mContext, markerIcon));
         marker.setPosition(startPoint);
-        //marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+        marker.setInfoWindow(customInfoWindow);
+//        marker.setTitle(title);
+//        marker.setSnippet(description); //descrizione
+        //marker.setSubDescription("bestia");
+        marker.setImage(drawable);
+        marker.setInfoWindowAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
+
         map.getOverlays().add(marker);
 
 //        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(marker);

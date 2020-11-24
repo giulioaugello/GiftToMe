@@ -14,7 +14,7 @@ import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.LAM.GiftToMe.UsefulClass.AddressAndPermissionUtils;
+import com.LAM.GiftToMe.UsefulClass.AddressPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
 import com.android.volley.VolleyError;
 import com.google.android.material.chip.Chip;
@@ -96,7 +96,7 @@ public class MyGiftFragment extends Fragment {
                             userGift.setDescription(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
                             userGift.setLat(tweetWithoutHashtagJSON.getString(lat));
                             userGift.setLon(tweetWithoutHashtagJSON.getString(lon));
-                            userGift.setAddress(AddressAndPermissionUtils.addressString(mContext, (Double)tweetWithoutHashtagJSON.get(lat), (Double)tweetWithoutHashtagJSON.get(lon)));
+                            userGift.setAddress(AddressPermissionUtils.addressString(mContext, (Double)tweetWithoutHashtagJSON.get(lat), (Double)tweetWithoutHashtagJSON.get(lon)));
                             userGift.setIssuer(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
 
                             userGifts.add(userGift);
