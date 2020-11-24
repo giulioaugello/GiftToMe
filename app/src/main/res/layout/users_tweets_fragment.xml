@@ -64,7 +64,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Puoi cercare una posizione che ti interessa o attivare il GPS premendo il pulsante al lato"
+                android:text="Attiva il GPS premendo il pulsante a lato"
                 android:textSize="19sp"
                 android:gravity="center"
                 android:textColor="#F44336"

@@ -35,6 +35,7 @@ import com.LAM.GiftToMe.UsefulClass.AddressPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.CustomInfoWindow;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
 import com.android.volley.VolleyError;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +57,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class HomeFragment extends Fragment implements LocationListener {
 
@@ -176,6 +178,20 @@ public class HomeFragment extends Fragment implements LocationListener {
             @Override
             public void onClick(View v) {
                 setSearchPosition();
+            }
+        });
+
+        FloatingActionButton floatingActionButton = v.findViewById(R.id.go_to_list);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserTweetsFragment userTweetsFragment = new UserTweetsFragment();
+                FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.righttoleft, R.anim.none);
+                fragmentTransaction.replace(R.id.fragment_container, userTweetsFragment, MainActivity.usersGiftListFragmentTag).commit();
+                fragmentTransaction.addToBackStack(MainActivity.usersGiftListFragmentTag);
+                MainActivity.activeFragment = userTweetsFragment;
             }
         });
 
@@ -541,8 +557,8 @@ public class HomeFragment extends Fragment implements LocationListener {
         }
 
         GeoPoint startPoint = new GeoPoint(array[0], array[1]);
-
         //MarkerInfoWindow markerInfoWindow = new MarkerInfoWindow(R.layout.popup_marker, map);
+        //popup custom
         CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, title, description, issuer, mContext);
 
         Marker marker = new Marker(map);
@@ -550,14 +566,14 @@ public class HomeFragment extends Fragment implements LocationListener {
         marker.setPosition(startPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-        marker.setInfoWindow(customInfoWindow);
-//        marker.setTitle(title);
-//        marker.setSnippet(description); //descrizione
-        //marker.setSubDescription("bestia");
-        marker.setImage(drawable);
+        marker.setInfoWindow(customInfoWindow); //setta il popup
+        marker.setSubDescription("Tocca per chiudere oppure"); //sottodescrizione
+        marker.setImage(drawable); //setta l'immagine nel popup
         marker.setInfoWindowAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
 
         map.getOverlays().add(marker);
+
+        //se sono vicino al marker apre da solo il popup?
 
 //        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(marker);
 //

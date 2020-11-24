@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -39,7 +40,9 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -116,12 +119,27 @@ public class UserTweetsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddressPermissionUtils.requestPermissionsIfNecessary(new String[] {
 
-                        Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
+                if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
-                }, mContext, v);
+                    AddressPermissionUtils.requestPermissionsIfNecessary(new String[]{
+
+                            Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
+
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
+                    }, mContext, v);
+
+                }else{
+
+                    HomeFragment homeFragment = new HomeFragment();
+                    FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(R.anim.lefttoright, R.anim.none);
+                    fragmentTransaction.replace(R.id.fragment_container, homeFragment, MainActivity.homeFragmentTag).commit();
+                    fragmentTransaction.addToBackStack(MainActivity.homeFragmentTag);
+                    MainActivity.activeFragment = homeFragment;
+
+                }
 
             }
         });
