@@ -97,12 +97,27 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_brightness_1_24"
+                        android:layout_gravity="center"
+                        app:tint="@color/colorChipSelected"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sport"
                     android:textSize="30sp"
+                    android:layout_marginStart="8dp"
                     android:textColor="#F44336"/>
+
+                </LinearLayout>
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -117,12 +132,27 @@
 
                 </HorizontalScrollView>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Electronics"
-                    android:textSize="30sp"
-                    android:textColor="#F44336"/>
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_brightness_1_24"
+                        android:layout_gravity="center"
+                        app:tint="@color/colorChipSelected"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Electronics"
+                        android:textSize="30sp"
+                        android:layout_marginStart="8dp"
+                        android:textColor="#F44336"/>
+
+                </LinearLayout>
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -137,12 +167,27 @@
 
                 </HorizontalScrollView>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Clothing"
-                    android:textSize="30sp"
-                    android:textColor="#F44336"/>
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_brightness_1_24"
+                        android:layout_gravity="center"
+                        app:tint="@color/colorChipSelected"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Clothing"
+                        android:textSize="30sp"
+                        android:layout_marginStart="8dp"
+                        android:textColor="#F44336"/>
+
+                </LinearLayout>
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -157,12 +202,27 @@
 
                 </HorizontalScrollView>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Music&amp;Books"
-                    android:textSize="30sp"
-                    android:textColor="#F44336"/>
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_brightness_1_24"
+                        android:layout_gravity="center"
+                        app:tint="@color/colorChipSelected"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Music&amp;Books"
+                        android:textSize="30sp"
+                        android:layout_marginStart="8dp"
+                        android:textColor="#F44336"/>
+
+                </LinearLayout>
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -177,12 +237,27 @@
 
                 </HorizontalScrollView>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Other"
-                    android:textSize="30sp"
-                    android:textColor="#F44336"/>
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_brightness_1_24"
+                        android:layout_gravity="center"
+                        app:tint="@color/colorChipSelected"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Other"
+                        android:textSize="30sp"
+                        android:layout_marginStart="8dp"
+                        android:textColor="#F44336"/>
+
+                </LinearLayout>
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"

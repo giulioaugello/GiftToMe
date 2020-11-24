@@ -58,6 +58,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.nameGift.setText(usersGifts.get(position).getName());
+        holder.nameGift.setSelected(true);
 
         String category = usersGifts.get(position).getCategory();
         MyGiftTweetsAdapter.changeCategoryImage(category, holder.imageCategory);

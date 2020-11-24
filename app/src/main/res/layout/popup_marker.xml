@@ -2,7 +2,6 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardCornerRadius="10dp"
@@ -29,7 +28,6 @@
                     android:id="@+id/bubble_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
                     android:textSize="25sp"
                     android:textColor="@color/colorPrimary"/>
 
@@ -37,8 +35,7 @@
                     android:id="@+id/bubble_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
-                    android:textSize="25sp"
+                    android:textSize="23sp"
                     android:textColor="@color/colorPrimary"
                     android:layout_marginTop="10dp"/>
 
@@ -58,7 +55,6 @@
             android:id="@+id/bubble_subdescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
             android:textSize="15sp"
             android:gravity="center"
             android:textColor="@color/colorPrimary"
@@ -74,7 +70,6 @@
             android:drawablePadding="10dp"
             android:drawableTint="#F8F8FF"
             android:padding="15dp"
-            android:text="Contatta"
             android:textColor="@color/ghost_white" />
 
 
