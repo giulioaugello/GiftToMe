@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -21,6 +22,7 @@ import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -46,7 +48,12 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -199,61 +206,6 @@ public class HomeFragment extends Fragment implements LocationListener {
     }
 
     public void enablePermissionsAndGPS(){
-//        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//
-//            Log.i("gpsgps", "Dentro");
-//            String message = "";
-//            if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) message = "Devi attivare la posizione";
-//            else if(checkIsHighAccuracy() != 3) message = "La posizione deve essere in modalità alta";
-//            else message = "altro";
-//            //qui il gps non è attivo quindi mostro dialog
-//            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) {
-//                // Build the alert dialog
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setTitle("Attiva la posizione");
-//                builder.setMessage(message);
-//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        // Show location settings when the user acknowledges the alert dialog
-//                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//                        startActivityForResult(intent, 1003);
-//                    }
-//                });
-//
-//                builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        setMarkerPosition();
-//                        //se faccio annulla controllo se ho dato i permessi
-//                    }
-//                });
-//
-//                Dialog alertDialog = builder.create();
-//                alertDialog.setCanceledOnTouchOutside(false);
-//                alertDialog.show();
-//
-//            }else {
-//                checkUserLocation();
-//            }
-//
-//        }else {
-//            //Richiedo i permessi e richiamo enablePermissionsAndGPS() per far uscire il dialog del gps
-//            requestPermissionsIfNecessary(new String[] {
-//
-//                    Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
-//
-//                    Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
-//            });
-//            //se me li da
-//            enablePermissionsAndGPS();
-//        }
-
-//        requestPermissionsIfNecessary(new String[] {
-//
-//                Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
-//
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
-//        });
 
         Log.i("gpsgps", "Dentro");
         String message = "";
@@ -309,7 +261,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             myLocationNewOverlay.enableFollowLocation(); //segue la posizione dell'utente
-            //qui ho sia permessi che gps: quindi visualizzo mappa e lista
         } else {
             //richiedo i permessi
             AddressPermissionUtils.requestPermissionsIfNecessary(new String[] {
@@ -319,8 +270,6 @@ public class HomeFragment extends Fragment implements LocationListener {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
 
             }, mContext, v);
-
-            //qui ho gps e non ho permessi: quindi
         }
     }
 
@@ -364,15 +313,32 @@ public class HomeFragment extends Fragment implements LocationListener {
                     }
                 }
 
+                if (removeFirstMarker.size() == 1){
+                    Log.i("geogeo", "size " + removeFirstMarker.size());
+                    myLocationNewOverlay.disableFollowLocation();
+                    mapController.setCenter(start);
+                }
+
+                myLocationNewOverlay.disableFollowLocation();
+
                 mapController.setCenter(start);
-//                        myLocationNewOverlay.disableMyLocation();
-//                        myLocationNewOverlay.disableFollowLocation();
 
                 userPos.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3) {
+                            myLocationNewOverlay.enableFollowLocation();
+                            mapController.setZoom(17.50);
+                        }else{
+                            Log.i("geogeo", "size1 " + removeFirstMarker.size());
+                            enablePermissionsAndGPS();
+                        }
                         map.getOverlayManager().remove(marker);
-                        myLocationNewOverlay.enableFollowLocation();
+                        map.invalidate();
+
+                        //controllare se il gps è attivo
+
                     }
                 });
 
@@ -382,8 +348,8 @@ public class HomeFragment extends Fragment implements LocationListener {
             }else{
                 Toast.makeText(mContext, "Inserisci una posizione valida",Toast.LENGTH_LONG).show();
             }
-        }else{
-            Toast.makeText(mContext, "Inserisci una posizione che ti interessa",Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(mContext, "Bo",Toast.LENGTH_LONG).show();
         }
 
     }
