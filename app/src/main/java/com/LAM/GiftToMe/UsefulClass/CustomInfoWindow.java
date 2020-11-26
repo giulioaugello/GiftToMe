@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 
 import org.osmdroid.views.MapView;
@@ -46,7 +47,11 @@ public class CustomInfoWindow extends MarkerInfoWindow {
         contactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "ciao", Toast.LENGTH_SHORT).show();
+                if (!MainActivity.isLogged){
+                    Toast.makeText(mContext, "Per contattare un utente devi prima fare l'accesso", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(mContext, "ciao", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

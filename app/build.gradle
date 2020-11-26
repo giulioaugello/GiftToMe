@@ -35,6 +35,9 @@ dependencies {
     implementation 'org.osmdroid:osmdroid-wms:6.1.8'
     implementation 'org.osmdroid:osmdroid-mapsforge:6.1.8'
 
+    //OsmBonusPack per cluster
+    implementation 'com.github.MKergall:osmbonuspack:6.6.0'
+
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
 

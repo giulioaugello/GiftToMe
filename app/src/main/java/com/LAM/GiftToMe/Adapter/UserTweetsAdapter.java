@@ -3,6 +3,7 @@ package com.LAM.GiftToMe.Adapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
@@ -16,9 +17,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.Fragment.UserTweetsFragment;
+import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -95,7 +99,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
 
     private void showDetailsGift(final int position){
 
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.BottomSheetDialogTheme);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.BottomSheetDialogTheme);
 
         View bottomSheetView = LayoutInflater.from(mContext).inflate(R.layout.users_gift_bottom_dialog, null);
 
@@ -118,12 +122,17 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         contactUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "bello", Toast.LENGTH_LONG).show();
+                if (!MainActivity.isLogged){
+                    Toast.makeText(mContext, "Per contattare un utente devi prima fare l'accesso", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(mContext, "ciao", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
+
 
 }

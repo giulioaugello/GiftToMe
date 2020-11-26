@@ -12,11 +12,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.Html;
@@ -43,6 +45,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
+import org.osmdroid.bonuspack.location.NominatimPOIProvider;
+import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -82,11 +87,11 @@ public class HomeFragment extends Fragment implements LocationListener {
     private MapView map = null;
     private IMapController mapController;
     private MyLocationNewOverlay myLocationNewOverlay;
+    private ArrayList<Marker> allMarkers = new ArrayList<>();
 
     public static LocationManager locationManager;
 
     private ArrayList<UsersGift> arrayUsersGifts;
-    private double[] coordMarker = new double[2];
 
     private EditText addPosition;
     private ImageView searchPosition, userPos;
@@ -94,6 +99,9 @@ public class HomeFragment extends Fragment implements LocationListener {
     public static FloatingActionButton floatingActionButton;
 
     public static UserTweetsFragment userTweetsFragment;
+
+    NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
+    RadiusMarkerClusterer poiMarkers;
 
 
     @Nullable
@@ -103,6 +111,18 @@ public class HomeFragment extends Fragment implements LocationListener {
         v = inflater.inflate(R.layout.home_fragment, container, false);
         Configuration.getInstance().load(mContext, PreferenceManager.getDefaultSharedPreferences(mContext));
 
+        map = v.findViewById(R.id.map);
+        mapController = map.getController();
+
+        //serve per cluster
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        poiMarkers = new RadiusMarkerClusterer(mContext);
+        Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
+        Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
+        poiMarkers.setIcon(clusterIcon);
+
+        //dropdown
         final ImageView dropdown, zoomIn, zoomOut;
         dropdown = v.findViewById(R.id.dropdown_option);
         zoomIn = v.findViewById(R.id.zoom_in);
@@ -130,17 +150,6 @@ public class HomeFragment extends Fragment implements LocationListener {
             }
         });
 
-        map = v.findViewById(R.id.map);
-        map.setTileSource(TileSourceFactory.MAPNIK);
-        //map.getOverlayManager().getTilesOverlay().setColorFilter(TilesOverlay.INVERT_COLORS); //mappa in dark mode
-
-        map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER); //per togliere i tasti zoom built in
-        //map.getZoomController().getDisplay().setPositions(false, CustomZoomButtonsDisplay.HorizontalPosition.LEFT, CustomZoomButtonsDisplay.VerticalPosition.TOP);
-        RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(map);
-        mRotationGestureOverlay.setEnabled(true);
-        map.getOverlays().add(mRotationGestureOverlay);
-        map.setMultiTouchControls(true); //per il pinch to zoom e rotation
-
         zoomIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,25 +164,6 @@ public class HomeFragment extends Fragment implements LocationListener {
             }
         });
 
-        mapController = map.getController();
-        mapController.setZoom(15.56);
-        map.setMaxZoomLevel(19.0);
-
-        locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-
-        GeoPoint startPoint = new GeoPoint(44.4932655, 11.3370644);
-        mapController.setCenter(startPoint);
-
-        myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(mContext), map); //overlay per la posizione dell'utente
-        myLocationNewOverlay.enableMyLocation();
-        map.getOverlays().add(myLocationNewOverlay);
-        myLocationNewOverlay.enableFollowLocation(); //segue l'overlay della posizione dell'utente, anche quando si muove
-        myLocationNewOverlay.setDrawAccuracyEnabled(false); //non disegna il cerchio dell'utente
-        mapController.setZoom(17.50);
-        Bitmap bitmapNotMoving = BitmapFactory.decodeResource(getResources(), R.drawable.position); //icona per utente fermo
-        Bitmap bitmapMoving = BitmapFactory.decodeResource(getResources(), R.drawable.position); //icona per utente in movimento
-        myLocationNewOverlay.setDirectionArrow(bitmapNotMoving, bitmapMoving);
-
         userPos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,9 +175,11 @@ public class HomeFragment extends Fragment implements LocationListener {
             }
         });
 
-        enablePermissionsAndGPS();
+        setupMap(); //inizializza elementi della mappa
 
-        getUsersGifts();
+        enablePermissionsAndGPS(); //richiesta permessi e gps
+
+        getUsersGifts(); //prende i regali
 
         searchPosition.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,10 +213,43 @@ public class HomeFragment extends Fragment implements LocationListener {
             }
         });
 
+
         return v;
     }
 
-    public void enablePermissionsAndGPS(){
+    private void setupMap(){
+
+        map.setTileSource(TileSourceFactory.MAPNIK);
+        //map.getOverlayManager().getTilesOverlay().setColorFilter(TilesOverlay.INVERT_COLORS); //mappa in dark mode
+
+        map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER); //per togliere i tasti zoom built in
+        //map.getZoomController().getDisplay().setPositions(false, CustomZoomButtonsDisplay.HorizontalPosition.LEFT, CustomZoomButtonsDisplay.VerticalPosition.TOP);
+        RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(map);
+        mRotationGestureOverlay.setEnabled(true);
+        map.getOverlays().add(mRotationGestureOverlay);
+        map.setMultiTouchControls(true); //per il pinch to zoom e rotation
+
+        mapController.setZoom(15.56);
+        map.setMaxZoomLevel(19.0);
+
+        locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+
+        GeoPoint startPoint = new GeoPoint(44.4932655, 11.3370644);
+        mapController.setCenter(startPoint);
+
+        myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(mContext), map); //overlay per la posizione dell'utente
+        myLocationNewOverlay.enableMyLocation();
+        map.getOverlays().add(myLocationNewOverlay);
+        myLocationNewOverlay.enableFollowLocation(); //segue l'overlay della posizione dell'utente, anche quando si muove
+        myLocationNewOverlay.setDrawAccuracyEnabled(false); //non disegna il cerchio dell'utente
+        mapController.setZoom(17.50);
+        Bitmap bitmapNotMoving = BitmapFactory.decodeResource(getResources(), R.drawable.position); //icona per utente fermo
+        Bitmap bitmapMoving = BitmapFactory.decodeResource(getResources(), R.drawable.position); //icona per utente in movimento
+        myLocationNewOverlay.setDirectionArrow(bitmapNotMoving, bitmapMoving);
+
+    }
+
+    private void enablePermissionsAndGPS(){
 
         Log.i("gpsgps", "Dentro");
         String message = "";
@@ -321,6 +346,7 @@ public class HomeFragment extends Fragment implements LocationListener {
                 marker.setIcon(ContextCompat.getDrawable(mContext, R.drawable.position));
                 marker.setPosition(start);
                 marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                marker.setInfoWindow(null); //toglie il popup di default
                 Log.i("geogeo", "coord " + marker.getPosition());
 
                 map.getOverlays().add(marker);
@@ -468,12 +494,30 @@ public class HomeFragment extends Fragment implements LocationListener {
                 }
 
                 for (UsersGift userGift : arrayUsersGifts) {
-//                    LatLng latLng = new LatLng(Double.parseDouble(userGift.getLat()), Double.parseDouble(userGift.getLon()));
-//                    addMarker(latLng, userGift.getCategory());
-                    coordMarker[0] = Double.parseDouble(userGift.getLat());
-                    coordMarker[1] = Double.parseDouble(userGift.getLon());
-                    addMarker(coordMarker, userGift.getCategory(), userGift.getName(), userGift.getDescription(), userGift.getIssuer());
+                    //aggiungo i marker alla mappa
+                    addMarker(userGift.getGeoPoint(), userGift.getCategory(), userGift.getName(), userGift.getDescription(), userGift.getAddress(), userGift.getIssuer());
+
                 }
+
+                //Cluster veloce sullo stesso indirizzo
+//                for (int i = 0; i < arrayUsersGifts.size()-1; i++){
+//                    for (int j = 1; j < arrayUsersGifts.size()-1; j++){
+//                        if (arrayUsersGifts.get(j).getAddress().equals(arrayUsersGifts.get(i).getAddress()) && j != i){
+//                            Log.i("giftgift", "j: " + arrayUsersGifts.get(j).getName() + "  i: " + arrayUsersGifts.get(i).getName());
+//                            RadiusMarkerClusterer poiMarkers = new RadiusMarkerClusterer(mContext);
+//                            Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
+//                            Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
+//                            poiMarkers.setIcon(clusterIcon);
+//                            poiMarkers.add(allMarkers.get(i));
+//                            poiMarkers.add(allMarkers.get(j));
+//                            map.getOverlays().remove(allMarkers.get(i));
+//                            map.getOverlays().remove(allMarkers.get(j));
+//                            map.getOverlays().add(poiMarkers);
+//                            Log.i("giftgift", "bellobello");
+//                        }
+//                    }
+//                }
+
 
 //                bCallback.onLoadComplete();
 //
@@ -513,7 +557,7 @@ public class HomeFragment extends Fragment implements LocationListener {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void addMarker(double[] array, String category, String title, String description, String issuer) {
+    private void addMarker(GeoPoint geoPoint, String category, String title, String description, String address, String issuer) {
 
         int markerIcon = 0;
         Drawable drawable = null;
@@ -541,14 +585,31 @@ public class HomeFragment extends Fragment implements LocationListener {
                 break;
         }
 
-        GeoPoint startPoint = new GeoPoint(array[0], array[1]);
+        //marker senza cluster
+        //GeoPoint startPoint = new GeoPoint(array[0], array[1]);
         //MarkerInfoWindow markerInfoWindow = new MarkerInfoWindow(R.layout.popup_marker, map);
         //popup custom
+//        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, title, description, issuer, mContext);
+//
+//        Marker marker = new Marker(map);
+//        marker.setIcon(ContextCompat.getDrawable(mContext, markerIcon));
+//        marker.setPosition(geoPoint);
+//        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+//
+//        marker.setInfoWindow(customInfoWindow); //setta il popup
+//        marker.setSubDescription("Tocca per chiudere oppure"); //sottodescrizione
+//        marker.setImage(drawable); //setta l'immagine nel popup
+//        marker.setInfoWindowAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
+//
+//        allMarkers.add(marker);
+//
+//        map.getOverlays().add(marker);
+
         CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, title, description, issuer, mContext);
 
         Marker marker = new Marker(map);
         marker.setIcon(ContextCompat.getDrawable(mContext, markerIcon));
-        marker.setPosition(startPoint);
+        marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
         marker.setInfoWindow(customInfoWindow); //setta il popup
@@ -556,7 +617,11 @@ public class HomeFragment extends Fragment implements LocationListener {
         marker.setImage(drawable); //setta l'immagine nel popup
         marker.setInfoWindowAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
 
-        map.getOverlays().add(marker);
+        allMarkers.add(marker);
+
+        poiMarkers.add(marker);
+
+        map.getOverlays().add(poiMarkers);
 
         //se sono vicino al marker apre da solo il popup?
 

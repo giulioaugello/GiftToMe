@@ -6,10 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.Settings;
 
+import org.osmdroid.util.GeoPoint;
+
 public class UsersGift {
 
     private String tweetId, giftId, name, description, lat, lon, category, address, issuer;
-
 
     public UsersGift(String tweetId, String giftId, String name, String description, String lat, String lon, String category, String address, String issuer) {
         this.tweetId = tweetId;
@@ -97,5 +98,9 @@ public class UsersGift {
 
     public void setIssuer(String issuer) {
         this.issuer = issuer;
+    }
+
+    public GeoPoint getGeoPoint(){
+        return new GeoPoint(Double.parseDouble(this.lat), Double.parseDouble(this.lon));
     }
 }
