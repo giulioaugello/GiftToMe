@@ -2,18 +2,21 @@ package com.LAM.GiftToMe;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +25,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.Fragment.ChatFragment;
 import com.LAM.GiftToMe.Fragment.HomeFragment;
+import com.LAM.GiftToMe.Fragment.MyGiftFragment;
 import com.LAM.GiftToMe.Fragment.NewGiftFragment;
 import com.LAM.GiftToMe.Fragment.ProfileFragment;
 import com.LAM.GiftToMe.Fragment.UserTweetsFragment;
@@ -36,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private HomeFragment homeFragment;
     private NewGiftFragment newGiftFragment;
-    private UserTweetsFragment chatFragment; //rimettere ChatFragment
+    private ChatFragment chatFragment; //rimettere ChatFragment
+    private UserTweetsFragment userTweetsFragment;
     private ProfileFragment profileFragment;
     private ListFragment listFragment;
     public static Fragment activeFragment;
@@ -62,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
+        userTweetsFragment = new UserTweetsFragment();
         //primo fragment
         homeFragment = new HomeFragment();
         activeFragment = homeFragment;
@@ -131,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_chat:
 //                    if (isLogged){
                         if(chatFragment == null) {
-                            chatFragment = new UserTweetsFragment(); //rimettere ChatFragment()
+                            chatFragment = new ChatFragment(); //rimettere ChatFragment()
                         }
                         selectedFragment = chatFragment;
                         fragmentTag = usersGiftListFragmentTag; //rimettere il tag della chat
@@ -228,6 +235,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+            if (activeFragment == homeFragment){
+                ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) HomeFragment.floatingActionButton.getLayoutParams();
+                params1.verticalBias = 0.8f;
+                HomeFragment.floatingActionButton.setLayoutParams(params1);
+            }else if (activeFragment == HomeFragment.userTweetsFragment){
+                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) UserTweetsFragment.fab.getLayoutParams();
+                params.verticalBias = 0.8f;
+                UserTweetsFragment.fab.setLayoutParams(params);
+            }else if (activeFragment.equals(fragmentManager.findFragmentByTag(myGiftFragmentTag))){
+                MyGiftFragment.recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+            }
+
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+
+            if (activeFragment == homeFragment){
+                ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) HomeFragment.floatingActionButton.getLayoutParams();
+                params1.verticalBias = 0.88f;
+                HomeFragment.floatingActionButton.setLayoutParams(params1);
+            }else if (activeFragment == HomeFragment.userTweetsFragment){
+                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) UserTweetsFragment.fab.getLayoutParams();
+                params.verticalBias = 0.88f;
+                UserTweetsFragment.fab.setLayoutParams(params);
+            }else if (activeFragment.equals(fragmentManager.findFragmentByTag(myGiftFragmentTag))){
+                MyGiftFragment.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+            }
+
+        }
+        
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         //Viene salvata la sessione utente per essere ancora loggato quando riapre l'app
@@ -256,6 +303,5 @@ public class MainActivity extends AppCompatActivity {
         }else if (activeFragment == fragment.findFragmentByTag(usersGiftListFragmentTag)){
             fragment.findFragmentByTag(usersGiftListFragmentTag).onActivityResult(requestCode, resultCode, data);
         }
-
     }
 }

@@ -12,7 +12,7 @@
         android:id="@+id/scrollNewGift"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="50dp"
         android:layout_marginBottom="56dp"
         android:paddingTop="15dp"
         android:paddingBottom="10dp"

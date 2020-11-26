@@ -2,47 +2,66 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <org.osmdroid.views.MapView
-        android:id="@+id/map"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#56ab2f">
 
     <LinearLayout
+        android:id="@+id/linear_map"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:background="@drawable/round_corner_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="50dp">
+
+            <org.osmdroid.views.MapView
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/linear_map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/dropdown_option"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_arrow_drop_down_24"
-                android:padding="3dp"
                 android:background="@drawable/button_addgift"
+                android:padding="3dp"
+                android:src="@drawable/ic_baseline_arrow_drop_down_24"
                 app:tint="#FFFFFF" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
                 android:layout_marginStart="15dp"
-                android:background="@drawable/bottom_navigation_background">
+                android:background="@drawable/bottom_navigation_background"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/add_position"
@@ -51,20 +70,20 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#56ab2f"
                     android:hint="Inserisci una posizione"
                     android:padding="10dp"
                     android:textColor="#56ab2f"
                     android:textColorHint="#56ab2f"
-                    android:backgroundTint="#56ab2f"
-                    android:layout_weight="1"
                     android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/search_position"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
                     android:layout_marginEnd="10dp"
+                    android:layout_weight="0"
                     android:src="@drawable/ic_baseline_navigation_24"
                     app:tint="#56ab2f" />
 
@@ -72,40 +91,58 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/zoom_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_add_24"
-            android:layout_marginTop="10dp"
-            android:padding="3dp"
-            android:background="@drawable/zoom_background"
-            app:tint="#FFFFFF"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/zoom_out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_remove_24"
-            android:layout_marginTop="10dp"
-            android:padding="3dp"
-            android:background="@drawable/zoom_background"
-            app:tint="#FFFFFF"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/position"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_gps_fixed_24"
-            android:layout_marginTop="10dp"
-            android:padding="3dp"
-            android:background="@drawable/zoom_background"
-            app:tint="#FFFFFF"
-            android:visibility="gone"/>
-
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/zoom_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/zoom_background"
+        android:padding="3dp"
+        android:src="@drawable/ic_baseline_add_24"
+        android:visibility="gone"
+        app:tint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintVertical_bias="0.02"/>
+
+    <ImageView
+        android:id="@+id/zoom_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/zoom_background"
+        android:padding="3dp"
+        android:src="@drawable/ic_baseline_remove_24"
+        android:visibility="gone"
+        app:tint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/zoom_in"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintVertical_bias="0"/>
+
+    <ImageView
+        android:id="@+id/position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/zoom_background"
+        android:padding="3dp"
+        android:src="@drawable/ic_baseline_gps_fixed_24"
+        android:visibility="gone"
+        app:tint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/zoom_out"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintVertical_bias="0"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/go_to_list"

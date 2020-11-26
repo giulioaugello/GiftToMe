@@ -6,8 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:background="#56ab2f"
-    >
+    android:background="#56ab2f">
 
 <!--    <TableLayout-->
 <!--        android:layout_width="match_parent"-->

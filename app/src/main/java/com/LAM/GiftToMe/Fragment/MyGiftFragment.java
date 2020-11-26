@@ -33,7 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MyGiftFragment extends Fragment {
 
-    public RecyclerView recyclerView;
+    public static RecyclerView recyclerView;
     private Context mContext;
     public static ScrollView scrollView;
     private ArrayList<MyGift> userGifts;

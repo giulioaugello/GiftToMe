@@ -54,6 +54,7 @@ import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -62,6 +63,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -89,6 +91,9 @@ public class HomeFragment extends Fragment implements LocationListener {
     private EditText addPosition;
     private ImageView searchPosition, userPos;
     private ArrayList<Marker> removeFirstMarker = new ArrayList<>();
+    public static FloatingActionButton floatingActionButton;
+
+    public static UserTweetsFragment userTweetsFragment;
 
 
     @Nullable
@@ -131,7 +136,10 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER); //per togliere i tasti zoom built in
         //map.getZoomController().getDisplay().setPositions(false, CustomZoomButtonsDisplay.HorizontalPosition.LEFT, CustomZoomButtonsDisplay.VerticalPosition.TOP);
-        map.setMultiTouchControls(true); //per il pinch to zoom
+        RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(map);
+        mRotationGestureOverlay.setEnabled(true);
+        map.getOverlays().add(mRotationGestureOverlay);
+        map.setMultiTouchControls(true); //per il pinch to zoom e rotation
 
         zoomIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,12 +196,23 @@ public class HomeFragment extends Fragment implements LocationListener {
             }
         });
 
-        FloatingActionButton floatingActionButton = v.findViewById(R.id.go_to_list);
+        floatingActionButton = v.findViewById(R.id.go_to_list);
+
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) floatingActionButton.getLayoutParams();
+            params.verticalBias = 0.8f;
+            floatingActionButton.setLayoutParams(params);
+        }else if (orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT){
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) floatingActionButton.getLayoutParams();
+            params.verticalBias = 0.88f;
+            floatingActionButton.setLayoutParams(params);
+        }
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserTweetsFragment userTweetsFragment = new UserTweetsFragment();
+                userTweetsFragment = new UserTweetsFragment();
                 FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.righttoleft, R.anim.none);
                 fragmentTransaction.replace(R.id.fragment_container, userTweetsFragment, MainActivity.usersGiftListFragmentTag).commit();

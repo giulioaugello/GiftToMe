@@ -56,7 +56,7 @@ public class UserTweetsFragment extends Fragment {
     private LinearLayout linearGpsOff;
     private ArrayList<UsersGift> sportA, electronicsA, clothingA, musicA, otherA;
     private UserTweetsAdapter userTweetsAdapter;
-
+    public static FloatingActionButton fab;
 
     private Fragment fragment;
 
@@ -92,11 +92,22 @@ public class UserTweetsFragment extends Fragment {
         turnOnGps = v.findViewById(R.id.turn_on_gps);
         scrollView = v.findViewById(R.id.scroll_tweets_list);
 
-        FloatingActionButton fab = v.findViewById(R.id.return_to_map);
+        fab = v.findViewById(R.id.return_to_map);
 
+        //altezza floating action bar
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) fab.getLayoutParams();
+            params.verticalBias = 0.8f;
+            fab.setLayoutParams(params);
+        }else if (orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT){
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) fab.getLayoutParams();
+            params.verticalBias = 0.88f;
+            fab.setLayoutParams(params);
+        }
 
+        //nascondo la scritta del gps spento e metto margine alla scrollview
         final float density = mContext.getResources().getDisplayMetrics().density;
-
         if (HomeFragment.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             linearGpsOff.setVisibility(View.GONE);
 
@@ -116,6 +127,7 @@ public class UserTweetsFragment extends Fragment {
             }
         });
 
+        //chiedo i permessi e cambio fragment tramite la mainactivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -311,9 +323,10 @@ public class UserTweetsFragment extends Fragment {
     }
 
     private void setupRecyclerView(ArrayList<UsersGift> usersGiftsList, RecyclerView recyclerView){
+
         userTweetsAdapter = new UserTweetsAdapter(mContext, usersGiftsList, getActivity(),this);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, true));
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(userTweetsAdapter);
 
     }
