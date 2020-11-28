@@ -3,8 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
     app:cardBackgroundColor="@color/ghost_white">
 
     <LinearLayout
@@ -22,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="2">
+                android:layout_weight="3">
 
                 <TextView
                     android:id="@+id/bubble_title"
@@ -45,11 +47,18 @@
                 android:id="@+id/bubble_image"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/electronic"
                 android:layout_gravity="center"
                 android:layout_weight="1"/>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/address_popup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="21sp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/bubble_subdescription"
@@ -57,8 +66,7 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:gravity="center"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginTop="10dp"/>
+            android:textColor="@color/colorPrimary"/>
 
         <Button
             android:id="@+id/contact"

@@ -23,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.Adapter.UserTweetsAdapter;
@@ -78,6 +79,13 @@ public class UserTweetsFragment extends Fragment {
 
         View v =  inflater.inflate(R.layout.users_tweets_fragment, container, false);
         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.usersGiftListFragmentTag);
+
+        final TextView noGift1, noGift2, noGift3, noGift4, noGift5;
+        noGift1 = v.findViewById(R.id.no_gift1);
+        noGift2 = v.findViewById(R.id.no_gift2);
+        noGift3 = v.findViewById(R.id.no_gift3);
+        noGift4 = v.findViewById(R.id.no_gift4);
+        noGift5 = v.findViewById(R.id.no_gift5);
 
         mContext = getActivity().getApplicationContext();
 
@@ -239,11 +247,16 @@ public class UserTweetsFragment extends Fragment {
                     Log.i("giftgift", "mus " + musicA);
                     Log.i("giftgift", "oth " + otherA);
 
-                    setupRecyclerView(sportA, recyclerViewSport);
-                    setupRecyclerView(electronicsA, recyclerViewElectronics);
-                    setupRecyclerView(clothingA, recyclerViewClothing);
-                    setupRecyclerView(musicA, recyclerViewMusic);
-                    setupRecyclerView(otherA, recyclerViewOther);
+//                    setupRecyclerView(sportA, recyclerViewSport);
+//                    setupRecyclerView(electronicsA, recyclerViewElectronics);
+//                    setupRecyclerView(clothingA, recyclerViewClothing);
+//                    setupRecyclerView(musicA, recyclerViewMusic);
+//                    setupRecyclerView(otherA, recyclerViewOther);
+                    checkIsEmpty(sportA, recyclerViewSport, noGift1);
+                    checkIsEmpty(electronicsA, recyclerViewElectronics, noGift2);
+                    checkIsEmpty(clothingA, recyclerViewClothing, noGift3);
+                    checkIsEmpty(musicA, recyclerViewMusic, noGift4);
+                    checkIsEmpty(otherA, recyclerViewOther, noGift5);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -294,6 +307,15 @@ public class UserTweetsFragment extends Fragment {
         //setUpBottomSheetDialog();
 
         return v;
+    }
+
+    private void checkIsEmpty(ArrayList<UsersGift> arrayList, RecyclerView recyclerView, TextView textView){
+        if (arrayList.isEmpty()){
+            textView.setVisibility(View.VISIBLE);
+        }else{
+            setupRecyclerView(arrayList, recyclerView);
+            textView.setVisibility(View.GONE);
+        }
     }
 
     private void enableGPS(){

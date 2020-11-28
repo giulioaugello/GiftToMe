@@ -11,8 +11,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,13 +25,14 @@ import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.Adapter.PopupAdapter;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
@@ -46,25 +48,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
-import org.osmdroid.bonuspack.location.NominatimPOIProvider;
-import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.Projection;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Overlay;
-import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
-import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,6 +68,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class HomeFragment extends Fragment implements LocationListener {
 
@@ -87,7 +85,12 @@ public class HomeFragment extends Fragment implements LocationListener {
     private MapView map = null;
     private IMapController mapController;
     private MyLocationNewOverlay myLocationNewOverlay;
+
     private ArrayList<Marker> allMarkers = new ArrayList<>();
+    private ArrayList<Marker> selectedMarker = new ArrayList<>();
+    private ArrayList<UsersGift> selectedGift = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private PopupAdapter popupAdapter;
 
     public static LocationManager locationManager;
 
@@ -100,8 +103,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
     public static UserTweetsFragment userTweetsFragment;
 
-    NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
-    RadiusMarkerClusterer poiMarkers;
+    private RadiusMarkerClusterer poiMarkers;
 
 
     @Nullable
@@ -499,11 +501,13 @@ public class HomeFragment extends Fragment implements LocationListener {
 
                 }
 
-                //Cluster veloce sullo stesso indirizzo
-//                for (int i = 0; i < arrayUsersGifts.size()-1; i++){
-//                    for (int j = 1; j < arrayUsersGifts.size()-1; j++){
-//                        if (arrayUsersGifts.get(j).getAddress().equals(arrayUsersGifts.get(i).getAddress()) && j != i){
-//                            Log.i("giftgift", "j: " + arrayUsersGifts.get(j).getName() + "  i: " + arrayUsersGifts.get(i).getName());
+
+                for (int i = 0; i < arrayUsersGifts.size()-1; i++){
+                    for (int j = i+1; j < arrayUsersGifts.size(); j++){
+                        if (arrayUsersGifts.get(j).getAddress().equals(arrayUsersGifts.get(i).getAddress())){
+                            //Log.i("giftgift", "j: " + arrayUsersGifts.get(j).getName() + "  i: " + arrayUsersGifts.get(i).getName());
+
+                            //Cluster veloce sullo stesso indirizzo
 //                            RadiusMarkerClusterer poiMarkers = new RadiusMarkerClusterer(mContext);
 //                            Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
 //                            Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
@@ -513,11 +517,44 @@ public class HomeFragment extends Fragment implements LocationListener {
 //                            map.getOverlays().remove(allMarkers.get(i));
 //                            map.getOverlays().remove(allMarkers.get(j));
 //                            map.getOverlays().add(poiMarkers);
-//                            Log.i("giftgift", "bellobello");
-//                        }
-//                    }
-//                }
 
+                            //popolo gli array con gli elementi che hanno la stessa via
+                            selectedMarker.add(allMarkers.get(i));
+                            selectedMarker.add(allMarkers.get(j));
+                            selectedGift.add(arrayUsersGifts.get(i));
+                            selectedGift.add(arrayUsersGifts.get(j));
+
+                        }
+                    }
+                }
+                if (dupMarker(selectedMarker).size() > 0){
+                    for (Marker object: dupMarker(selectedMarker)) {
+                        poiMarkers.getItems().remove(object);
+                    }
+                }
+                if (dupGift(selectedGift).size() > 0){
+                    for (UsersGift gift: dupGift(selectedGift)){
+
+                        Marker markerSamePosition = new Marker(map);
+                        markerSamePosition.setIcon(ContextCompat.getDrawable(mContext, R.drawable.location_same));
+                        markerSamePosition.setPosition(gift.getGeoPoint());
+                        markerSamePosition.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                        markerSamePosition.setTitle(gift.getName());
+                        Log.i("giftgift", markerSamePosition.getTitle());
+                        poiMarkers.add(markerSamePosition);
+
+                        markerSamePosition.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                                Log.i("giftgift", "2 " + marker.getTitle());
+                                showDialogSamePosition(AddressPermissionUtils.addressString(mContext, marker.getPosition().getLatitude(), marker.getPosition().getLongitude()));
+                                setupRecyclerView(searchGifts(dupGift(selectedGift), AddressPermissionUtils.addressString(mContext, marker.getPosition().getLatitude(), marker.getPosition().getLongitude())), recyclerView);
+                                return true;
+                            }
+                        });
+                        map.getOverlays().add(poiMarkers);
+                    }
+                }
 
 //                bCallback.onLoadComplete();
 //
@@ -554,6 +591,68 @@ public class HomeFragment extends Fragment implements LocationListener {
         });
 
         //moveCameraToUserLocation();
+    }
+
+    private void showDialogSamePosition(String markerAddress){
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setCancelable(true);
+
+        final View v  = getActivity().getLayoutInflater().inflate(R.layout.recyclerview_same_position,null);
+        dialog.setContentView(v);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        recyclerView = v.findViewById(R.id.recycler_popup);
+        TextView generalAddress = v.findViewById(R.id.address_recycler);
+        generalAddress.setText(markerAddress);
+        dialog.show();
+    }
+
+    private ArrayList<UsersGift> searchGifts(ArrayList<UsersGift> arrayList, String address){
+        ArrayList<UsersGift> returnArray = new ArrayList<>();
+        for (UsersGift gift: arrayList){
+            if (gift.getAddress().equals(address)){
+                returnArray.add(gift);
+            }
+        }
+        return returnArray;
+    }
+
+    private void setupRecyclerView(ArrayList<UsersGift> usersGiftsList, RecyclerView recyclerView){
+
+        popupAdapter = new PopupAdapter(mContext, usersGiftsList, getActivity(),this);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setAdapter(popupAdapter);
+
+    }
+
+    //cerca i duplicati
+    private Set<Marker> dupMarker(ArrayList<Marker> arrayList){
+        Set<Marker> set = new HashSet<>();
+        for(int i =0; i < arrayList.size(); i++) {
+            if (!set.contains(arrayList.get(i))) {
+                //set.remove(arrayList.get(i));
+                //Log.i("giftgift", arrayList.get(i).getTitle() + " is duplicated");
+                set.add(arrayList.get(i));
+            }
+        }
+        //Log.i("giftgift", set.size() + " size");
+        return set;
+    }
+
+    private ArrayList<UsersGift> dupGift(ArrayList<UsersGift> arrayList){
+        Set<UsersGift> set = new HashSet<>();
+        ArrayList<UsersGift> ret = new ArrayList<>();
+        for(int i =0; i < arrayList.size(); i++) {
+            if (!set.contains(arrayList.get(i))) {
+                //set.remove(arrayList.get(i));
+                //Log.i("giftgift", arrayList.get(i).getTitle() + " is duplicated");
+                set.add(arrayList.get(i));
+                ret.add(arrayList.get(i));
+            }
+        }
+        //Log.i("giftgift", ret.size() + " size: " + ret);
+        return ret;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -605,12 +704,13 @@ public class HomeFragment extends Fragment implements LocationListener {
 //
 //        map.getOverlays().add(marker);
 
-        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, title, description, issuer, mContext);
+        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, title, description, issuer, address, mContext);
 
         Marker marker = new Marker(map);
         marker.setIcon(ContextCompat.getDrawable(mContext, markerIcon));
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        marker.setTitle(title);
 
         marker.setInfoWindow(customInfoWindow); //setta il popup
         marker.setSubDescription("Tocca per chiudere oppure"); //sottodescrizione
