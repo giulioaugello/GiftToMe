@@ -219,6 +219,15 @@ public class HomeFragment extends Fragment implements LocationListener {
         return v;
     }
 
+    //resetto i valori degli array
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        selectedGift.clear();
+        selectedMarker.clear();
+        allMarkers.clear();
+    }
+
     private void setupMap(){
 
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -497,15 +506,14 @@ public class HomeFragment extends Fragment implements LocationListener {
 
                 for (UsersGift userGift : arrayUsersGifts) {
                     //aggiungo i marker alla mappa
-                    addMarker(userGift.getGeoPoint(), userGift.getCategory(), userGift.getName(), userGift.getDescription(), userGift.getAddress(), userGift.getIssuer());
+                    addMarker(userGift.getGeoPoint(), userGift.getCategory(), userGift.getGiftId(), userGift.getName(), userGift.getDescription(), userGift.getAddress(), userGift.getIssuer());
 
                 }
 
-
+                //cerco gli elementi con lo stesso indirizzo (ho anche i duplicati)
                 for (int i = 0; i < arrayUsersGifts.size()-1; i++){
                     for (int j = i+1; j < arrayUsersGifts.size(); j++){
                         if (arrayUsersGifts.get(j).getAddress().equals(arrayUsersGifts.get(i).getAddress())){
-                            //Log.i("giftgift", "j: " + arrayUsersGifts.get(j).getName() + "  i: " + arrayUsersGifts.get(i).getName());
 
                             //Cluster veloce sullo stesso indirizzo
 //                            RadiusMarkerClusterer poiMarkers = new RadiusMarkerClusterer(mContext);
@@ -527,11 +535,15 @@ public class HomeFragment extends Fragment implements LocationListener {
                         }
                     }
                 }
+
+                //elimino i marker dal cluster (prendendo l'arraylist creato prima e togliendogli i duplicati)
                 if (dupMarker(selectedMarker).size() > 0){
                     for (Marker object: dupMarker(selectedMarker)) {
                         poiMarkers.getItems().remove(object);
                     }
                 }
+
+                //ricreo lo stesso numero di marker con diversa icona
                 if (dupGift(selectedGift).size() > 0){
                     for (UsersGift gift: dupGift(selectedGift)){
 
@@ -539,16 +551,16 @@ public class HomeFragment extends Fragment implements LocationListener {
                         markerSamePosition.setIcon(ContextCompat.getDrawable(mContext, R.drawable.location_same));
                         markerSamePosition.setPosition(gift.getGeoPoint());
                         markerSamePosition.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                        markerSamePosition.setTitle(gift.getName());
+                        markerSamePosition.setTitle(gift.getGiftId());
                         Log.i("giftgift", markerSamePosition.getTitle());
                         poiMarkers.add(markerSamePosition);
 
+                        //onClick per vedere il dialog con la recyclerView (contiene i regali aventi lo stesso indirizzo)
                         markerSamePosition.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
                             @Override
                             public boolean onMarkerClick(Marker marker, MapView mapView) {
-                                Log.i("giftgift", "2 " + marker.getTitle());
                                 showDialogSamePosition(AddressPermissionUtils.addressString(mContext, marker.getPosition().getLatitude(), marker.getPosition().getLongitude()));
-                                setupRecyclerView(searchGifts(dupGift(selectedGift), AddressPermissionUtils.addressString(mContext, marker.getPosition().getLatitude(), marker.getPosition().getLongitude())), recyclerView);
+                                setupRecyclerView(searchGiftsSamePosition(dupGift(selectedGift), AddressPermissionUtils.addressString(mContext, marker.getPosition().getLatitude(), marker.getPosition().getLongitude())), recyclerView);
                                 return true;
                             }
                         });
@@ -593,6 +605,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         //moveCameraToUserLocation();
     }
 
+    //dialog per mostrare la recyclerView per i regali con lo stesso indirizzo
     private void showDialogSamePosition(String markerAddress){
         final Dialog dialog = new Dialog(getActivity());
         dialog.setCancelable(true);
@@ -601,13 +614,16 @@ public class HomeFragment extends Fragment implements LocationListener {
         dialog.setContentView(v);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        recyclerView = v.findViewById(R.id.recycler_popup);
         TextView generalAddress = v.findViewById(R.id.address_recycler);
+        recyclerView = v.findViewById(R.id.recycler_popup);
+
         generalAddress.setText(markerAddress);
+
         dialog.show();
     }
 
-    private ArrayList<UsersGift> searchGifts(ArrayList<UsersGift> arrayList, String address){
+    //cerca all'interno dell'array i regali che hanno address come indirizzo
+    private ArrayList<UsersGift> searchGiftsSamePosition(ArrayList<UsersGift> arrayList, String address){
         ArrayList<UsersGift> returnArray = new ArrayList<>();
         for (UsersGift gift: arrayList){
             if (gift.getAddress().equals(address)){
@@ -626,37 +642,33 @@ public class HomeFragment extends Fragment implements LocationListener {
 
     }
 
-    //cerca i duplicati
+    //cerca i duplicati nell'array per i marker da eliminare
     private Set<Marker> dupMarker(ArrayList<Marker> arrayList){
         Set<Marker> set = new HashSet<>();
         for(int i =0; i < arrayList.size(); i++) {
             if (!set.contains(arrayList.get(i))) {
-                //set.remove(arrayList.get(i));
-                //Log.i("giftgift", arrayList.get(i).getTitle() + " is duplicated");
                 set.add(arrayList.get(i));
             }
         }
-        //Log.i("giftgift", set.size() + " size");
         return set;
     }
 
+    //cerca i duplicati nell'array per i marker da aggiungere
     private ArrayList<UsersGift> dupGift(ArrayList<UsersGift> arrayList){
         Set<UsersGift> set = new HashSet<>();
         ArrayList<UsersGift> ret = new ArrayList<>();
         for(int i =0; i < arrayList.size(); i++) {
             if (!set.contains(arrayList.get(i))) {
-                //set.remove(arrayList.get(i));
-                //Log.i("giftgift", arrayList.get(i).getTitle() + " is duplicated");
                 set.add(arrayList.get(i));
                 ret.add(arrayList.get(i));
             }
         }
-        //Log.i("giftgift", ret.size() + " size: " + ret);
         return ret;
     }
 
+    //creo un marker e lo aggiungo al cluster
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void addMarker(GeoPoint geoPoint, String category, String title, String description, String address, String issuer) {
+    private void addMarker(GeoPoint geoPoint, String category, String giftId, String title, String description, String address, String issuer) {
 
         int markerIcon = 0;
         Drawable drawable = null;
@@ -704,13 +716,13 @@ public class HomeFragment extends Fragment implements LocationListener {
 //
 //        map.getOverlays().add(marker);
 
-        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, title, description, issuer, address, mContext);
+        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, giftId, title, description, issuer, address, mContext);
 
         Marker marker = new Marker(map);
         marker.setIcon(ContextCompat.getDrawable(mContext, markerIcon));
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        marker.setTitle(title);
+        marker.setTitle(giftId);
 
         marker.setInfoWindow(customInfoWindow); //setta il popup
         marker.setSubDescription("Tocca per chiudere oppure"); //sottodescrizione

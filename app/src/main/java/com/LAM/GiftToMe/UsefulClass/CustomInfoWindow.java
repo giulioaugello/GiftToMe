@@ -14,12 +14,13 @@ import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
 public class CustomInfoWindow extends MarkerInfoWindow {
 
-    public String title, description, issuer, address;
+    public String title, description, issuer, address, giftId;
     private Context mContext;
 
-    public CustomInfoWindow(int layoutResId, MapView mapView, String title, String description, String issuer, String address, Context context) {
+    public CustomInfoWindow(int layoutResId, MapView mapView, String giftId, String title, String description, String issuer, String address, Context context) {
         super(layoutResId, mapView);
 
+        this.giftId = giftId;
         this.title = title;
         this.description = description;
         this.issuer = issuer;
