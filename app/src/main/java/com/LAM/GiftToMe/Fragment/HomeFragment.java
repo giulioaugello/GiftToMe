@@ -90,7 +90,6 @@ public class HomeFragment extends Fragment implements LocationListener {
     private ArrayList<Marker> selectedMarker = new ArrayList<>();
     private ArrayList<UsersGift> selectedGift = new ArrayList<>();
     private RecyclerView recyclerView;
-    private PopupAdapter popupAdapter;
 
     public static LocationManager locationManager;
 
@@ -635,16 +634,17 @@ public class HomeFragment extends Fragment implements LocationListener {
         return returnArray;
     }
 
+    //collega recyclerView all'adapter
     private void setupRecyclerView(ArrayList<UsersGift> usersGiftsList, RecyclerView recyclerView){
 
-        popupAdapter = new PopupAdapter(mContext, usersGiftsList, getActivity(),this);
+        PopupAdapter popupAdapter = new PopupAdapter(mContext, usersGiftsList, getActivity(), this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(popupAdapter);
 
     }
 
-    //cerca i duplicati nell'array per i marker da eliminare
+    //cerca i duplicati nell'array dei marker da eliminare
     private Set<Marker> dupMarker(ArrayList<Marker> arrayList){
         Set<Marker> set = new HashSet<>();
         for(int i =0; i < arrayList.size(); i++) {
@@ -655,7 +655,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         return set;
     }
 
-    //cerca i duplicati nell'array per i marker da aggiungere
+    //cerca i duplicati nell'array dei marker da aggiungere
     private ArrayList<UsersGift> dupGift(ArrayList<UsersGift> arrayList){
         Set<UsersGift> set = new HashSet<>();
         ArrayList<UsersGift> ret = new ArrayList<>();

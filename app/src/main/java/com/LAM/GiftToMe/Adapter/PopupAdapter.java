@@ -48,6 +48,8 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
         holder.title.setText(usersGifts.get(position).getName());
         holder.description.setText(usersGifts.get(position).getDescription());
         holder.address.setText(usersGifts.get(position).getAddress());
+        //holder.address.setVisibility(View.GONE);
+        holder.subDesc.setVisibility(View.GONE);
         holder.contactButton.setText("Contatta " + usersGifts.get(position).getIssuer());
         String category = usersGifts.get(position).getCategory();
         MyGiftTweetsAdapter.changeCategoryImage(category, holder.imageCategory);
@@ -72,7 +74,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView imageCategory;
-        private TextView title, description, address;
+        private TextView title, description, address, subDesc;
         private Button contactButton;
 
         public ViewHolder(@NonNull View itemView) {
@@ -82,6 +84,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
             title = itemView.findViewById(R.id.bubble_title);
             description = itemView.findViewById(R.id.bubble_description);
             address = itemView.findViewById(R.id.address_popup);
+            subDesc = itemView.findViewById(R.id.bubble_subdescription);
             contactButton = itemView.findViewById(R.id.contact);
 
         }
