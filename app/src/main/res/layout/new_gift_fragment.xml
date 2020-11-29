@@ -66,7 +66,7 @@
                 android:layout_marginRight="6dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="sans-serif"
-                android:hint="Indirizzo"
+                android:hint="Indirizzo (Via, Numero Civico, Città)"
                 android:textColor="#F44336"
                 android:textColorHint="#F44336"
                 android:backgroundTint="#F44336"/>

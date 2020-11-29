@@ -198,7 +198,8 @@ public class NewGiftFragment extends Fragment {
                     @Override
                     public void onError(VolleyError error) {
                         error.printStackTrace();
-
+                        dialog.dismiss();
+                        onErrorDialog();
                     }
 
                     @Override
@@ -243,6 +244,54 @@ public class NewGiftFragment extends Fragment {
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.newGiftFragmentTag);
                         MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
                         clearForm(linearLayout);
+                    }
+
+                }, 1600);
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                Log.e("Animation:","cancel");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                Log.e("Animation:","repeat");
+            }
+        });
+
+    }
+    
+    private void onErrorDialog(){
+        final Dialog dialog = new Dialog(getActivity());
+        View view = getActivity().getLayoutInflater().inflate(R.layout.gift_error_animation,null);
+        dialog.setCancelable(false);
+        dialog.setContentView(view);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        LottieAnimationView lottieAnimationView = view.findViewById(R.id.animationViewNewGiftError);
+
+        dialog.show();
+
+        lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                Log.e("Animation:","start");
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+                Handler handler = new Handler(); //serve per ritardare la chiusura del dialog
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.newGiftFragmentTag);
+                        MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
+                        //clearForm(linearLayout);
                     }
 
                 }, 1600);

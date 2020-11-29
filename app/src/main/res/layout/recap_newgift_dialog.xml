@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="350dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
     app:cardCornerRadius="10dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/background_card_mygift">
+        android:background="@drawable/background_card_mygift"
+        android:padding="10dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -25,7 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_margin="8dp"
             android:background="@drawable/bottom_navigation_background"
             android:padding="20dp">
 
