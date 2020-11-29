@@ -223,7 +223,9 @@ public class HomeFragment extends Fragment implements LocationListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i("giftgift", "Prima: " + selectedGift.size());
         selectedGift.clear();
+        Log.i("giftgift", "Dopo: " + selectedGift.size());
         selectedMarker.clear();
         allMarkers.clear();
     }
@@ -552,7 +554,7 @@ public class HomeFragment extends Fragment implements LocationListener {
                         markerSamePosition.setPosition(gift.getGeoPoint());
                         markerSamePosition.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                         markerSamePosition.setTitle(gift.getGiftId());
-                        Log.i("giftgift", markerSamePosition.getTitle());
+                        //Log.i("giftgift", markerSamePosition.getTitle());
                         poiMarkers.add(markerSamePosition);
 
                         //onClick per vedere il dialog con la recyclerView (contiene i regali aventi lo stesso indirizzo)
@@ -763,6 +765,11 @@ public class HomeFragment extends Fragment implements LocationListener {
 //            fragmentTransaction.addToBackStack(userTweetsFragmentTag);
 //            MainActivity.activeFragment = userTweetsFragment;
 //        }
+
+        //resetto per non far aumentare il numero dei marker nel cluster dello stesso luogo
+        selectedGift.clear();
+        selectedMarker.clear();
+        allMarkers.clear();
     }
 
     @Override
