@@ -45,10 +45,10 @@
 
             <ImageView
                 android:id="@+id/bubble_image"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"/>
+                android:layout_weight="0"/>
 
         </LinearLayout>
 
