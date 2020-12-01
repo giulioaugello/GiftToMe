@@ -78,7 +78,6 @@
             app:layout_constraintVertical_bias="0"
             android:layout_marginTop="10dp"
             android:paddingBottom="20dp"
-            android:layout_marginBottom="20dp"
             android:background="@drawable/round_corner_profile"
             android:visibility="gone">
 
