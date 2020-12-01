@@ -5,11 +5,17 @@
     <string name="CONSUMER_KEY" translatable="false">FDuIWWAoNzMAgJFnJFOKVGvAe</string>
     <string name="CONSUMER_SECRET" translatable="false">dRGTLXzxSmWwT3ekam0vRRhFl8g8PaeLKAsrzTlxRCzrT80K1p</string>
 
+    <!--  FCM Server Key  -->
+    <string name="FCM_Server_Key" translatable="false">AAAAU8t-klw:APA91bEC9DUa-MkumJ75_nlcsA3jIVfe2vZoM13grj4LJpVOsqQwkbeYXgC7QywntBpj4val5Mk9wPfMkSEmq-rSt8iAo9tbn-A7dqeqSYV4c9h14ymCqCBEBVheqxepADJb_zPKk-O9</string>
+
     <!--  User Shared Preferences  -->
     <string name="shared_preferences_user_name" translatable="false">userName</string>
     <string name="shared_preferences_token" translatable="false">token</string>
     <string name="shared_preferences_token_secret" translatable="false">tokenSecret</string>
     <string name="shared_preferences_user_id" translatable="false">userId</string>
+    <!--    Shared Preferences Notification info-->
+    <string name="fcm_pref_name" translatable="false">FCMTokenPref</string>
+    <string name="fcm_token" translatable="false">FCMToken</string>
 
     <!--    UserGift Parsing-->
     <string name="user_gift_parsing_name" translatable="false">name</string>
@@ -48,5 +54,17 @@
     <string name="settings_fragment_tag" translatable="false">SettingsFragment</string>
 
     <string name="double_tap_to_exit_message">Press back button again to exit</string>
+
+    <!--    Notifications String-->
+    <string name="notification_title" translatable="false">title</string>
+    <string name="notification_body" translatable="false">body</string>
+    <string name="notification_data" translatable="false">data</string>
+    <string name="notification_to" translatable="false">to</string>
+    <string name="notification_priority" translatable="false">priority</string>
+    <string name="notification_priority_value" translatable="false">high</string>
+    <!--    Reply notification title-->
+    <string name="reply_notification_title">Reply received</string>
+    <!--    Reply notification text-->
+    <string name="reply_notification_text">You have received an answer from %1$s for the article %2$s</string>
 
 </resources>

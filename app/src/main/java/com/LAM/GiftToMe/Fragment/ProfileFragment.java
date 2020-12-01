@@ -2,6 +2,7 @@ package com.LAM.GiftToMe.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
+import com.LAM.GiftToMe.FCMFirebase.MyFirebaseMessagingService;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
@@ -61,6 +64,7 @@ public class ProfileFragment extends Fragment {
     private ImageView twitterBanner, twitterPhoto;
 
     public String userName;
+    private String fcmToken;
 
     @Nullable
     @Override
@@ -96,6 +100,16 @@ public class ProfileFragment extends Fragment {
                 MainActivity.tokenSecret = MainActivity.session.getAuthToken().secret;
 
                 MainActivity.isLogged = true;
+
+                SharedPreferences prefs = mContext.getSharedPreferences(getResources().getString(R.string.fcm_pref_name), Context.MODE_PRIVATE);
+                fcmToken = prefs.getString(getResources().getString(R.string.fcm_token),null);
+                Log.i("FCMTAG", "bello " + fcmToken);
+
+                if(fcmToken != null) {
+                    //Il token viene salvato nel db se non esiste già l'utente con questo token
+                    Log.i("FCMTAG", "bello");
+                    DBFirestore.checkIfExist(MainActivity.userName, fcmToken);
+                }
 
 //                Log.i("LOGLOGLO","Username: " + MainActivity.userName);
 //                Log.i("LOGLOGLO","Userid: " + MainActivity.userId);
