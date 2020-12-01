@@ -262,7 +262,7 @@ public class NewGiftFragment extends Fragment {
         });
 
     }
-    
+
     private void onErrorDialog(){
         final Dialog dialog = new Dialog(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.gift_error_animation,null);

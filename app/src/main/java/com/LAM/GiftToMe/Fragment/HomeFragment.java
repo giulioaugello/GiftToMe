@@ -718,7 +718,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 //
 //        map.getOverlays().add(marker);
 
-        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, giftId, title, description, issuer, address, mContext);
+        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, giftId, title, description, issuer, address, mContext, getActivity());
 
         Marker marker = new Marker(map);
         marker.setIcon(ContextCompat.getDrawable(mContext, markerIcon));
