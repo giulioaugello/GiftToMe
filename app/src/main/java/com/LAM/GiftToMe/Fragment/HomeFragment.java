@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
@@ -66,6 +67,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -119,9 +121,21 @@ public class HomeFragment extends Fragment implements LocationListener {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         poiMarkers = new RadiusMarkerClusterer(mContext);
-        Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
-        Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
-        poiMarkers.setIcon(clusterIcon);
+//        Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
+//        Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
+//        poiMarkers.setIcon(clusterIcon);
+
+//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+////            Drawable clusterIconD = getResources().getDrawable(R.mipmap.cluster, null);
+////            Bitmap bitmap = ((BitmapDrawable) clusterIconD).getBitmap();
+////            Drawable drawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (65.0f * getResources().getDisplayMetrics().density), (int) (65.0f * getResources().getDisplayMetrics().density), true));
+////            Bitmap icon = BitmapFactory.decodeResource(mContext.getResources(), );
+////            poiMarkers.setIcon(icon);
+////        }else{
+////            Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
+////            Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
+////            poiMarkers.setIcon(clusterIcon);
+////        }
 
         //dropdown
         final ImageView dropdown, zoomIn, zoomOut;
@@ -213,6 +227,8 @@ public class HomeFragment extends Fragment implements LocationListener {
                 MainActivity.activeFragment = userTweetsFragment;
             }
         });
+
+
 
 
         return v;
@@ -356,7 +372,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 
                 final Marker marker = new Marker(map);
                 removeFirstMarker.add(marker);
-                marker.setIcon(ContextCompat.getDrawable(mContext, R.drawable.position));
+                drawableBuildVersion(marker, ContextCompat.getDrawable(mContext, R.drawable.position), ContextCompat.getDrawable(mContext, R.mipmap.position));
+                //marker.setIcon(ContextCompat.getDrawable(mContext, R.drawable.position));
                 marker.setPosition(start);
                 marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                 marker.setInfoWindow(null); //toglie il popup di default
@@ -556,7 +573,8 @@ public class HomeFragment extends Fragment implements LocationListener {
                     for (UsersGift gift: dupGift(selectedGift)){
 
                         Marker markerSamePosition = new Marker(map);
-                        markerSamePosition.setIcon(ContextCompat.getDrawable(mContext, R.drawable.location_same));
+                        drawableBuildVersion(markerSamePosition, ContextCompat.getDrawable(mContext, R.drawable.location_same), ContextCompat.getDrawable(mContext, R.mipmap.location_same));
+                        //markerSamePosition.setIcon(ContextCompat.getDrawable(mContext, R.drawable.location_same));
                         markerSamePosition.setPosition(gift.getGeoPoint());
                         markerSamePosition.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                         markerSamePosition.setTitle(gift.getGiftId());
@@ -679,31 +697,39 @@ public class HomeFragment extends Fragment implements LocationListener {
     @SuppressLint("UseCompatLoadingForDrawables")
     private void addMarker(GeoPoint geoPoint, String category, String giftId, String title, String description, String address, String issuer) {
 
-        int markerIcon = 0;
-        Drawable drawable = null;
+        Drawable markerDrawablePie = null;
+        Drawable markerDrawableNoPie = null;
+        Drawable drawableImagePopup = null;
 
         switch (category) {
             case "Sport":
-                markerIcon = R.drawable.sport_marker;
-                drawable = getResources().getDrawable(R.drawable.sport, null);
+                markerDrawablePie = getResources().getDrawable(R.mipmap.sport_marker, null);
+                markerDrawableNoPie = getResources().getDrawable(R.drawable.sport_marker, null);
+                drawableImagePopup = getResources().getDrawable(R.drawable.sport, null);
                 break;
             case "Electronics":
-                markerIcon = R.drawable.electronic_marker;
-                drawable = getResources().getDrawable(R.drawable.electronic, null);
+                markerDrawablePie = getResources().getDrawable(R.mipmap.electronic_marker, null);
+                markerDrawableNoPie = getResources().getDrawable(R.drawable.electronic_marker, null);
+                drawableImagePopup = getResources().getDrawable(R.drawable.electronic, null);
                 break;
             case "Clothing":
-                markerIcon = R.drawable.clothing_marker;
-                drawable = getResources().getDrawable(R.drawable.clothing, null);
+                markerDrawablePie = getResources().getDrawable(R.mipmap.clothing_marker, null);
+                markerDrawableNoPie = getResources().getDrawable(R.drawable.clothing_marker, null);
+                drawableImagePopup = getResources().getDrawable(R.drawable.clothing, null);
                 break;
             case "Music&Books":
-                markerIcon = R.drawable.music_marker;
-                drawable = getResources().getDrawable(R.drawable.musicbook, null);
+                markerDrawablePie = getResources().getDrawable(R.mipmap.music_marker, null);
+                markerDrawableNoPie = getResources().getDrawable(R.drawable.music_marker, null);
+                drawableImagePopup = getResources().getDrawable(R.drawable.musicbook, null);
                 break;
             case "Other":
-                markerIcon = R.drawable.other_marker;
-                drawable = getResources().getDrawable(R.drawable.file, null);
+                markerDrawablePie = getResources().getDrawable(R.mipmap.other_marker, null);
+                markerDrawableNoPie = getResources().getDrawable(R.drawable.other_marker, null);
+                drawableImagePopup = getResources().getDrawable(R.drawable.file, null);
                 break;
         }
+
+
 
         //marker senza cluster
         //GeoPoint startPoint = new GeoPoint(array[0], array[1]);
@@ -718,24 +744,34 @@ public class HomeFragment extends Fragment implements LocationListener {
 //
 //        marker.setInfoWindow(customInfoWindow); //setta il popup
 //        marker.setSubDescription("Tocca per chiudere oppure"); //sottodescrizione
-//        marker.setImage(drawable); //setta l'immagine nel popup
+//        marker.setImage(drawableImagePopup); //setta l'immagine nel popup
 //        marker.setInfoWindowAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
 //
 //        allMarkers.add(marker);
 //
 //        map.getOverlays().add(marker);
 
+
+
         CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, giftId, title, description, issuer, address, mContext, getActivity());
 
         Marker marker = new Marker(map);
-        marker.setIcon(ContextCompat.getDrawable(mContext, markerIcon));
+        drawableBuildVersion(marker, markerDrawableNoPie, markerDrawablePie);
+//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            //Drawable d = ResourcesCompat.getDrawable(getResources(), R.drawableImagePopup.marker_default, null);
+              //Bitmap bitmap = ((BitmapDrawable) markerDrawablePie).getBitmap();
+//            Drawable dr = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (65.0f * getResources().getDisplayMetrics().density), (int) (65.0f * getResources().getDisplayMetrics().density), true));
+//            marker.setIcon(dr);
+//        }else{
+//            marker.setIcon(markerDrawableNoPie);
+//        }
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setTitle(giftId);
 
         marker.setInfoWindow(customInfoWindow); //setta il popup
         marker.setSubDescription("Tocca per chiudere oppure"); //sottodescrizione
-        marker.setImage(drawable); //setta l'immagine nel popup
+        marker.setImage(drawableImagePopup); //setta l'immagine nel popup
         marker.setInfoWindowAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
 
         allMarkers.add(marker);
@@ -752,6 +788,17 @@ public class HomeFragment extends Fragment implements LocationListener {
 //
 //        addGeofence(latLng, MainActivity.radius);
 
+    }
+
+    //In base alla versione di android prendo i drawable da due cartelle diverse (uscivano marker piccoli in android superiore a pie)
+    private void drawableBuildVersion(Marker marker, Drawable drawable, Drawable mipmap){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Bitmap bitmap = ((BitmapDrawable) mipmap).getBitmap();
+            Drawable dr = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (65.0f * getResources().getDisplayMetrics().density), (int) (65.0f * getResources().getDisplayMetrics().density), true));
+            marker.setIcon(dr);
+        }else{
+            marker.setIcon(drawable);
+        }
     }
 
     @Override
