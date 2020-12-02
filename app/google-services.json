@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "359896355420",
+    "firebase_url": "https://gifttomeapp.firebaseio.com",
+    "project_id": "gifttomeapp",
+    "storage_bucket": "gifttomeapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359896355420:android:3c355ff7e97daf8a86cc99",
+        "android_client_info": {
+          "package_name": "com.LAM.GiftToMe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "359896355420-ah098npo9j81eg5vnu0h94f5860rs934.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmckoh7neonxPEMigfv4X20K8KmolUgMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "359896355420-ah098npo9j81eg5vnu0h94f5860rs934.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

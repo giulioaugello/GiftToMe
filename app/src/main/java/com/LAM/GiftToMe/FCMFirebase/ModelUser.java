@@ -1,13 +1,20 @@
 package com.LAM.GiftToMe.FCMFirebase;
 
+import java.util.ArrayList;
+
 public class ModelUser {
 
-    private String username, token;
+    private String username;
+    private String[] token;
 
-    public ModelUser(String username, String token){
-        this.username = username;
-        this.token = token;
+    public ModelUser(){
+
     }
+
+//    public ModelUser(String username, String token){
+//        this.username = username;
+//        this.token.add(token);
+//    }
 
     public String getUsername() {
         return username;
@@ -17,11 +24,11 @@ public class ModelUser {
         this.username = username;
     }
 
-    public String getToken() {
+    public String[] getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(String[] token) {
         this.token = token;
     }
 }

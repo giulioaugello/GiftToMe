@@ -11,6 +11,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 
@@ -22,8 +27,13 @@ public class DBFirestore {
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = firestoreDB.collection("users");
-        ModelUser modelUser = new ModelUser(username, token);
-        collectionReference.add(modelUser);
+        Map<String, Object> model = new HashMap<>();
+        String[] tokens = {token};
+        model.put("username", username);
+        model.put("token", Arrays.asList(tokens));
+        collectionReference.add(model);
+        //ModelUser modelUser = new ModelUser(username, token);
+        //collectionReference.add(modelUser);
 
     }
 
@@ -31,18 +41,19 @@ public class DBFirestore {
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = firestoreDB.collection("users");
-        collectionReference.whereEqualTo("username", username).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    String token = "";
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Log.i(TAG, document.getId() + " => " + document.getData());
                         //document.get("token").toString();
-                        token = document.getString("token");
+                        ArrayList<String> tokens = (ArrayList<String>) document.getData().get("token");
+                        for(String token: tokens){
+                            FCMNotification.sendFCMNotification(message, token, context);
+                        }
                     }
-                    Log.i("FCMTAG", "eccomi " + token);
-                    FCMNotification.sendFCMNotification(message, token, context);
+                    //Log.i("FCMTAG", "eccomi " + token);
                 } else {
                     Log.i(TAG, "Error getting documents.", task.getException());
                 }
@@ -54,19 +65,39 @@ public class DBFirestore {
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = firestoreDB.collection("users");
-        collectionReference.whereEqualTo("username", username).whereEqualTo("token", token).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    if(task.getResult().size() == 0 ){
+                    if(task.getResult().size() == 0){
                         Log.i(TAG, "User not Exists " + username + " " + token);
                         saveUserDB(username, token);
                     }else{
                         Log.i(TAG, "User already Exists");
+                        for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+                            updateTokens(queryDocumentSnapshot.getId(), queryDocumentSnapshot.getData(), token);
+                        }
                     }
                 }
             }
         });
+    }
+
+    public static void updateTokens(String id, Map<String, Object> data, String token){
+
+        if (data.containsKey("token")){
+            //ArrayList<String> tokens = new ArrayList<>(Arrays.asList(data.get("token")));
+            ArrayList<String> tokens = (ArrayList<String>) data.get("token");
+            if (!tokens.contains(token)){
+                tokens.add(token);
+                FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                CollectionReference collectionReference = firestoreDB.collection("users");
+                Map<String, Object> model = new HashMap<>();
+                model.put("username", data.get("username"));
+                model.put("token", tokens);
+                collectionReference.document(id).set(model);
+            }
+        }
     }
 
 }

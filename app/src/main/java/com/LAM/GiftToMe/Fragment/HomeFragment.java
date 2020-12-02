@@ -86,9 +86,9 @@ public class HomeFragment extends Fragment implements LocationListener {
     private IMapController mapController;
     private MyLocationNewOverlay myLocationNewOverlay;
 
-    private ArrayList<Marker> allMarkers = new ArrayList<>();
-    private ArrayList<Marker> selectedMarker = new ArrayList<>();
-    private ArrayList<UsersGift> selectedGift = new ArrayList<>();
+    private ArrayList<Marker> allMarkers;
+    private ArrayList<Marker> selectedMarker;
+    private ArrayList<UsersGift> selectedGift;
     private RecyclerView recyclerView;
 
     public static LocationManager locationManager;
@@ -222,11 +222,12 @@ public class HomeFragment extends Fragment implements LocationListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("giftgift", "Prima: " + selectedGift.size());
-        selectedGift.clear();
-        Log.i("giftgift", "Dopo: " + selectedGift.size());
-        selectedMarker.clear();
-        allMarkers.clear();
+//        Log.i("giftgift", "Prima: " + selectedGift.size());
+//        selectedGift.clear();
+//        Log.i("giftgift", "Dopo: " + selectedGift.size());
+//        selectedMarker.clear();
+//        allMarkers.clear();
+//        arrayUsersGifts.clear();
     }
 
     private void setupMap(){
@@ -455,6 +456,9 @@ public class HomeFragment extends Fragment implements LocationListener {
             @Override
             public void onResponse(String response) {
                 arrayUsersGifts = new ArrayList<>();
+                allMarkers = new ArrayList<>();
+                selectedMarker = new ArrayList<>();
+                selectedGift = new ArrayList<>();
 
                 String id, text, hashtag = "";
                 try {
@@ -496,11 +500,14 @@ public class HomeFragment extends Fragment implements LocationListener {
 
                         if (!userGift.getIssuer().equals(MainActivity.userName)) {
                             arrayUsersGifts.add(userGift);
-                            //Log.i("giftgift", "array " + userGift.getName());
+//                            Log.i("giftgift", "array " + userGift.getName() + " " + userGift.getIssuer());
                         }
 
 
                     }
+//                    Log.i("giftgift", "username " + MainActivity.userName);
+//                    Log.i("giftgift", "array " + arrayUsersGifts);
+//                    Log.i("giftgift", "size " + arrayUsersGifts.size());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -767,9 +774,10 @@ public class HomeFragment extends Fragment implements LocationListener {
 //        }
 
         //resetto per non far aumentare il numero dei marker nel cluster dello stesso luogo
-        selectedGift.clear();
-        selectedMarker.clear();
-        allMarkers.clear();
+//        selectedGift.clear();
+//        selectedMarker.clear();
+//        allMarkers.clear();
+        //arrayUsersGifts.clear();
     }
 
     @Override
