@@ -67,7 +67,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -125,17 +124,18 @@ public class HomeFragment extends Fragment implements LocationListener {
 //        Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
 //        poiMarkers.setIcon(clusterIcon);
 
-//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-////            Drawable clusterIconD = getResources().getDrawable(R.mipmap.cluster, null);
-////            Bitmap bitmap = ((BitmapDrawable) clusterIconD).getBitmap();
-////            Drawable drawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (65.0f * getResources().getDisplayMetrics().density), (int) (65.0f * getResources().getDisplayMetrics().density), true));
-////            Bitmap icon = BitmapFactory.decodeResource(mContext.getResources(), );
-////            poiMarkers.setIcon(icon);
-////        }else{
-////            Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
-////            Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
-////            poiMarkers.setIcon(clusterIcon);
-////        }
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Drawable clusterIconD = getResources().getDrawable(R.mipmap.cluster_pie, null);
+            Bitmap bitmap = ((BitmapDrawable) clusterIconD).getBitmap();
+            //Drawable drawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (65.0f * getResources().getDisplayMetrics().density), (int) (65.0f * getResources().getDisplayMetrics().density), true));
+
+            //Bitmap icon = BitmapFactory.decodeResource(mContext.getResources(), );
+            poiMarkers.setIcon(bitmap);
+        }else{
+            Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
+            Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
+            poiMarkers.setIcon(clusterIcon);
+        }
 
         //dropdown
         final ImageView dropdown, zoomIn, zoomOut;
@@ -794,7 +794,7 @@ public class HomeFragment extends Fragment implements LocationListener {
     private void drawableBuildVersion(Marker marker, Drawable drawable, Drawable mipmap){
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             Bitmap bitmap = ((BitmapDrawable) mipmap).getBitmap();
-            Drawable dr = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (65.0f * getResources().getDisplayMetrics().density), (int) (65.0f * getResources().getDisplayMetrics().density), true));
+            Drawable dr = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (64.0f * getResources().getDisplayMetrics().density), (int) (64.0f * getResources().getDisplayMetrics().density), true));
             marker.setIcon(dr);
         }else{
             marker.setIcon(drawable);
