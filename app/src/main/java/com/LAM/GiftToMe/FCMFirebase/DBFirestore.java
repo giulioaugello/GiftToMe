@@ -86,10 +86,40 @@ public class DBFirestore {
     public static void updateTokens(String id, Map<String, Object> data, String token){
 
         if (data.containsKey("token")){
-            //ArrayList<String> tokens = new ArrayList<>(Arrays.asList(data.get("token")));
             ArrayList<String> tokens = (ArrayList<String>) data.get("token");
             if (!tokens.contains(token)){
                 tokens.add(token);
+                FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                CollectionReference collectionReference = firestoreDB.collection("users");
+                Map<String, Object> model = new HashMap<>();
+                model.put("username", data.get("username"));
+                model.put("token", tokens);
+                collectionReference.document(id).set(model);
+            }
+        }
+    }
+
+    public static void removeToken(final String username, final String token){
+
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+                        updateTokensLogout(queryDocumentSnapshot.getId(), queryDocumentSnapshot.getData(), token);
+                    }
+                }
+            }
+        });
+    }
+
+    public static void updateTokensLogout(String id, Map<String, Object> data, String token){
+        if (data.containsKey("token")){
+            ArrayList<String> tokens = (ArrayList<String>) data.get("token");
+            if (tokens.contains(token)){
+                tokens.remove(token);
                 FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
                 CollectionReference collectionReference = firestoreDB.collection("users");
                 Map<String, Object> model = new HashMap<>();

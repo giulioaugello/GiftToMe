@@ -65,6 +65,7 @@ public class ProfileFragment extends Fragment {
 
     public String userName;
     private String fcmToken;
+    private SharedPreferences prefs;
 
     @Nullable
     @Override
@@ -89,6 +90,9 @@ public class ProfileFragment extends Fragment {
         twitterBanner = v.findViewById(R.id.twitterBanner);
         constraintBeginning = v.findViewById(R.id.constraint_beginning);
 
+        prefs = mContext.getSharedPreferences(getResources().getString(R.string.fcm_pref_name), Context.MODE_PRIVATE);
+        fcmToken = prefs.getString(getResources().getString(R.string.fcm_token),null);
+
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
@@ -101,15 +105,14 @@ public class ProfileFragment extends Fragment {
 
                 MainActivity.isLogged = true;
 
-                SharedPreferences prefs = mContext.getSharedPreferences(getResources().getString(R.string.fcm_pref_name), Context.MODE_PRIVATE);
-                fcmToken = prefs.getString(getResources().getString(R.string.fcm_token),null);
-                Log.i("FCMTAG", "bello " + fcmToken);
+
+                Log.i("sharedshared", "shared " + fcmToken);
 
                 if(fcmToken != null) {
                     //Il token viene salvato nel db se non esiste già l'utente con questo token
-                    Log.i("FCMTAG", "bello");
                     DBFirestore.checkIfExist(MainActivity.userName, fcmToken);
                 }
+                Log.i("sharedshared", "shared1 " + fcmToken);
 
 //                Log.i("LOGLOGLO","Username: " + MainActivity.userName);
 //                Log.i("LOGLOGLO","Userid: " + MainActivity.userId);
@@ -126,12 +129,17 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(mContext, exception.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+        Log.i("sharedshared", "shared2 " + fcmToken);
 
         if(MainActivity.isLogged) updateUI(true);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("sharedshared", "shared3 " + fcmToken);
+
+                DBFirestore.removeToken(MainActivity.userName, fcmToken);
+
                 TwitterCore.getInstance().getSessionManager().clearActiveSession();
                 Toast.makeText(mContext, "Logged out!", Toast.LENGTH_LONG).show();
                 MainActivity.isLogged = false;

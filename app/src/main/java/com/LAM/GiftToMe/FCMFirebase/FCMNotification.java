@@ -45,22 +45,16 @@ public class FCMNotification extends ContextWrapper {
     public FCMNotification(Context base) {
         super(base);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            createChannels();
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setDescription("this is the desc of the channel");
+            notificationChannel.setLightColor(Color.BLUE);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
         }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void createChannels() {
-
-        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-        notificationChannel.enableLights(true);
-        notificationChannel.enableVibration(true);
-        notificationChannel.setDescription("this is the desc of the channel");
-        notificationChannel.setLightColor(Color.BLUE);
-        notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.createNotificationChannel(notificationChannel);
     }
 
     public void sendHighPriorityNotification(String title, String body){
