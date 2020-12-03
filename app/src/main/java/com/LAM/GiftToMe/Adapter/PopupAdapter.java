@@ -77,7 +77,6 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
                 if (!MainActivity.isLogged){
                     Toast.makeText(mContext, "Per contattare un utente devi prima fare l'accesso", Toast.LENGTH_SHORT).show();
                 }else{
-                    //Toast.makeText(mContext, "ciao", Toast.LENGTH_SHORT).show();
                     showReplyDialog(position, activity, mContext, usersGifts);
                 }
             }
@@ -148,17 +147,6 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
                         String receiverUserName = usersGifts.get(position).getIssuer();
 
                         DBFirestore.getToken(receiverUserName, message, mContext);
-//                        FirestoreFunctions.getUserToken(receiverUserName, new FirestoreResponseListener() {
-//                            @Override
-//                            public void onComplete(boolean isDocumentExist) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onTokenRetrieved(String token) {
-//                                NotificationHelper.sendFCMNotification(message,token,mContext);
-//                            }
-//                        });
                     }
                 });
 

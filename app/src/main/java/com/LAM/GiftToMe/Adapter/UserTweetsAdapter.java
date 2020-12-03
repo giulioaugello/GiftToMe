@@ -125,7 +125,6 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
                 if (!MainActivity.isLogged){
                     Toast.makeText(mContext, "Per contattare un utente devi prima fare l'accesso", Toast.LENGTH_SHORT).show();
                 }else{
-                    //Toast.makeText(mContext, "ciao", Toast.LENGTH_SHORT).show();
                     PopupAdapter.showReplyDialog(position, activity, mContext, usersGifts);
                 }
             }

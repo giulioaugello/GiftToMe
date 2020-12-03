@@ -531,7 +531,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
                 for (UsersGift userGift : arrayUsersGifts) {
                     //aggiungo i marker alla mappa
-                    addMarker(userGift.getGeoPoint(), userGift.getCategory(), userGift.getGiftId(), userGift.getName(), userGift.getDescription(), userGift.getAddress(), userGift.getIssuer());
+                    addMarker(userGift.getGeoPoint(), userGift.getCategory(), userGift.getGiftId(), userGift.getTweetId(), userGift.getName(), userGift.getDescription(), userGift.getAddress(), userGift.getIssuer());
 
                 }
 
@@ -695,7 +695,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
     //creo un marker e lo aggiungo al cluster
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void addMarker(GeoPoint geoPoint, String category, String giftId, String title, String description, String address, String issuer) {
+    private void addMarker(GeoPoint geoPoint, String category, String giftId, String tweetId, String title, String description, String address, String issuer) {
 
         Drawable markerDrawablePie = null;
         Drawable markerDrawableNoPie = null;
@@ -753,7 +753,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
 
 
-        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, giftId, title, description, issuer, address, mContext, getActivity());
+        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, giftId, tweetId, title, description, issuer, address, mContext, getActivity());
 
         Marker marker = new Marker(map);
         drawableBuildVersion(marker, markerDrawableNoPie, markerDrawablePie);
