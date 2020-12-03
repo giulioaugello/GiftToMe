@@ -105,14 +105,10 @@ public class ProfileFragment extends Fragment {
 
                 MainActivity.isLogged = true;
 
-
-                Log.i("sharedshared", "shared " + fcmToken);
-
                 if(fcmToken != null) {
                     //Il token viene salvato nel db se non esiste già l'utente con questo token
                     DBFirestore.checkIfExist(MainActivity.userName, fcmToken);
                 }
-                Log.i("sharedshared", "shared1 " + fcmToken);
 
 //                Log.i("LOGLOGLO","Username: " + MainActivity.userName);
 //                Log.i("LOGLOGLO","Userid: " + MainActivity.userId);
@@ -129,14 +125,12 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(mContext, exception.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-        Log.i("sharedshared", "shared2 " + fcmToken);
 
         if(MainActivity.isLogged) updateUI(true);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("sharedshared", "shared3 " + fcmToken);
 
                 DBFirestore.removeToken(MainActivity.userName, fcmToken);
 
@@ -181,7 +175,6 @@ public class ProfileFragment extends Fragment {
     private void updateUI(boolean signedIn) {
         if (signedIn) {
             setPageWithUserInfo();
-            Log.i("wewewe","wewe");
             constraintBeginning.setVisibility(View.GONE);
             constraintLayout.setVisibility(View.VISIBLE);
             secondConstraint.setVisibility(View.VISIBLE);

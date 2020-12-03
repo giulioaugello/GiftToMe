@@ -78,7 +78,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
                     Toast.makeText(mContext, "Per contattare un utente devi prima fare l'accesso", Toast.LENGTH_SHORT).show();
                 }else{
                     //Toast.makeText(mContext, "ciao", Toast.LENGTH_SHORT).show();
-                    showReplyDialog(position);
+                    showReplyDialog(position, activity, mContext, usersGifts);
                 }
             }
         });
@@ -108,7 +108,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
         }
     }
 
-    public void showReplyDialog(final int position){
+    public static void showReplyDialog(final int position, Activity activity, final Context mContext, final ArrayList<UsersGift> usersGifts){
 
         final Dialog replyGiftDialog = new Dialog(activity);
         View view = activity.getLayoutInflater().inflate(R.layout.reply_gift_dialog,null);
@@ -116,15 +116,14 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
         replyGiftDialog.setCancelable(true);
         replyGiftDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        replyGiftText = view.findViewById(R.id.get_text_reply);
+        final EditText replyGiftText = view.findViewById(R.id.get_text_reply);
         TextView topText = view.findViewById(R.id.top_text);
         topText.setText("Contatta " + usersGifts.get(position).getIssuer() + " per il regalo: " + usersGifts.get(position).getName());
-        sendReply = view.findViewById(R.id.send_button);
+        Button sendReply = view.findViewById(R.id.send_button);
 
         sendReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "bellobello", Toast.LENGTH_SHORT).show();
                 final String yourReply = replyGiftText.getText().toString();
 
                 final String id = "";
@@ -223,4 +222,120 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
 
         replyGiftDialog.show();
     }
+
+//    public void showReplyDialog(final int position){
+//
+//        final Dialog replyGiftDialog = new Dialog(activity);
+//        View view = activity.getLayoutInflater().inflate(R.layout.reply_gift_dialog,null);
+//        replyGiftDialog.setContentView(view);
+//        replyGiftDialog.setCancelable(true);
+//        replyGiftDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//        replyGiftText = view.findViewById(R.id.get_text_reply);
+//        TextView topText = view.findViewById(R.id.top_text);
+//        topText.setText("Contatta " + usersGifts.get(position).getIssuer() + " per il regalo: " + usersGifts.get(position).getName());
+//        sendReply = view.findViewById(R.id.send_button);
+//
+//        sendReply.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final String yourReply = replyGiftText.getText().toString();
+//
+//                final String id = "";
+//                final String reply = "@" + usersGifts.get(position).getIssuer() + " " + EditString.normalizeReply(id,MainActivity.userName,usersGifts.get(position).getIssuer(),yourReply,usersGifts.get(position).getGiftId());
+//
+//                TwitterRequests.postTweet(reply, usersGifts.get(position).getTweetId(), mContext, new VolleyListener() {
+//                    @Override
+//                    public void onError(VolleyError message) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                        final ArrayList<String> message = new ArrayList<>();
+//                        String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
+//                        String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
+//
+//                        message.add(notificationTitle);
+//                        message.add(notificationText);
+//
+//                        String receiverUserName = usersGifts.get(position).getIssuer();
+//
+//                        DBFirestore.getToken(receiverUserName, message, mContext);
+////                        FirestoreFunctions.getUserToken(receiverUserName, new FirestoreResponseListener() {
+////                            @Override
+////                            public void onComplete(boolean isDocumentExist) {
+////
+////                            }
+////
+////                            @Override
+////                            public void onTokenRetrieved(String token) {
+////                                NotificationHelper.sendFCMNotification(message,token,mContext);
+////                            }
+////                        });
+//                    }
+//                });
+//
+//                String chatTweet = EditString.normalizeChatTweet(usersGifts.get(position).getTweetId(),usersGifts.get(position).getIssuer(),MainActivity.userName);
+//
+//                TwitterRequests.postTweet(chatTweet, "", mContext, new VolleyListener() {
+//                    @Override
+//                    public void onError(VolleyError error) {
+//                        String data = new String(error.networkResponse.data);
+//                        try {
+//
+//                            JSONObject dataJSON = new JSONObject(data);
+//                            JSONArray jsonArray = new JSONArray(dataJSON.getString(mContext.getResources().getString(R.string.json_errors)));
+//                            for(int i = 0; i<jsonArray.length();i++){
+//
+//                                JSONObject JObj = jsonArray.getJSONObject(i);
+//                                if(Integer.parseInt(JObj.getString(mContext.getResources().getString(R.string.json_code))) == 187){
+//                                    Toast.makeText(mContext, "Non puoi iniziare una nuova chat perchè già ne hai una", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//
+//                        }
+//                        catch (JSONException e){
+//                            e.printStackTrace();
+//                        }
+//
+//                        replyGiftDialog.dismiss();
+//
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                        try{
+//                            JSONObject responseJSON = new JSONObject(response);
+//                            String tweetId = responseJSON.getString(mContext.getResources().getString(R.string.json_id));
+//                            String message = EditString.normalizeChatMessage(usersGifts.get(position).getIssuer(),MainActivity.userName,yourReply);
+//
+//                            TwitterRequests.postTweet(message, tweetId, mContext, new VolleyListener() {
+//
+//                                @Override
+//                                public void onResponse(String response) {
+//                                    replyGiftDialog.dismiss();
+//                                }
+//
+//                                @Override
+//                                public void onError(VolleyError error) {
+//                                    error.printStackTrace();
+//                                }
+//                            });
+//
+//                        }
+//                        catch (JSONException e){
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//
+//            }
+//        });
+//
+//        replyGiftDialog.show();
+//    }
+
 }
