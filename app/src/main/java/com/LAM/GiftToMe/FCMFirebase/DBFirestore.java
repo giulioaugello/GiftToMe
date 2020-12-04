@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -13,6 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +29,25 @@ public class DBFirestore {
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = firestoreDB.collection("users");
+
+        String[] messages = {};
+        Date[] timestamps = {};
+
+        Map<String, Object> chatMap = new HashMap<>();
+        chatMap.put("issuer", "");
+        chatMap.put("messages", Arrays.asList(messages));
+        chatMap.put("timestamp", Arrays.asList(timestamps));
+
+        List<Map<String, Object>> chatList = new ArrayList<>();
+        chatList.add(chatMap);
+
+
         Map<String, Object> model = new HashMap<>();
         String[] tokens = {token};
         model.put("username", username);
         model.put("token", Arrays.asList(tokens));
+        model.put("chat", chatList);
+
         collectionReference.add(model);
         //ModelUser modelUser = new ModelUser(username, token);
         //collectionReference.add(modelUser);

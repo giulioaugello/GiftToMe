@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.Fragment.MyGiftFragment;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
@@ -35,6 +36,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapter.ViewHolder> {
@@ -48,7 +50,8 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
     private TextView nameLong, descriptionLong, addressLong;
     private ImageView imageCategory;
     private String nameString,addressString,descriptionString,categoryString, issuer;
-    private ScrollView scroll;
+
+    public static boolean isOnTouch = false;
 
     public MyGiftTweetsAdapter(Context mContext, ArrayList<MyGift> myGift, Activity activity, Fragment fragment) {
         this.mContext = mContext;
@@ -102,7 +105,6 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
         private ImageView deleteButton, editButton, imgCategory;
         private TextView giftName;
         private CardView card;
-        private ScrollView scrollView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -312,9 +314,6 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
         String cat = myGift.get(position).getCategory();
         changeCategoryImage(cat, imageCategory);
 
-        View v  = activity.getLayoutInflater().inflate(R.layout.mygift_fragment,null);
-        scroll = v.findViewById(R.id.scrollGift);
-
         cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -326,8 +325,14 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
         cardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    dialog.dismiss();
+                if (dialog.isShowing()) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    int action = event.getActionMasked();
+                    if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_BUTTON_RELEASE) {
+                        dialog.dismiss();
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        return true;
+                    }
                 }
                 return false;
             }

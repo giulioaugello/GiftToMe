@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
@@ -125,85 +126,98 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
             public void onClick(View v) {
                 final String yourReply = replyGiftText.getText().toString();
 
-                final String id = "";
-                final String reply = "@" + usersGifts.get(position).getIssuer() + " " + EditString.normalizeReply(id,MainActivity.userName,usersGifts.get(position).getIssuer(),yourReply,usersGifts.get(position).getGiftId());
+//                final ArrayList<String> message = new ArrayList<>();
+//                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
+//                String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
+//
+//                message.add(notificationTitle);
+//                message.add(notificationText);
+//
+//                String receiverUserName = usersGifts.get(position).getIssuer();
+//
+//                DBFirestore.getToken(receiverUserName, message, mContext);
 
-                TwitterRequests.postTweet(reply, usersGifts.get(position).getTweetId(), mContext, new VolleyListener() {
-                    @Override
-                    public void onError(VolleyError message) {
+                Chat.sendMessage("L_A_M98");
 
-                    }
+//                final String id = "";
+//                final String reply = "@" + usersGifts.get(position).getIssuer() + " " + EditString.normalizeReply(id, MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getGiftId());
+//
+//                TwitterRequests.postTweet(reply, usersGifts.get(position).getTweetId(), mContext, new VolleyListener() {
+//                    @Override
+//                    public void onError(VolleyError message) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                        final ArrayList<String> message = new ArrayList<>();
+//                        String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
+//                        String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
+//
+//                        message.add(notificationTitle);
+//                        message.add(notificationText);
+//
+//                        String receiverUserName = usersGifts.get(position).getIssuer();
+//
+//                        DBFirestore.getToken(receiverUserName, message, mContext);
+//                    }
+//                });
 
-                    @Override
-                    public void onResponse(String response) {
+                //String chatTweet = EditString.normalizeChatTweet(usersGifts.get(position).getTweetId(),usersGifts.get(position).getIssuer(),MainActivity.userName);
 
-                        final ArrayList<String> message = new ArrayList<>();
-                        String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
-                        String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
-
-                        message.add(notificationTitle);
-                        message.add(notificationText);
-
-                        String receiverUserName = usersGifts.get(position).getIssuer();
-
-                        DBFirestore.getToken(receiverUserName, message, mContext);
-                    }
-                });
-
-                String chatTweet = EditString.normalizeChatTweet(usersGifts.get(position).getTweetId(),usersGifts.get(position).getIssuer(),MainActivity.userName);
-
-                TwitterRequests.postTweet(chatTweet, "", mContext, new VolleyListener() {
-                    @Override
-                    public void onError(VolleyError error) {
-                        String data = new String(error.networkResponse.data);
-                        try {
-
-                            JSONObject dataJSON = new JSONObject(data);
-                            JSONArray jsonArray = new JSONArray(dataJSON.getString(mContext.getResources().getString(R.string.json_errors)));
-                            for(int i = 0; i<jsonArray.length();i++){
-
-                                JSONObject JObj = jsonArray.getJSONObject(i);
-                                if(Integer.parseInt(JObj.getString(mContext.getResources().getString(R.string.json_code))) == 187){
-                                    Toast.makeText(mContext, "Non puoi iniziare una nuova chat perchè già ne hai una", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                        }
-                        catch (JSONException e){
-                            e.printStackTrace();
-                        }
-
-                        replyGiftDialog.dismiss();
-
-                    }
-
-                    @Override
-                    public void onResponse(String response) {
-
-                        try{
-                            JSONObject responseJSON = new JSONObject(response);
-                            String tweetId = responseJSON.getString(mContext.getResources().getString(R.string.json_id));
-                            String message = EditString.normalizeChatMessage(usersGifts.get(position).getIssuer(),MainActivity.userName,yourReply);
-
-                            TwitterRequests.postTweet(message, tweetId, mContext, new VolleyListener() {
-
-                                @Override
-                                public void onResponse(String response) {
-                                    replyGiftDialog.dismiss();
-                                }
-
-                                @Override
-                                public void onError(VolleyError error) {
-                                    error.printStackTrace();
-                                }
-                            });
-
-                        }
-                        catch (JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-                });
+//                TwitterRequests.postTweet(chatTweet, "", mContext, new VolleyListener() {
+//                    @Override
+//                    public void onError(VolleyError error) {
+//                        String data = new String(error.networkResponse.data);
+//                        try {
+//
+//                            JSONObject dataJSON = new JSONObject(data);
+//                            JSONArray jsonArray = new JSONArray(dataJSON.getString(mContext.getResources().getString(R.string.json_errors)));
+//                            for(int i = 0; i<jsonArray.length();i++){
+//
+//                                JSONObject JObj = jsonArray.getJSONObject(i);
+//                                if(Integer.parseInt(JObj.getString(mContext.getResources().getString(R.string.json_code))) == 187){
+//                                    Toast.makeText(mContext, "Non puoi iniziare una nuova chat perchè già ne hai una", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//
+//                        }
+//                        catch (JSONException e){
+//                            e.printStackTrace();
+//                        }
+//
+//                        replyGiftDialog.dismiss();
+//
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                        try{
+//                            JSONObject responseJSON = new JSONObject(response);
+//                            String tweetId = responseJSON.getString(mContext.getResources().getString(R.string.json_id));
+//                            String message = EditString.normalizeChatMessage(usersGifts.get(position).getIssuer(),MainActivity.userName,yourReply);
+//
+//                            TwitterRequests.postTweet(message, tweetId, mContext, new VolleyListener() {
+//
+//                                @Override
+//                                public void onResponse(String response) {
+//                                    replyGiftDialog.dismiss();
+//                                }
+//
+//                                @Override
+//                                public void onError(VolleyError error) {
+//                                    error.printStackTrace();
+//                                }
+//                            });
+//
+//                        }
+//                        catch (JSONException e){
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
 
             }
         });

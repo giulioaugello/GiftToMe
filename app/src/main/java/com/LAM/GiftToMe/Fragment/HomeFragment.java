@@ -424,7 +424,7 @@ public class HomeFragment extends Fragment implements LocationListener {
                 Toast.makeText(mContext, "Inserisci una posizione valida",Toast.LENGTH_LONG).show();
             }
         }else {
-            Toast.makeText(mContext, "Bo",Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Non hai attivato il gps, inserisci una posizione",Toast.LENGTH_LONG).show();
         }
 
     }
@@ -757,14 +757,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         Marker marker = new Marker(map);
         drawableBuildVersion(marker, markerDrawableNoPie, markerDrawablePie);
-//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//            //Drawable d = ResourcesCompat.getDrawable(getResources(), R.drawableImagePopup.marker_default, null);
-              //Bitmap bitmap = ((BitmapDrawable) markerDrawablePie).getBitmap();
-//            Drawable dr = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (65.0f * getResources().getDisplayMetrics().density), (int) (65.0f * getResources().getDisplayMetrics().density), true));
-//            marker.setIcon(dr);
-//        }else{
-//            marker.setIcon(markerDrawableNoPie);
-//        }
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setTitle(giftId);

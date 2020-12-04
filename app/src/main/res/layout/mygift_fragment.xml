@@ -8,82 +8,6 @@
     android:orientation="vertical"
     android:background="#56ab2f">
 
-<!--    <TableLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:stretchColumns="*"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        >-->
-
-<!--        <TableRow-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            >-->
-
-<!--            <com.google.android.material.chip.Chip-->
-<!--                android:id="@+id/sport_chip"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="4dp"-->
-<!--                android:padding="12dp"-->
-<!--                android:textAlignment="center"-->
-<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
-<!--                app:chipIcon="@drawable/sport"-->
-<!--                app:chipBackgroundColor="#F8F8FF"-->
-<!--                app:iconStartPadding="5dp" />-->
-
-<!--            <com.google.android.material.chip.Chip-->
-<!--                android:id="@+id/electronic_chip"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="4dp"-->
-<!--                android:padding="12dp"-->
-<!--                android:textAlignment="center"-->
-<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
-<!--                app:chipIcon="@drawable/electronic"-->
-<!--                app:chipBackgroundColor="#F8F8FF"-->
-<!--                app:iconStartPadding="5dp"/>-->
-
-<!--            <com.google.android.material.chip.Chip-->
-<!--                android:id="@+id/clothing_chip"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="4dp"-->
-<!--                android:padding="12dp"-->
-<!--                android:textAlignment="center"-->
-<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
-<!--                app:chipIcon="@drawable/clothing"-->
-<!--                app:chipBackgroundColor="#F8F8FF"-->
-<!--                app:iconStartPadding="5dp"/>-->
-
-<!--            <com.google.android.material.chip.Chip-->
-<!--                android:id="@+id/music_chip"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="4dp"-->
-<!--                android:padding="12dp"-->
-<!--                android:textAlignment="center"-->
-<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
-<!--                app:chipIcon="@drawable/music"-->
-<!--                app:chipBackgroundColor="#F8F8FF"-->
-<!--                app:iconStartPadding="5dp"/>-->
-
-<!--            <com.google.android.material.chip.Chip-->
-<!--                android:id="@+id/other_chip"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="4dp"-->
-<!--                android:padding="12dp"-->
-<!--                android:textAlignment="center"-->
-<!--                android:theme="@style/Theme.MaterialComponents.Light"-->
-<!--                app:chipIcon="@drawable/file"-->
-<!--                app:chipBackgroundColor="#F8F8FF"-->
-<!--                app:iconStartPadding="5dp"/>-->
-
-<!--        </TableRow>-->
-
-<!--    </TableLayout>-->
-
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -167,34 +91,29 @@
 
     </HorizontalScrollView>
 
-    <ScrollView
-        android:id="@+id/scrollGift"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="56dp"
         android:paddingTop="15dp"
         android:paddingBottom="10dp"
         android:background="@drawable/round_corner_profile">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userTweets"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/userTweets"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="70dp"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="70dp"/>
+    </LinearLayout>
 
-        </LinearLayout>
-
-    </ScrollView>
 
 </LinearLayout>

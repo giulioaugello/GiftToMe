@@ -35,7 +35,7 @@ public class MyGiftFragment extends Fragment {
 
     public static RecyclerView recyclerView;
     private Context mContext;
-    public static ScrollView scrollView;
+    //public static ScrollView scrollView;
     private ArrayList<MyGift> userGifts;
     private MyGiftTweetsAdapter myGiftTweetsAdapter;
     public static ArrayList<String> arrayActive;
@@ -52,7 +52,7 @@ public class MyGiftFragment extends Fragment {
         View v =  inflater.inflate(R.layout.mygift_fragment, container, false);
 
         mContext = getActivity().getApplicationContext();
-        scrollView = v.findViewById(R.id.scrollGift);
+        //scrollView = v.findViewById(R.id.scrollGift);
         recyclerView = v.findViewById(R.id.userTweets);
         userGifts = new ArrayList<>();
 
