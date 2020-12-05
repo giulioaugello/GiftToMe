@@ -36,7 +36,7 @@ public class DBFirestore {
         Map<String, Object> chatMap = new HashMap<>();
         chatMap.put("issuer", "");
         chatMap.put("messages", Arrays.asList(messages));
-        chatMap.put("timestamp", Arrays.asList(timestamps));
+        chatMap.put("timestamps", Arrays.asList(timestamps));
 
         List<Map<String, Object>> chatList = new ArrayList<>();
         chatList.add(chatMap);

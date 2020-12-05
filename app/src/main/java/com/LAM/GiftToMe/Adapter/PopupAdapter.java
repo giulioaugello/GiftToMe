@@ -137,7 +137,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
 //
 //                DBFirestore.getToken(receiverUserName, message, mContext);
 
-                Chat.sendMessage("L_A_M98");
+                Chat.sendMessage("L_A_M98", "Anna", yourReply);
 
 //                final String id = "";
 //                final String reply = "@" + usersGifts.get(position).getIssuer() + " " + EditString.normalizeReply(id, MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getGiftId());

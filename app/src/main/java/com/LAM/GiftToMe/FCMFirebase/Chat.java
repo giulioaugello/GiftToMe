@@ -5,13 +5,12 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,23 +20,78 @@ import androidx.annotation.NonNull;
 public class Chat {
 
     private static final String TAG = "TAGCHAT";
+    private static int indexReceiver = 0;
 
-    public static void sendMessage(String username){
+    public static void sendMessage(String username, final String receiver, final String reply){ //voglio inviare un messaggio da username a receiver con testo reply
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = firestoreDB.collection("users");
+        final CollectionReference collectionReference = firestoreDB.collection("users");
         collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
-                        //updateChat(queryDocumentSnapshot.getId(), queryDocumentSnapshot.getData(), message, issuer);
                         List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
-                        Log.i("chatchat", "List " + chat);
+                        //Log.i("chatchat", "List " + chat); //List [{timestamps=[Timestamp(seconds=1607158800, nanoseconds=0)], messages=[Ciao Lam], issuer=Giulio2803}]
+                        //Log.i("chatchat", "List " + queryDocumentSnapshot.getData()); //restituisce tutto il blocco di lam2803
+                        if (chat != null){
+
+                            Map<String, Object> model = new HashMap<>();
+                            model.put("username", queryDocumentSnapshot.getData().get("username"));
+                            model.put("token", queryDocumentSnapshot.getData().get("token"));
+
+                            if (!checkIssuerExist(chat, receiver)){ //se il receiver non c'è: creo una nuova hashmap e la aggiungo a chat
+
+                                Log.i("chatchat", "Nuova Chat");
+
+                                ArrayList<String> messagesArrayList = new ArrayList<>();
+                                messagesArrayList.add(reply);
+                                ArrayList<Date> datesArrayList = new ArrayList<>();
+                                Date date = new Date();
+                                datesArrayList.add(date);
+                                Map<String, Object> chatNewIssuer = new HashMap<>();
+                                chatNewIssuer.put("issuer", receiver);
+                                chatNewIssuer.put("messages", messagesArrayList);
+                                chatNewIssuer.put("timestamps", datesArrayList);
+                                chat.add(chatNewIssuer);
+
+                                model.put("chat", chat);
+
+                                collectionReference.document(queryDocumentSnapshot.getId()).set(model);
+
+                            }else { //se il receiver esiste aggiungo solo messaggio e timestamp
+
+                                Log.i("chatchat", "Chat già esistente " + reply);
+
+                                ArrayList<String> messagesArrayList = (ArrayList<String>) chat.get(indexReceiver).get("messages");
+                                messagesArrayList.add(reply);
+                                Log.i("chatchat", "Messages " + messagesArrayList);
+
+                                ArrayList<Date> datesArrayList = (ArrayList<Date>) chat.get(indexReceiver).get("timestamps");
+                                Date date = new Date();
+                                datesArrayList.add(date);
+                                Log.i("chatchat", "Dates " + datesArrayList + " " + chat.get(indexReceiver).get("issuer"));
+
+                                chat.get(indexReceiver).put("messages", messagesArrayList);
+                                chat.get(indexReceiver).put("timestamps", datesArrayList);
+
+                                model.put("chat", chat);
+
+                                collectionReference.document(queryDocumentSnapshot.getId()).set(model);
+
+                            }
+                            //Log.i("chatchat", "List " + chat);
+
+//                            for (int i = 0; i < chat.size(); i++){
+//                                Log.i("chatchat", "receiver: " + chat.get(i).get("issuer") + ", message: " + chat.get(i).get("messages") + ", timestamp: " + chat.get(i).get("timestamps"));
+//                            }
+                        }
+
                     }
                 }
             }
         });
+
 //        DocumentReference documentReference = collectionReference.document();
 //        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 //            @Override
@@ -51,6 +105,18 @@ public class Chat {
 //                }
 //            }
 //        });
+    }
+
+    private static boolean checkIssuerExist(List<Map<String, Object>> chat, String receiver){
+        for (int i = 0; i < chat.size(); i++){
+            String issuers = (String) chat.get(i).get("issuer");
+            if (issuers.equals(receiver)){
+                indexReceiver = i;
+                Log.i("chatchat", "Issuer boolean: " + issuers + " " + indexReceiver);
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void updateChat(String id, Map<String, Object> data, Map<String, Object> dataInside, String message, String issuer){
