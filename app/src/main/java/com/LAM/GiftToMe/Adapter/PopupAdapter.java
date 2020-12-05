@@ -126,18 +126,22 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
             public void onClick(View v) {
                 final String yourReply = replyGiftText.getText().toString();
 
-//                final ArrayList<String> message = new ArrayList<>();
-//                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
-//                String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
-//
-//                message.add(notificationTitle);
-//                message.add(notificationText);
-//
-//                String receiverUserName = usersGifts.get(position).getIssuer();
-//
-//                DBFirestore.getToken(receiverUserName, message, mContext);
+                final ArrayList<String> message = new ArrayList<>();
+                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
+                String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
 
-                Chat.sendMessage("L_A_M98", "Anna", yourReply);
+                message.add(notificationTitle);
+                message.add(notificationText);
+
+                String receiverUserName = usersGifts.get(position).getIssuer();
+
+                DBFirestore.getToken(receiverUserName, message, mContext);
+
+                Chat.sendMessage(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, mContext);
+
+                replyGiftDialog.dismiss();
+
+                //Chat.getMessages("L_A_M98", "Giulio2803");
 
 //                final String id = "";
 //                final String reply = "@" + usersGifts.get(position).getIssuer() + " " + EditString.normalizeReply(id, MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getGiftId());

@@ -34,7 +34,7 @@ public class DBFirestore {
         Date[] timestamps = {};
 
         Map<String, Object> chatMap = new HashMap<>();
-        chatMap.put("issuer", "");
+        chatMap.put("receiver", "");
         chatMap.put("messages", Arrays.asList(messages));
         chatMap.put("timestamps", Arrays.asList(timestamps));
 
