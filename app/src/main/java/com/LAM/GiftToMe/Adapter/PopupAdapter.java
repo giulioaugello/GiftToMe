@@ -126,18 +126,19 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
             public void onClick(View v) {
                 final String yourReply = replyGiftText.getText().toString();
 
-                final ArrayList<String> message = new ArrayList<>();
-                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
-                String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
+//                final ArrayList<String> message = new ArrayList<>();
+//                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
+//                String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
+//
+//                message.add(notificationTitle);
+//                message.add(notificationText);
+//
+//                String receiverUserName = usersGifts.get(position).getIssuer();
+//
+//                DBFirestore.getToken(receiverUserName, message, mContext);
 
-                message.add(notificationTitle);
-                message.add(notificationText);
-
-                String receiverUserName = usersGifts.get(position).getIssuer();
-
-                DBFirestore.getToken(receiverUserName, message, mContext);
-
-                Chat.sendMessage(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, mContext);
+                //Chat.sendMessage(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, mContext);
+                Chat.sendMessage("L_A_M98", "Francesco", yourReply, "Prova5", mContext);
 
                 replyGiftDialog.dismiss();
 

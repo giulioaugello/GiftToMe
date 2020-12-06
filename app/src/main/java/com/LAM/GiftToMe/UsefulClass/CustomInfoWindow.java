@@ -107,7 +107,7 @@ public class CustomInfoWindow extends MarkerInfoWindow {
 
                 DBFirestore.getToken(receiverUserName, message, mContext);
 
-                Chat.sendMessage(MainActivity.userName, issuer, yourReply, mContext);
+                //Chat.sendMessage(MainActivity.userName, issuer, yourReply, mContext);
 
                 replyGiftDialog.dismiss();
 

@@ -33,12 +33,21 @@ public class DBFirestore {
         String[] messages = {};
         Date[] timestamps = {};
 
-        Map<String, Object> chatMap = new HashMap<>();
-        chatMap.put("receiver", "");
-        chatMap.put("messages", Arrays.asList(messages));
-        chatMap.put("timestamps", Arrays.asList(timestamps));
+        List<Map<String, Object>> gift = new ArrayList<>();
+
+        Map<String, Object> giftInfo = new HashMap<>();
+        giftInfo.put("giftName", "");
+        giftInfo.put("messages", Arrays.asList(messages));
+        giftInfo.put("timestamps", Arrays.asList(timestamps));
+        gift.add(giftInfo);
 
         List<Map<String, Object>> chatList = new ArrayList<>();
+
+        Map<String, Object> chatMap = new HashMap<>();
+        chatMap.put("receiver", "");
+        chatMap.put("arrayGift", gift);
+//        chatMap.put("messages", Arrays.asList(messages));
+//        chatMap.put("timestamps", Arrays.asList(timestamps));
         chatList.add(chatMap);
 
 
