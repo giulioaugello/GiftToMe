@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
@@ -33,9 +34,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private Context mContext;
     private Activity activity;
     private Fragment fragment;
-    private ArrayList<UsersGift> usersGifts;
+    private ArrayList<ReceiverModel> usersGifts;
 
-    public ChatListAdapter(Context mContext, ArrayList<UsersGift> usersGifts, Activity activity, Fragment fragment) {
+    public ChatListAdapter(Context mContext, ArrayList<ReceiverModel> usersGifts, Activity activity, Fragment fragment) {
         this.mContext = mContext;
         this.activity = activity;
         this.fragment = fragment;
@@ -52,11 +53,11 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ChatListAdapter.ViewHolder holder, int position) {
 
-        holder.userName.setText(usersGifts.get(position).getIssuer());
-        holder.nameGift.setText(usersGifts.get(position).getName());
+        holder.userName.setText(usersGifts.get(position).getUsername());
+        holder.nameGift.setText(usersGifts.get(position).getGiftName());
 
-        String category = usersGifts.get(position).getCategory();
-        MyGiftTweetsAdapter.changeCategoryImage(category, holder.imageCategory);
+//        String category = usersGifts.get(position).getCategory();
+//        MyGiftTweetsAdapter.changeCategoryImage(category, holder.imageCategory);
 
         getTwitterProfileImage(position, usersGifts, holder.imageTwitterUser);
 
@@ -85,8 +86,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         }
     }
 
-    private void getTwitterProfileImage(int position, ArrayList<UsersGift> usersGifts, final ImageView profileImage){
-        TwitterRequests.getUserInfo(mContext, usersGifts.get(position).getIssuer(), new VolleyListener() {
+    private void getTwitterProfileImage(int position, ArrayList<ReceiverModel> usersGifts, final ImageView profileImage){
+        TwitterRequests.getUserInfo(mContext, usersGifts.get(position).getUsername(), new VolleyListener() {
 
             @Override
             public void onResponse(String response) {

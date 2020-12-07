@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
+import com.LAM.GiftToMe.FCMFirebase.FirestoreListener;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
@@ -30,6 +31,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -137,7 +141,55 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
 //
 //                DBFirestore.getToken(receiverUserName, message, mContext);
 
-                Chat.sendMessage(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getName());
+                //Chat.sendMessage(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getName());
+                Chat.getReceiverUsernameFromGift("L_A_M98", "Prova2", new FirestoreListener() {
+                    @Override
+                    public void onMessageRetrieve(List<String> listenerMessages) {
+                        Log.i("chatchat", "listenerName: " + listenerMessages);
+                    }
+
+                    @Override
+                    public void onDateRetrieve(List<Date> listenerTimestamps) {
+
+                    }
+
+                    @Override
+                    public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+//                        Log.i("chatchat", "listener: " + listenerChat);
+//                        Log.i("chatchat", "listenerOne: " + listenerChat.get(0).get("giftName"));
+                    }
+
+                    @Override
+                    public void onReceiverRetrieve(String receiver) {
+                        Log.i("chatchat", "receiver: " + receiver);
+                    }
+
+                    @Override
+                    public void onTaskError(Exception taskException) {
+
+                    }
+                });
+//                Chat.getTimestamps("L_A_M98", "Giulio2803", "gift", new FirestoreListener() {
+//                    @Override
+//                    public void onMessageRetrieve(List<String> listenerMessages) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onDateRetrieve(List<Date> listenerTimestamps) {
+//                        Log.i("chatchat", "listener: " + listenerTimestamps);
+//                    }
+//
+//                    @Override
+//                    public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onTaskError(Exception taskException) {
+//
+//                    }
+//                });
 
                 replyGiftDialog.dismiss();
 

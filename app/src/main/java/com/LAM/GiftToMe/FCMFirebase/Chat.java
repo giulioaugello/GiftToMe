@@ -285,7 +285,7 @@ public class Chat {
     }
 
     //ritorna List con tutti i messaggi da username a receiver
-    public static List<String> getMessages(String username, final String receiver, final String giftName){
+    public static void getMessages(String username, final String receiver, final String giftName, final FirestoreListener listener){
 
         final List<String> myList = new ArrayList<>();
 
@@ -323,17 +323,19 @@ public class Chat {
                         myList.addAll(myMessages);
                         Log.i("chatchat", "receiver: " + chat.get(indexR).get("receiver") + ", message: " + myMessages + ", return: " + myList +  " " + myList.get(0));
 
+                        listener.onMessageRetrieve(myList);
+
                     }
+                }else{
+                    listener.onTaskError(task.getException());
                 }
             }
         });
 
-        return myList;
-
     }
 
     //ritorna List con tutti i timestamp da username a receiver
-    public static List<Date> getTimestamps(String username, final String receiver, final String giftName){
+    public static void getTimestamps(String username, final String receiver, final String giftName, final FirestoreListener listener){
 
         final List<Date> myList = new ArrayList<>();
 
@@ -371,12 +373,136 @@ public class Chat {
                         myList.addAll(myTimestamps);
                         Log.i("chatchat", "receiver: " + chat.get(indexR).get("receiver") + ", timestamp: " + myTimestamps + ", return " + myList + " " + myList.get(0));
 
+                        Log.i("chatchat",  "myList: " + myList);
+
+                        listener.onDateRetrieve(myList);
                     }
+                }else{
+                    listener.onTaskError(task.getException());
                 }
             }
         });
 
-        return myList;
+
+    }
+
+    public static void getReceiverUsernameFromGift(String username, final String giftName, final FirestoreListener listener){
+
+        final FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+                        String receiverUsername = "";
+                        for (int i = 0; i < chat.size(); i++){
+                            List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("arrayGift");
+                            for (int j = 0; j < giftList.size(); j++){
+                                if (giftList.get(j).get("giftName").equals(giftName)){
+                                    receiverUsername = (String) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("receiver");
+                                    Log.i("chatchat", "Ciao" + receiverUsername);
+                                }
+                            }
+                        }
+
+                        listener.onReceiverRetrieve(receiverUsername);
+
+
+                    }
+                }else {
+                    listener.onTaskError(task.getException());
+                }
+            }
+        });
+    }
+
+
+    public static void getArrayGift(String username, final FirestoreListener firestoreListener){
+
+        final List<Map<String, Object>> myList = new ArrayList<>();
+
+        final FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+                        for (int i = 0; i < chat.size(); i++){
+                            List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("arrayGift");
+                            for (int j = 0; j < giftList.size(); j++){
+                                Log.i("chatchat",  "myListFor: " + giftList.get(j));
+                                myList.add(giftList.get(j));
+                            }
+                        }
+
+                        Log.i("chatchat",  "myList: " + myList);
+                        Log.i("chatchat",  "size: " + myList.size());
+                        firestoreListener.onChatRetrieve(myList);
+
+                    }
+                }else {
+                    firestoreListener.onTaskError(task.getException());
+                }
+            }
+        });
+    }
+
+    public static void getReceiverArray(String username, final FirestoreListener firestoreListener){
+        final FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+                        List<String> listName = new ArrayList<>();
+                        for (int i = 0; i < chat.size(); i++){
+                            String chatReceiver = (String) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("receiver");
+                            listName.add(chatReceiver);
+                        }
+                        firestoreListener.onMessageRetrieve(listName);
+
+                    }
+                }else {
+                    firestoreListener.onTaskError(task.getException());
+                }
+            }
+        });
+    }
+
+    //prendo ogni elemento dell'array chat
+    public static void getArrayChat(String username, final FirestoreListener listener){
+
+        final List<Map<String, Object>> myList = new ArrayList<>();
+
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+                        myList.addAll(chat);
+//                        for (int i = 0; i < chat.size(); i++){
+//                            Log.i("chatchat",  "receiver: " + myList.get(i).get("receiver") + " " + myList.get(i).get("arrayGift"));
+//                        }
+
+                        Log.i("chatchat",  "myList: " + myList);
+
+                        listener.onChatRetrieve(myList);
+
+                    }
+                }else{
+                    listener.onTaskError(task.getException());
+                }
+            }
+        });
 
     }
 
