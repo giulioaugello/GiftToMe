@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.MainActivity;
@@ -59,7 +60,14 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 //        String category = usersGifts.get(position).getCategory();
 //        MyGiftTweetsAdapter.changeCategoryImage(category, holder.imageCategory);
 
-        //getTwitterProfileImage(position, usersGifts, holder.imageTwitterUser);
+        getTwitterProfileImage(position, usersGifts, holder.imageTwitterUser);
+
+        holder.card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "Pazzesco", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

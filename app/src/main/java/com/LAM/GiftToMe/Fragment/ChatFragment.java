@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.LAM.GiftToMe.Adapter.ChatListAdapter;
 import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
@@ -38,6 +41,10 @@ public class ChatFragment extends Fragment {
     private RecyclerView recyclerView;
     private ChatListAdapter chatListAdapter;
 
+    private EditText searchGift;
+    private ImageView searchButton;
+    private ArrayList<String> arrayListGiftName;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,6 +56,9 @@ public class ChatFragment extends Fragment {
         chatmodel = new ArrayList<>();
 
         recyclerView = v.findViewById(R.id.recyclerview_chat);
+
+        searchGift = v.findViewById(R.id.gift_search_edit);
+
 
         Chat.getArrayGift("L_A_M98", new FirestoreListener() {
             @Override
@@ -63,6 +73,8 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onChatRetrieve(final List<Map<String, Object>> listenerChat) {
+
+                arrayListGiftName = new ArrayList<>();
 
                 for (int k = 0; k < listenerChat.size(); k++){
 
@@ -81,9 +93,11 @@ public class ChatFragment extends Fragment {
                     receiverModel.setMessages((ArrayList<String>) listenerChat.get(k).get("messages"));
                     receiverModel.setTimestamps((ArrayList<Date>) listenerChat.get(k).get("timestamps"));
 
+                    arrayListGiftName.add((String) listenerChat.get(k).get("giftName"));
                     chatmodel.add(receiverModel);
 
                 }
+                Log.i("chatchat", "ChatModel: " +  arrayListGiftName);
 
 
                 setupRecyclerView(chatmodel);
@@ -107,7 +121,11 @@ public class ChatFragment extends Fragment {
     private void setupRecyclerView(ArrayList<ReceiverModel> receiverModels){
         chatListAdapter = new ChatListAdapter(mContext, receiverModels, getActivity(), this);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        //in testa esce l'ultima persona aggiunta nel database (tranne se già esisteva)
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext, RecyclerView.VERTICAL, true);
+        linearLayoutManager.setStackFromEnd(true);
+
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         recyclerView.setAdapter(chatListAdapter);
     }
