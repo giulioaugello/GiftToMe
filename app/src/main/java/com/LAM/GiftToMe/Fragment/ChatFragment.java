@@ -17,6 +17,7 @@ import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
 
+import com.airbnb.lottie.L;
 import com.google.firebase.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,9 +38,6 @@ public class ChatFragment extends Fragment {
     private RecyclerView recyclerView;
     private ChatListAdapter chatListAdapter;
 
-    private String user = "";
-    private ArrayList<String> strings;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,7 +47,6 @@ public class ChatFragment extends Fragment {
         mContext = getActivity().getApplicationContext();
 
         chatmodel = new ArrayList<>();
-        strings = new ArrayList<>();
 
         recyclerView = v.findViewById(R.id.recyclerview_chat);
 
@@ -65,43 +62,7 @@ public class ChatFragment extends Fragment {
             }
 
             @Override
-            public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
-                final ArrayList<String> prova = new ArrayList<>();
-
-                for (int prove = 0; prove < listenerChat.size(); prove++){
-
-                    List<String> messages = (List<String>) listenerChat.get(prove).get("messages");
-                    List<Timestamp> timestamps = (List<Timestamp>) listenerChat.get(prove).get("timestamps");
-
-                    Chat.getReceiverUsernameFromGift("L_A_M98", (String) listenerChat.get(prove).get("giftName"), messages.get(0), timestamps.get(0), new FirestoreListener() {
-                        @Override
-                        public void onMessageRetrieve(List<String> listenerMessages) {
-
-                        }
-
-                        @Override
-                        public void onDateRetrieve(List<Date> listenerTimestamps) {
-
-                        }
-
-                        @Override
-                        public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
-
-                        }
-
-                        @Override
-                        public void onReceiverRetrieve(String receiver) {
-                            Log.i("chatchat", "onReceiverRetrieve: " + receiver);
-                            prova.add(receiver);
-                        }
-
-                        @Override
-                        public void onTaskError(Exception taskException) {
-
-                        }
-                    });
-                }
-                Log.i("chatchat", "Array: " + prova);
+            public void onChatRetrieve(final List<Map<String, Object>> listenerChat) {
 
                 for (int k = 0; k < listenerChat.size(); k++){
 
@@ -115,16 +76,13 @@ public class ChatFragment extends Fragment {
 
                     final ReceiverModel receiverModel = new ReceiverModel();
 
-                    //receiverModel.setUsername();
-
+                    receiverModel.setUsername(Chat.listString.get(k));
                     receiverModel.setGiftName((String) listenerChat.get(k).get("giftName"));
                     receiverModel.setMessages((ArrayList<String>) listenerChat.get(k).get("messages"));
                     receiverModel.setTimestamps((ArrayList<Date>) listenerChat.get(k).get("timestamps"));
 
                     chatmodel.add(receiverModel);
-//                    for (ReceiverModel model: chatmodel){
-//                        Log.i("chatchat", "Model: " + model.getUsername());
-//                    }
+
                 }
 
 

@@ -28,6 +28,7 @@ public class Chat {
     private static int indexReceiver = 0;
     private static int indexGift = 0;
     private static int indexName = 0;
+    public static List<String> listString;
 
     public static void sendMessage(String username, final String receiver, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
 
@@ -388,53 +389,21 @@ public class Chat {
 
     }
 
-    public static void getReceiverUsernameFromGift(String username, final String giftName, final String firstMessage, final Timestamp firstTimestamp, final FirestoreListener listener){
+    public static void getReceiverUsernameFromGift(QueryDocumentSnapshot queryDocumentSnapshot, final String giftName, final String firstMessage, final Timestamp firstTimestamp, final List<Map<String, Object>> giftList, final List<String> messages, final List<Timestamp> timestamps, final int i, final int j){
 
-        final FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = firestoreDB.collection("users");
-        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+        String receiverUsername = "";
 
-                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
-                        String receiverUsername = "";
-
-                        for (int i = 0; i < chat.size(); i++){ //per ogni chat
-
-                            List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("arrayGift");
-
-                            for (int j = 0; j < giftList.size(); j++){ //per ogni regalo
-
-                                List<String> messages = (List<String>) giftList.get(j).get("messages");
-                                List<Timestamp> timestamps = (List<Timestamp>) giftList.get(j).get("timestamps");
-
-//                                Log.i("chatchat", "messages1: " + messages + messages.get(0));
-//                                Log.i("chatchat", "timestamps1: " + timestamps);
-
-                                if (giftList.get(j).get("giftName").equals(giftName) && messages.get(0).equals(firstMessage) && timestamps.get(0).equals(firstTimestamp)){
-                                    receiverUsername = (String) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("receiver");
-                                    indexName = i;
-                                    Log.i("chatchat", "IndexName: " + indexName);
-                                }
-
-                            }
-                        }
-
-                        listener.onReceiverRetrieve(receiverUsername);
-
-                    }
-                }else {
-                    listener.onTaskError(task.getException());
-                }
-            }
-        });
+        if (giftList.get(j).get("giftName").equals(giftName) && messages.get(0).equals(firstMessage) && timestamps.get(0).equals(firstTimestamp)){
+            receiverUsername = (String) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("receiver");
+            listString.add(receiverUsername);
+            indexName = i;
+            Log.i("chatchat", "ListName: " + listString);
+        }
     }
-
 
     public static void getArrayGift(final String username, final FirestoreListener firestoreListener){
 
+        listString = new ArrayList<>();
         final List<Map<String, Object>> myList = new ArrayList<>();
 
         final FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
@@ -458,12 +427,16 @@ public class Chat {
                                 List<Timestamp> timestamps = (List<Timestamp>) giftList.get(j).get("timestamps");
                                 //Log.i("chatchat",  "myListFor: " + giftList.get(j));
 
+                                getReceiverUsernameFromGift(queryDocumentSnapshot, (String) giftList.get(j).get("giftName"), messages.get(0), timestamps.get(0), giftList, messages, timestamps, i, j);
 
                                 myList.add(giftList.get(j));
 
                             }
 
                         }
+
+
+
                         firestoreListener.onChatRetrieve(myList);
 
 
