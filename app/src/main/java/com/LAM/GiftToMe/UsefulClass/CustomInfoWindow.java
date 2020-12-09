@@ -33,6 +33,7 @@ public class CustomInfoWindow extends MarkerInfoWindow {
     private Context mContext;
     private Activity activity;
 
+
     public CustomInfoWindow(int layoutResId, MapView mapView, String giftId, String tweetId, String title, String description, String issuer, String address, Context context, Activity activity) {
         super(layoutResId, mapView);
 

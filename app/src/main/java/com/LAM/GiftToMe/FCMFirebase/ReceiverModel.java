@@ -9,6 +9,10 @@ public class ReceiverModel {
     private List<String> messages;
     private List<Date> timestamps;
 
+    public ReceiverModel(){
+
+    }
+
     public ReceiverModel(String username, String giftName, List<String> messages, List<Date> timestamps){
         this.username = username;
         this.giftName = giftName;

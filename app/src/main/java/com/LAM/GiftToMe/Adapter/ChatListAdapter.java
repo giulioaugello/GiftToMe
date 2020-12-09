@@ -59,7 +59,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 //        String category = usersGifts.get(position).getCategory();
 //        MyGiftTweetsAdapter.changeCategoryImage(category, holder.imageCategory);
 
-        getTwitterProfileImage(position, usersGifts, holder.imageTwitterUser);
+        //getTwitterProfileImage(position, usersGifts, holder.imageTwitterUser);
 
     }
 

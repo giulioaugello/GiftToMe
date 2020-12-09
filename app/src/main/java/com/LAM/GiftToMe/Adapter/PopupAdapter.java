@@ -141,34 +141,8 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
 //
 //                DBFirestore.getToken(receiverUserName, message, mContext);
 
-                //Chat.sendMessage(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getName());
-                Chat.getReceiverUsernameFromGift("L_A_M98", "Prova2", new FirestoreListener() {
-                    @Override
-                    public void onMessageRetrieve(List<String> listenerMessages) {
-                        Log.i("chatchat", "listenerName: " + listenerMessages);
-                    }
+                Chat.sendMessage(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getName());
 
-                    @Override
-                    public void onDateRetrieve(List<Date> listenerTimestamps) {
-
-                    }
-
-                    @Override
-                    public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
-//                        Log.i("chatchat", "listener: " + listenerChat);
-//                        Log.i("chatchat", "listenerOne: " + listenerChat.get(0).get("giftName"));
-                    }
-
-                    @Override
-                    public void onReceiverRetrieve(String receiver) {
-                        Log.i("chatchat", "receiver: " + receiver);
-                    }
-
-                    @Override
-                    public void onTaskError(Exception taskException) {
-
-                    }
-                });
 //                Chat.getTimestamps("L_A_M98", "Giulio2803", "gift", new FirestoreListener() {
 //                    @Override
 //                    public void onMessageRetrieve(List<String> listenerMessages) {

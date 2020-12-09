@@ -50,8 +50,9 @@
 
                 <ImageView
                     android:id="@+id/image_category"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_card_giftcard_24"/>
 
                 <TextView
                     android:id="@+id/name_gift"
