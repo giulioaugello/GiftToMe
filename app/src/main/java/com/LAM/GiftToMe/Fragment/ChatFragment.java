@@ -156,15 +156,16 @@ public class ChatFragment extends Fragment {
         recyclerView.setAdapter(chatListAdapter);
     }
 
-
-    void filter(String text){
+    //filtra sul nome dei regali
+    private void filter(String text){
         ArrayList<ReceiverModel> temp = new ArrayList();
         for(ReceiverModel receiverModel: chatmodel){
-            //or use .equal(text) with you want equal match
-            //use .toLowerCase() for better matches
-            if(receiverModel.getGiftName().toLowerCase().contains(text)){
+
+            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
+            if(receiverModel.getGiftName().toLowerCase().contains(text) || receiverModel.getGiftName().contains(text) || receiverModel.getGiftName().toUpperCase().contains(text)){
                 temp.add(receiverModel);
             }
+
         }
         //update recyclerview
         chatListAdapter.updateList(temp);

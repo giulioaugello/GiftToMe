@@ -117,6 +117,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         });
     }
 
+    //aggiorna la lista
     public void updateList(ArrayList<ReceiverModel> list){
         arrayChat = list;
         notifyDataSetChanged();
