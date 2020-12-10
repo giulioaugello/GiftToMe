@@ -207,6 +207,7 @@ public class NewGiftFragment extends Fragment {
                         Log.i(TAG,response);
                         dialog.dismiss();
                         onSuccessDialog();
+                        //per ogni elemento che creo, metto nel campo chatMyGift un nuovo elemento
                     }
                 });
 

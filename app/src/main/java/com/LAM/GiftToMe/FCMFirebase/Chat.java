@@ -30,6 +30,28 @@ public class Chat {
     private static int indexName = 0;
     public static List<String> listString;
 
+//    public static void newGiftUpload(String username, String giftName){
+//
+//        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+//        final CollectionReference collectionReference = firestoreDB.collection("users");
+//        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()){
+//                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+//                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+//                        Map<String, Object> model = new HashMap<>();
+//                        model.put("username", queryDocumentSnapshot.getData().get("username"));
+//                        model.put("token", queryDocumentSnapshot.getData().get("token"));
+//
+//
+//
+//                    }
+//                }
+//            }
+//        });
+//    }
+
     public static void sendMessage(String username, final String receiver, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();

@@ -30,6 +30,30 @@ public class DBFirestore {
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = firestoreDB.collection("users");
 
+        /////////////////////////////////////////////////////////////////////////
+        //CHAT MY GIFT
+
+        String[] messagesMyGift = {};
+        Date[] timestampsMyGift = {};
+
+        List<Map<String, Object>> myGift = new ArrayList<>();
+
+        Map<String, Object> myGiftInfo = new HashMap<>();
+        myGiftInfo.put("sender", "");
+        myGiftInfo.put("messages", Arrays.asList(messagesMyGift));
+        myGiftInfo.put("timestamps", Arrays.asList(timestampsMyGift));
+        myGift.add(myGiftInfo);
+
+        List<Map<String, Object>> chatListMyGift = new ArrayList<>();
+
+        Map<String, Object> chatMapMyGift = new HashMap<>();
+        chatMapMyGift.put("myGiftName", "");
+        chatMapMyGift.put("arrayMyGift", myGift);
+        chatListMyGift.add(chatMapMyGift);
+
+        /////////////////////////////////////////////////////////////
+        //CHAT OTHER GIFT
+
         String[] messages = {};
         Date[] timestamps = {};
 
@@ -46,16 +70,17 @@ public class DBFirestore {
         Map<String, Object> chatMap = new HashMap<>();
         chatMap.put("receiver", "");
         chatMap.put("arrayGift", gift);
-//        chatMap.put("messages", Arrays.asList(messages));
-//        chatMap.put("timestamps", Arrays.asList(timestamps));
         chatList.add(chatMap);
 
+        /////////////////////////////////////////////////////////////
+        //MODEL
 
         Map<String, Object> model = new HashMap<>();
         String[] tokens = {token};
         model.put("username", username);
         model.put("token", Arrays.asList(tokens));
         model.put("chat", chatList);
+        model.put("chatMyGift", chatListMyGift);
 
         collectionReference.add(model);
         //ModelUser modelUser = new ModelUser(username, token);
