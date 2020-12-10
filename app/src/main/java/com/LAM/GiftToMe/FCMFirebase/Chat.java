@@ -396,6 +396,8 @@ public class Chat {
 
     }
 
+
+
     //ritorna List con tutti i timestamp da username a receiver
     public static void getTimestamps(String username, final String receiver, final String giftName, final FirestoreListener listener){
 

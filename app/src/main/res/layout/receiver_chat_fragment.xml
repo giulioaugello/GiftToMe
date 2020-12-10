@@ -24,16 +24,43 @@
             android:layout_marginStart="10dp"
             app:tint="#56ab2f" />
 
-
-        <TextView
-            android:id="@+id/tw_username"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nome Receiver"
-            android:textSize="20sp"
-            android:textColor="@color/colorPrimary"
+            android:orientation="vertical"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp">
+
+            <TextView
+                android:id="@+id/tw_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome Receiver"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimary"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_card_giftcard_24"/>
+
+                <TextView
+                    android:id="@+id/mes_gift_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nome Regalo"
+                    android:textSize="15sp"
+                    android:layout_marginStart="3dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 

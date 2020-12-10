@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.LAM.GiftToMe.R;
@@ -22,7 +23,7 @@ public class ReceiverChatAdapter extends RecyclerView.Adapter<ReceiverChatAdapte
     @NonNull
     @Override
     public ReceiverChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.cardview_chat_fragment, parent, false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.single_message_textview, parent, false);
         return new ReceiverChatAdapter.ViewHolder(v);
     }
 
@@ -38,10 +39,14 @@ public class ReceiverChatAdapter extends RecyclerView.Adapter<ReceiverChatAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
+        private LinearLayout linearLayout;
+        private TextView message;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            linearLayout = itemView.findViewById(R.id.message_layout);
+            message = itemView.findViewById(R.id.message_text);
 
         }
     }
