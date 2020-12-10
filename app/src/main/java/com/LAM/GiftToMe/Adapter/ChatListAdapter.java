@@ -11,12 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
-import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.LAM.GiftToMe.UsefulClass.UsersGift;
 import com.android.volley.VolleyError;
 import com.squareup.picasso.Picasso;
 
@@ -35,13 +33,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     private Context mContext;
     private Activity activity;
     private Fragment fragment;
-    private ArrayList<ReceiverModel> usersGifts;
+    private ArrayList<ReceiverModel> arrayChat;
 
-    public ChatListAdapter(Context mContext, ArrayList<ReceiverModel> usersGifts, Activity activity, Fragment fragment) {
+    public ChatListAdapter(Context mContext, ArrayList<ReceiverModel> arrayChat, Activity activity, Fragment fragment) {
         this.mContext = mContext;
         this.activity = activity;
         this.fragment = fragment;
-        this.usersGifts = usersGifts;
+        this.arrayChat = arrayChat;
     }
 
     @NonNull
@@ -54,13 +52,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ChatListAdapter.ViewHolder holder, int position) {
 
-        holder.userName.setText(usersGifts.get(position).getUsername());
-        holder.nameGift.setText(usersGifts.get(position).getGiftName());
+        holder.userName.setText(arrayChat.get(position).getUsername());
+        holder.nameGift.setText(arrayChat.get(position).getGiftName());
 
 //        String category = usersGifts.get(position).getCategory();
 //        MyGiftTweetsAdapter.changeCategoryImage(category, holder.imageCategory);
 
-        getTwitterProfileImage(position, usersGifts, holder.imageTwitterUser);
+        getTwitterProfileImage(position, arrayChat, holder.imageTwitterUser);
 
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +71,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return usersGifts.size();
+        return arrayChat.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -118,4 +116,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             }
         });
     }
+
+    public void updateList(ArrayList<ReceiverModel> list){
+        arrayChat = list;
+        notifyDataSetChanged();
+    }
+
 }

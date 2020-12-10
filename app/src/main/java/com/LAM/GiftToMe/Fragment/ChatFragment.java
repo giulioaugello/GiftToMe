@@ -3,6 +3,8 @@ package com.LAM.GiftToMe.Fragment;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,7 +102,31 @@ public class ChatFragment extends Fragment {
                 Log.i("chatchat", "ChatModel: " +  arrayListGiftName);
 
 
+
+
                 setupRecyclerView(chatmodel);
+
+                searchGift.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                        // filter your list from your input
+                        filter(s.toString());
+                        //you can use runnable postDelayed like 500 ms to delay search text
+                    }
+                });
 
             }
 
@@ -128,5 +154,19 @@ public class ChatFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         recyclerView.setAdapter(chatListAdapter);
+    }
+
+
+    void filter(String text){
+        ArrayList<ReceiverModel> temp = new ArrayList();
+        for(ReceiverModel receiverModel: chatmodel){
+            //or use .equal(text) with you want equal match
+            //use .toLowerCase() for better matches
+            if(receiverModel.getGiftName().toLowerCase().contains(text)){
+                temp.add(receiverModel);
+            }
+        }
+        //update recyclerview
+        chatListAdapter.updateList(temp);
     }
 }
