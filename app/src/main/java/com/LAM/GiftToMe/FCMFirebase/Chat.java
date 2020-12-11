@@ -403,7 +403,6 @@ public class Chat {
                         }
 
                         List<Map<String, Object>> myGiftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(indexG).get("arrayMyGift");
-                        Log.i("chatchat", "myGiftList: " + myGiftList);
 
                         if (!checkSenderExist(myGiftList, sender)){//se il sender non esiste: creo la sua map
 
@@ -411,24 +410,33 @@ public class Chat {
 
                             List<Date> datesArrayList = new ArrayList<>();
 
-                            List<Map<String, Object>> gift = new ArrayList<>();
+                            //List<Map<String, Object>> gift = new ArrayList<>();
                             Map<String, Object> myGiftInfo = new HashMap<>();
                             myGiftInfo.put("sender", sender);
                             myGiftInfo.put("messages", messagesArrayList);
                             myGiftInfo.put("timestamps", datesArrayList);
 
-                            gift.add(myGiftInfo);
+                            myGiftList.add(myGiftInfo);
+                            Log.i("chatchat", "myGiftList: " + myGiftList);
 
-                            Map<String, Object> chatNewGift = new HashMap<>();
-                            chatNewGift.put("myGiftName", giftName);
-                            chatNewGift.put("arrayMyGift", gift);
+                            //gift.add(myGiftInfo);
+//
+//                            Map<String, Object> chatNewGift = new HashMap<>();
+//                            chatNewGift.put("myGiftName", giftName);
+//                            chatNewGift.put("arrayMyGift", myGiftList);
 
-                            chatMyGift.add(chatNewGift);
+                            chatMyGift.get(indexG).put("myGiftName", giftName);
+                            chatMyGift.get(indexG).put("arrayMyGift", myGiftList);
+
+
 
                             model.put("chatMyGift", chatMyGift);
 
+
                             collectionReference.document(queryDocumentSnapshot.getId()).set(model);
 
+                        }else{
+                            return;
                         }
 
                     }
