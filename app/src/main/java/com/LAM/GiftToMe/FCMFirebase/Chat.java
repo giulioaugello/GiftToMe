@@ -10,11 +10,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.twitter.sdk.android.core.identity.OAuthActivity;
 
 import com.google.firebase.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,30 +25,12 @@ public class Chat {
     private static final String TAG = "TAGCHAT";
     private static int indexReceiver = 0;
     private static int indexGift = 0;
+    private static int indexSender = 0;
+    private static int indexMyGift = 0;
     private static int indexName = 0;
     public static List<String> listString;
 
-//    public static void newGiftUpload(String username, String giftName){
-//
-//        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-//        final CollectionReference collectionReference = firestoreDB.collection("users");
-//        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()){
-//                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
-//                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
-//                        Map<String, Object> model = new HashMap<>();
-//                        model.put("username", queryDocumentSnapshot.getData().get("username"));
-//                        model.put("token", queryDocumentSnapshot.getData().get("token"));
-//
-//
-//
-//                    }
-//                }
-//            }
-//        });
-//    }
+
 
     public static void sendMessage(String username, final String receiver, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
 
@@ -282,6 +262,189 @@ public class Chat {
 //            Log.i("chatchat", "receiver: " + chat.get(i).get("receiver") + ", message: " + chat.get(i).get("messages") + ", timestamp: " + chat.get(i).get("timestamps"));
 //        }
 
+    }
+
+    public static void newGiftUpload(String username, final String giftName){
+
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+                        List<Map<String, Object>> chatMyGift = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+//                        Map<String, Object> modelMyGift = new HashMap<>();
+//                        modelMyGift.put("username", queryDocumentSnapshot.getData().get("username"));
+//                        modelMyGift.put("token", queryDocumentSnapshot.getData().get("token"));
+
+                        if (chatMyGift != null) {
+
+                            //controllo prima se esiste myGiftName
+                            //se esiste dico di inserire un altro nome
+                            //se il regalo non esiste: creo il suo posto in chatMyGift
+                            //quando un utente risponde ad uno dei miei regali: a lui creo la parte in chat con i suoi messaggi
+                            //a me creo il sender se non esiste già per quel regalo
+
+                            Map<String, Object> model = new HashMap<>();
+                            model.put("username", queryDocumentSnapshot.getData().get("username"));
+                            model.put("token", queryDocumentSnapshot.getData().get("token"));
+                            model.put("chat", queryDocumentSnapshot.getData().get("chat"));
+
+                            if (checkMyGiftExist(chatMyGift, giftName)){ //se esiste dico di inserire un altro nome
+                                //Toast.makeText(mContext, "Hai già un regalo con questo nome, cambia nome", Toast.LENGTH_LONG).show();
+                                Log.i("chatchat", "esiste già");
+                                return;
+                            }else{ //se il regalo non esiste: creo il suo posto in chatMyGift
+
+                                List<Map<String, Object>> arrayMyGift = new ArrayList<>();
+
+                                Map<String, Object> chatNewGift = new HashMap<>();
+                                chatNewGift.put("myGiftName", giftName);
+                                chatNewGift.put("arrayMyGift", arrayMyGift);
+
+                                chatMyGift.add(chatNewGift);
+
+                                model.put("chatMyGift", chatMyGift);
+
+                                collectionReference.document(queryDocumentSnapshot.getId()).set(model);
+                            }
+
+//                            Log.i("chatchat", "Nuovo Gift");
+//
+//                            ArrayList<String> messagesArrayList = new ArrayList<>();
+//
+//                            ArrayList<Date> datesArrayList = new ArrayList<>();
+//
+//                            //questo lo devo creare quando qualcuno mi risponde (quindi in sendMessage)
+//                            List<Map<String, Object>> gift = new ArrayList<>();
+//                            Map<String, Object> myGiftInfo = new HashMap<>();
+//                            myGiftInfo.put("sender", "");
+//                            myGiftInfo.put("messages", messagesArrayList);
+//                            myGiftInfo.put("timestamps", datesArrayList);
+//
+//                            gift.add(myGiftInfo);
+//
+//                            Map<String, Object> chatNewGift = new HashMap<>();
+//                            chatNewGift.put("myGiftName", giftName);
+//                            chatNewGift.put("arrayMyGift", gift);
+//
+//                            chatMyGift.add(chatNewGift);
+//
+//                            model.put("chatMyGift", chatMyGift);
+//
+//                            collectionReference.document(queryDocumentSnapshot.getId()).set(model);
+
+                        }
+
+                    }
+                }
+            }
+        });
+    }
+
+    public static void checkNameExist(String username, final String giftName, final Context mContext, final FirestoreCheckName listener){
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+
+                        List<Map<String, Object>> chatMyGift = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+
+                        boolean exist = false;
+                        for (int i = 0; i < chatMyGift.size(); i++){
+                            if (chatMyGift.get(i).get("myGiftName").equals(giftName)){
+
+                                Toast.makeText(mContext, "Hai già un regalo con questo nome, cambialo", Toast.LENGTH_SHORT).show();
+
+                                exist = true;
+                                Log.i("chatchat", "Sono dentro " + exist);
+                            }
+                        }
+                        listener.onReceiverRetrieve(exist);
+                    }
+                }
+            }
+        });
+    }
+
+    public static void createSender(String username, final String sender){
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                        Map<String, Object> model = new HashMap<>();
+                        model.put("username", queryDocumentSnapshot.getData().get("username"));
+                        model.put("token", queryDocumentSnapshot.getData().get("token"));
+                        model.put("chat", queryDocumentSnapshot.getData().get("chat"));
+
+                        List<Map<String, Object>> chatMyGift = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+
+                        List<Map<String, Object>> myGiftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(indexSender).get("arrayMyGift");
+
+                        if (!checkSenderExist(myGiftList, sender)){//se il sender non esiste, creo la sua map
+
+                            ArrayList<String> messagesArrayList = new ArrayList<>();
+
+                            ArrayList<Date> datesArrayList = new ArrayList<>();
+
+                            List<Map<String, Object>> gift = new ArrayList<>();
+                            Map<String, Object> myGiftInfo = new HashMap<>();
+                            myGiftInfo.put("sender", "");
+                            myGiftInfo.put("messages", messagesArrayList);
+                            myGiftInfo.put("timestamps", datesArrayList);
+
+                            gift.add(myGiftInfo);
+
+//                            Map<String, Object> chatNewGift = new HashMap<>();
+//                            chatNewGift.put("myGiftName", giftName);
+//                            chatNewGift.put("arrayMyGift", gift);
+
+//                            chatMyGift.add(chatNewGift);
+//
+//                            model.put("chatMyGift", chatMyGift);
+
+                            collectionReference.document(queryDocumentSnapshot.getId()).set(model);
+
+                        }
+
+
+                    }
+                }
+            }
+        });
+    }
+
+    //controllo se il mio regalo già esiste
+    private static boolean checkMyGiftExist(List<Map<String, Object>> chatmyGift, String myGiftName){
+        for (int i = 0; i < chatmyGift.size(); i++){
+            String myGifts = (String) chatmyGift.get(i).get("myGiftName");
+            if (myGifts.equals(myGiftName)){
+                indexMyGift = i;
+                Log.i("chatchat", "Receiver boolean: " + myGifts + " " + indexMyGift);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //controllo se il sender già esiste
+    private static boolean checkSenderExist(List<Map<String, Object>> arrayMyGift, String sender){
+        for (int i = 0; i < arrayMyGift.size(); i++){
+            String senders = (String) arrayMyGift.get(i).get("sender");
+            if (senders.equals(sender)){
+                indexSender = i;
+                Log.i("chatchat", "Receiver boolean: " + senders + " " + indexReceiver);
+                return true;
+            }
+        }
+        return false;
     }
 
     //controllo se il receiver già esiste

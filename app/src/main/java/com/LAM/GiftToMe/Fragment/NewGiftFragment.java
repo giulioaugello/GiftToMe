@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
+import com.LAM.GiftToMe.FCMFirebase.Chat;
+import com.LAM.GiftToMe.FCMFirebase.FirestoreCheckName;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
@@ -107,7 +109,7 @@ public class NewGiftFragment extends Fragment {
                     return;
                 }
 
-                showDialogRecap();
+                showDialogRecap(nameForm.getText().toString());
 
             }
         });
@@ -152,10 +154,11 @@ public class NewGiftFragment extends Fragment {
             isReturn = true;
             return isReturn;
         }
+
         return isReturn;
     }
 
-    private void showDialogRecap(){
+    private void showDialogRecap(String giftName){
 
         final Dialog dialog = new Dialog(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.recap_newgift_dialog,null);
@@ -179,7 +182,16 @@ public class NewGiftFragment extends Fragment {
         MyGiftTweetsAdapter.changeCategoryImage(activeCategory, recapImg);
         newGiftCoords = AddressPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext);
 
-        dialog.show();
+        // controllo se il nome del regalo esiste già nel db, se non esiste mostro il dialog
+        Chat.checkNameExist("Giulio2803", giftName, mContext, new FirestoreCheckName() {
+            @Override
+            public void onReceiverRetrieve(boolean exist) {
+                if (!exist){
+                    dialog.show();
+                }
+            }
+        });
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
