@@ -2,8 +2,10 @@ package com.LAM.GiftToMe.FCMFirebase;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.Fragment.ChatFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -351,33 +353,6 @@ public class Chat {
         });
     }
 
-    public static void checkNameExist(String username, final String giftName, final Context mContext, final FirestoreCheckName listener){
-        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = firestoreDB.collection("users");
-        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
-
-                        List<Map<String, Object>> chatMyGift = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
-
-                        boolean exist = false;
-                        for (int i = 0; i < chatMyGift.size(); i++){
-                            if (chatMyGift.get(i).get("myGiftName").equals(giftName)){
-
-                                Toast.makeText(mContext, "Hai già un regalo con questo nome, cambialo", Toast.LENGTH_SHORT).show();
-                                exist = true;
-
-                            }
-                        }
-                        listener.onReceiverRetrieve(exist);
-                    }
-                }
-            }
-        });
-    }
-
     public static void createSender(String username, final String sender, final String giftName){
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = firestoreDB.collection("users");
@@ -419,16 +394,8 @@ public class Chat {
                             myGiftList.add(myGiftInfo);
                             Log.i("chatchat", "myGiftList: " + myGiftList);
 
-                            //gift.add(myGiftInfo);
-//
-//                            Map<String, Object> chatNewGift = new HashMap<>();
-//                            chatNewGift.put("myGiftName", giftName);
-//                            chatNewGift.put("arrayMyGift", myGiftList);
-
                             chatMyGift.get(indexG).put("myGiftName", giftName);
                             chatMyGift.get(indexG).put("arrayMyGift", myGiftList);
-
-
 
                             model.put("chatMyGift", chatMyGift);
 
@@ -445,13 +412,41 @@ public class Chat {
         });
     }
 
+    public static void checkNameExist(String username, final String giftName, final Context mContext, final FirestoreCheckName listener){
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+
+                        List<Map<String, Object>> chatMyGift = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+
+                        boolean exist = false;
+                        for (int i = 0; i < chatMyGift.size(); i++){
+                            if (chatMyGift.get(i).get("myGiftName").equals(giftName)){
+
+                                Toast.makeText(mContext, "Hai già un regalo con questo nome, cambialo", Toast.LENGTH_SHORT).show();
+                                exist = true;
+
+                            }
+                        }
+                        listener.onReceiverRetrieve(exist);
+                    }
+                }
+            }
+        });
+    }
+
+
     //controllo se il mio regalo già esiste
     private static boolean checkMyGiftExist(List<Map<String, Object>> chatmyGift, String myGiftName){
         for (int i = 0; i < chatmyGift.size(); i++){
             String myGifts = (String) chatmyGift.get(i).get("myGiftName");
             if (myGifts.equals(myGiftName)){
                 indexMyGift = i;
-                Log.i("chatchat", "Receiver boolean: " + myGifts + " " + indexMyGift);
+                //Log.i("chatchat", "Receiver boolean: " + myGifts + " " + indexMyGift);
                 return true;
             }
         }
@@ -464,7 +459,7 @@ public class Chat {
             String senders = (String) arrayMyGift.get(i).get("sender");
             if (senders.equals(sender)){
                 indexSender = i;
-                Log.i("chatchat", "Receiver boolean: " + senders + " " + indexReceiver);
+                //Log.i("chatchat", "Receiver boolean: " + senders + " " + indexReceiver);
                 return true;
             }
         }
@@ -477,7 +472,7 @@ public class Chat {
             String receivers = (String) chat.get(i).get("receiver");
             if (receivers.equals(receiver)){
                 indexReceiver = i;
-                Log.i("chatchat", "Receiver boolean: " + receivers + " " + indexReceiver);
+                //Log.i("chatchat", "Receiver boolean: " + receivers + " " + indexReceiver);
                 return true;
             }
         }
@@ -489,14 +484,14 @@ public class Chat {
             String giftInside = (String) gift.get(i).get("giftName");
             if (giftInside.equals(giftName)){
                 indexGift = i;
-                Log.i("chatchat", "Receiver boolean: " + giftInside + " " + indexGift);
+                //Log.i("chatchat", "Receiver boolean: " + giftInside + " " + indexGift);
                 return true;
             }
         }
         return false;
     }
 
-    public static void getArrayGift(final String username, final FirestoreListener firestoreListener){
+    public static void getArrayGift(final String username, final Context mContext, final FirestoreListener firestoreListener){
 
         listString = new ArrayList<>();
         final List<Map<String, Object>> myList = new ArrayList<>();
@@ -511,25 +506,30 @@ public class Chat {
 
                         List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
 
-                        for (int i = 0; i < chat.size(); i++){
+                        if (chat != null){
+                            for (int i = 0; i < chat.size(); i++){
 
-                            List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("arrayGift");
+                                List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("arrayGift");
 
-                            for (int j = 0; j < giftList.size(); j++){
+                                for (int j = 0; j < giftList.size(); j++){
 
-                                List<String> messages = (List<String>) giftList.get(j).get("messages");
-                                List<Timestamp> timestamps = (List<Timestamp>) giftList.get(j).get("timestamps");
-                                //Log.i("chatchat",  "myListFor: " + giftList.get(j));
+                                    List<String> messages = (List<String>) giftList.get(j).get("messages");
+                                    List<Timestamp> timestamps = (List<Timestamp>) giftList.get(j).get("timestamps");
+                                    //Log.i("chatchat",  "myListFor: " + giftList.get(j));
 
-                                getReceiverUsernameFromGift(queryDocumentSnapshot, (String) giftList.get(j).get("giftName"), messages.get(0), timestamps.get(0), giftList, messages, timestamps, i, j);
+                                    getReceiverUsernameFromGift(queryDocumentSnapshot, (String) giftList.get(j).get("giftName"), messages.get(0), timestamps.get(0), giftList, messages, timestamps, i, j);
 
-                                myList.add(giftList.get(j));
+                                    myList.add(giftList.get(j));
+
+                                }
 
                             }
 
+                            firestoreListener.onChatRetrieve(myList);
+                        }else{
+                            Toast.makeText(mContext, "Non hai nessuna chat", Toast.LENGTH_LONG).show();
                         }
 
-                        firestoreListener.onChatRetrieve(myList);
 
                     }
                 }else {

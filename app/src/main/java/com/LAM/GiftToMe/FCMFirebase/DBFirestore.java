@@ -33,44 +33,44 @@ public class DBFirestore {
         /////////////////////////////////////////////////////////////////////////
         //CHAT MY GIFT
 
-        String[] messagesMyGift = {};
-        Date[] timestampsMyGift = {};
-
-        List<Map<String, Object>> myGift = new ArrayList<>();
-
-        Map<String, Object> myGiftInfo = new HashMap<>();
-        myGiftInfo.put("sender", "");
-        myGiftInfo.put("messages", Arrays.asList(messagesMyGift));
-        myGiftInfo.put("timestamps", Arrays.asList(timestampsMyGift));
-        myGift.add(myGiftInfo);
+//        String[] messagesMyGift = {};
+//        Date[] timestampsMyGift = {};
+//
+//        List<Map<String, Object>> myGift = new ArrayList<>();
+//
+//        Map<String, Object> myGiftInfo = new HashMap<>();
+//        myGiftInfo.put("sender", "");
+//        myGiftInfo.put("messages", Arrays.asList(messagesMyGift));
+//        myGiftInfo.put("timestamps", Arrays.asList(timestampsMyGift));
+//        myGift.add(myGiftInfo);
 
         List<Map<String, Object>> chatListMyGift = new ArrayList<>();
 
-        Map<String, Object> chatMapMyGift = new HashMap<>();
-        chatMapMyGift.put("myGiftName", "");
-        chatMapMyGift.put("arrayMyGift", myGift);
-        chatListMyGift.add(chatMapMyGift);
+//        Map<String, Object> chatMapMyGift = new HashMap<>();
+//        chatMapMyGift.put("myGiftName", "");
+//        chatMapMyGift.put("arrayMyGift", myGift);
+//        chatListMyGift.add(chatMapMyGift);
 
         /////////////////////////////////////////////////////////////
         //CHAT OTHER GIFT
 
-        String[] messages = {};
-        Date[] timestamps = {};
-
-        List<Map<String, Object>> gift = new ArrayList<>();
-
-        Map<String, Object> giftInfo = new HashMap<>();
-        giftInfo.put("giftName", "");
-        giftInfo.put("messages", Arrays.asList(messages));
-        giftInfo.put("timestamps", Arrays.asList(timestamps));
-        gift.add(giftInfo);
+//        String[] messages = {};
+//        Date[] timestamps = {};
+//
+//        List<Map<String, Object>> gift = new ArrayList<>();
+//
+//        Map<String, Object> giftInfo = new HashMap<>();
+//        giftInfo.put("giftName", "");
+//        giftInfo.put("messages", Arrays.asList(messages));
+//        giftInfo.put("timestamps", Arrays.asList(timestamps));
+//        gift.add(giftInfo);
 
         List<Map<String, Object>> chatList = new ArrayList<>();
 
-        Map<String, Object> chatMap = new HashMap<>();
-        chatMap.put("receiver", "");
-        chatMap.put("arrayGift", gift);
-        chatList.add(chatMap);
+//        Map<String, Object> chatMap = new HashMap<>();
+//        chatMap.put("receiver", "");
+//        chatMap.put("arrayGift", gift);
+//        chatList.add(chatMap);
 
         /////////////////////////////////////////////////////////////
         //MODEL

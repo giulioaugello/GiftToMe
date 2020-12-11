@@ -12,12 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.LAM.GiftToMe.Adapter.ChatListAdapter;
 import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.FirestoreListener;
 import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
+import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
@@ -46,6 +48,7 @@ public class ChatFragment extends Fragment {
     private EditText searchGift;
     private ImageView searchButton;
     private ArrayList<String> arrayListGiftName;
+    private TextView noChat;
 
     @Nullable
     @Override
@@ -61,9 +64,11 @@ public class ChatFragment extends Fragment {
 
         searchGift = v.findViewById(R.id.gift_search_edit);
 
+        noChat = v.findViewById(R.id.no_chat);
+
         //Chat.createSender("Giulio2803", "Prova");
 
-        Chat.getArrayGift("L_A_M98", new FirestoreListener() {
+        Chat.getArrayGift(MainActivity.userName, mContext, new FirestoreListener() {
             @Override
             public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -76,6 +81,12 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onChatRetrieve(final List<Map<String, Object>> listenerChat) {
+
+                //Log.i("chatchat", "listener: " + listenerChat.size());
+                if (listenerChat.size() == 0){
+                    noChat.setVisibility(View.VISIBLE);
+                    return;
+                }
 
                 arrayListGiftName = new ArrayList<>();
 
@@ -107,6 +118,7 @@ public class ChatFragment extends Fragment {
 
                 setupRecyclerView(chatmodel);
 
+                //per la ricerca dei regali
                 searchGift.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {

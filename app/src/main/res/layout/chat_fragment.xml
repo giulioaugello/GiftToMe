@@ -51,6 +51,17 @@
         android:paddingBottom="10dp"
         android:background="@drawable/round_corner_profile">
 
+        <TextView
+            android:id="@+id/no_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Non ci sono chat! \n Contatta qualcuno per visualizzarla oppure inserisci un regalo e aspetta che qualcuno ti contatti"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/colorChipSelected"
+            android:visibility="gone"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_chat"
             android:layout_width="match_parent"
