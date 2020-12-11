@@ -158,7 +158,7 @@ public class NewGiftFragment extends Fragment {
         return isReturn;
     }
 
-    private void showDialogRecap(String giftName){
+    private void showDialogRecap(final String giftName){
 
         final Dialog dialog = new Dialog(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.recap_newgift_dialog,null);
@@ -218,8 +218,9 @@ public class NewGiftFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.i(TAG,response);
                         dialog.dismiss();
+                        Chat.newGiftUpload(MainActivity.userName, giftName);
                         onSuccessDialog();
-                        //per ogni elemento che creo, metto nel campo chatMyGift un nuovo elemento
+
                     }
                 });
 

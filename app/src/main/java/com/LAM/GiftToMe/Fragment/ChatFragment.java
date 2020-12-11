@@ -61,6 +61,7 @@ public class ChatFragment extends Fragment {
 
         searchGift = v.findViewById(R.id.gift_search_edit);
 
+        //Chat.createSender("Giulio2803", "Prova");
 
         Chat.getArrayGift("L_A_M98", new FirestoreListener() {
             @Override
@@ -99,7 +100,7 @@ public class ChatFragment extends Fragment {
                     chatmodel.add(receiverModel);
 
                 }
-                Log.i("chatchat", "ChatModel: " +  arrayListGiftName);
+                //Log.i("chatchat", "ChatModel: " +  arrayListGiftName);
 
 
 

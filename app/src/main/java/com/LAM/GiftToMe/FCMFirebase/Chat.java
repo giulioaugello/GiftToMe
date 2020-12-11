@@ -32,7 +32,7 @@ public class Chat {
 
 
 
-    public static void sendMessage(String username, final String receiver, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
+    public static void sendMessage(final String username, final String receiver, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = firestoreDB.collection("users");
@@ -47,6 +47,10 @@ public class Chat {
                         model.put("token", queryDocumentSnapshot.getData().get("token"));
 
                         updateChat(chat, model, receiver, reply, giftName, queryDocumentSnapshot);
+
+                        //dopo di questo creo in chatMyGift del receiver uno slot con username come sender (se già non esiste)
+                        //mentre messages e timestamps per il receiver restano vuoti
+                        createSender(receiver, username, giftName);
 
                         //Log.i("chatchat", "List " + chat); //List [{timestamps=[Timestamp(seconds=1607158800, nanoseconds=0)], messages=[Ciao Lam], receiver=Giulio2803}]
                         //Log.i("chatchat", "List " + queryDocumentSnapshot.getData()); //restituisce tutto il blocco di lam2803
@@ -192,6 +196,7 @@ public class Chat {
                 chat.add(chatNewReceiver);
 
                 model.put("chat", chat);
+                model.put("chatMyGift", queryDocumentSnapshot.getData().get("chatMyGift"));
 
                 collectionReference.document(queryDocumentSnapshot.getId()).set(model);
 
@@ -222,6 +227,7 @@ public class Chat {
                     chat.get(indexReceiver).put("arrayGift", giftList);
 
                     model.put("chat", chat);
+                    model.put("chatMyGift", queryDocumentSnapshot.getData().get("chatMyGift"));
 
                     collectionReference.document(queryDocumentSnapshot.getId()).set(model);
 
@@ -247,6 +253,7 @@ public class Chat {
                     chat.get(indexReceiver).put("arrayGift", giftList);
 
                     model.put("chat", chat);
+                    model.put("chatMyGift", queryDocumentSnapshot.getData().get("chatMyGift"));
 
                     collectionReference.document(queryDocumentSnapshot.getId()).set(model);
                 }
@@ -284,7 +291,7 @@ public class Chat {
                             //se esiste dico di inserire un altro nome
                             //se il regalo non esiste: creo il suo posto in chatMyGift
                             //quando un utente risponde ad uno dei miei regali: a lui creo la parte in chat con i suoi messaggi
-                            //a me creo il sender se non esiste già per quel regalo
+                            //a me creo il sender, se non esiste già, per quel regalo
 
                             Map<String, Object> model = new HashMap<>();
                             model.put("username", queryDocumentSnapshot.getData().get("username"));
@@ -293,6 +300,7 @@ public class Chat {
 
                             if (checkMyGiftExist(chatMyGift, giftName)){ //se esiste dico di inserire un altro nome
                                 //Toast.makeText(mContext, "Hai già un regalo con questo nome, cambia nome", Toast.LENGTH_LONG).show();
+
                                 Log.i("chatchat", "esiste già");
                                 return;
                             }else{ //se il regalo non esiste: creo il suo posto in chatMyGift
@@ -359,9 +367,8 @@ public class Chat {
                             if (chatMyGift.get(i).get("myGiftName").equals(giftName)){
 
                                 Toast.makeText(mContext, "Hai già un regalo con questo nome, cambialo", Toast.LENGTH_SHORT).show();
-
                                 exist = true;
-                                Log.i("chatchat", "Sono dentro " + exist);
+
                             }
                         }
                         listener.onReceiverRetrieve(exist);
@@ -371,7 +378,7 @@ public class Chat {
         });
     }
 
-    public static void createSender(String username, final String sender){
+    public static void createSender(String username, final String sender, final String giftName){
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = firestoreDB.collection("users");
         collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -386,34 +393,43 @@ public class Chat {
 
                         List<Map<String, Object>> chatMyGift = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
 
-                        List<Map<String, Object>> myGiftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(indexSender).get("arrayMyGift");
+                        int indexG = 0;
+                        for (int i = 0; i < chatMyGift.size(); i++){
+                            Log.i("chatchat", "myGiftName: " + chatMyGift.get(i).get("myGiftName"));
+                            if (chatMyGift.get(i).get("myGiftName").equals(giftName)){ //cerco l'indice del regalo che mi serve per myGiftList
+                                indexG = i;
+                                break;
+                            }
+                        }
 
-                        if (!checkSenderExist(myGiftList, sender)){//se il sender non esiste, creo la sua map
+                        List<Map<String, Object>> myGiftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(indexG).get("arrayMyGift");
+                        Log.i("chatchat", "myGiftList: " + myGiftList);
 
-                            ArrayList<String> messagesArrayList = new ArrayList<>();
+                        if (!checkSenderExist(myGiftList, sender)){//se il sender non esiste: creo la sua map
 
-                            ArrayList<Date> datesArrayList = new ArrayList<>();
+                            List<String> messagesArrayList = new ArrayList<>();
+
+                            List<Date> datesArrayList = new ArrayList<>();
 
                             List<Map<String, Object>> gift = new ArrayList<>();
                             Map<String, Object> myGiftInfo = new HashMap<>();
-                            myGiftInfo.put("sender", "");
+                            myGiftInfo.put("sender", sender);
                             myGiftInfo.put("messages", messagesArrayList);
                             myGiftInfo.put("timestamps", datesArrayList);
 
                             gift.add(myGiftInfo);
 
-//                            Map<String, Object> chatNewGift = new HashMap<>();
-//                            chatNewGift.put("myGiftName", giftName);
-//                            chatNewGift.put("arrayMyGift", gift);
+                            Map<String, Object> chatNewGift = new HashMap<>();
+                            chatNewGift.put("myGiftName", giftName);
+                            chatNewGift.put("arrayMyGift", gift);
 
-//                            chatMyGift.add(chatNewGift);
-//
-//                            model.put("chatMyGift", chatMyGift);
+                            chatMyGift.add(chatNewGift);
+
+                            model.put("chatMyGift", chatMyGift);
 
                             collectionReference.document(queryDocumentSnapshot.getId()).set(model);
 
                         }
-
 
                     }
                 }
