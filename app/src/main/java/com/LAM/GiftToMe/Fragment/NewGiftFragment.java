@@ -183,7 +183,7 @@ public class NewGiftFragment extends Fragment {
         newGiftCoords = AddressPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext);
 
         // controllo se il nome del regalo esiste già nel db, se non esiste mostro il dialog
-        Chat.checkNameExist("Giulio2803", giftName, mContext, new FirestoreCheckName() {
+        Chat.checkNameExist(MainActivity.userName, giftName, mContext, new FirestoreCheckName() {
             @Override
             public void onReceiverRetrieve(boolean exist) {
                 if (!exist){

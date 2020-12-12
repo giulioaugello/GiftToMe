@@ -3,7 +3,6 @@ package com.LAM.GiftToMe;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -17,12 +16,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.Fragment.ChatFragment;
@@ -56,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public static String userName,token,tokenSecret;
     public static Long userId;
 
-    public static String homeFragmentTag, usersGiftListFragmentTag, messagesFragmentTag, newGiftFragmentTag, profileFragmentTag, conversationFragmentTag, settingsFragmentTag, myGiftFragmentTag;
+    public static String homeFragmentTag, usersGiftListFragmentTag, chatFragmentTag, newGiftFragmentTag, profileFragmentTag, conversationFragmentTag, settingsFragmentTag, myGiftFragmentTag, receiverChatFragmentTag;
 
     private static final int TIME_INTERVAL = 2000; // tempo che intercorre tra due back (millisecondi)
     private long mBackPressed;
@@ -78,11 +74,12 @@ public class MainActivity extends AppCompatActivity {
         homeFragmentTag = getResources().getString(R.string.map_fragment_tag);
         usersGiftListFragmentTag = getResources().getString(R.string.users_tweets_fragment_tag);
         newGiftFragmentTag = getResources().getString(R.string.newgift_fragment_tag);
-        messagesFragmentTag = getResources().getString(R.string.messages_fragment_tag);
+        chatFragmentTag = getResources().getString(R.string.chat_fragment_tag);
         profileFragmentTag = getResources().getString(R.string.profile_fragment_tag);
         conversationFragmentTag = getResources().getString(R.string.conversation_fragment_tag);
         settingsFragmentTag = getResources().getString(R.string.settings_fragment_tag);
         myGiftFragmentTag = getResources().getString(R.string.mygift_fragment_tag);
+        receiverChatFragmentTag = getResources().getString(R.string.receiverchat_fragment_tag);
 
         sharedUsername = getResources().getString(R.string.shared_preferences_user_name);
         sharedUserId = getResources().getString(R.string.shared_preferences_user_id);
@@ -129,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                             newGiftFragment = new NewGiftFragment();
                         }
                         selectedFragment = newGiftFragment;
-                        fragmentTag = newGiftFragmentTag;
+                        fragmentTag = chatFragmentTag;
 //                    }else{
 //                        Toast.makeText(getApplicationContext(), "Devi accedere per poter aggiungere un regalo",Toast.LENGTH_LONG).show();
 //                        return false;
@@ -141,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                             chatFragment = new ChatFragment(); //rimettere ChatFragment()
                         }
                         selectedFragment = chatFragment;
-                        fragmentTag = usersGiftListFragmentTag; //rimettere il tag della chat
+                        fragmentTag = chatFragmentTag; //rimettere il tag della chat
 //                    }else{
 //                        Toast.makeText(getApplicationContext(), "Devi accedere per poter entrare in questa sezione",Toast.LENGTH_LONG).show();
 //                        return false;
@@ -160,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().addToBackStack(fragmentTag);
 
             activeFragment = selectedFragment;
+
+            Log.i("activeactive", "" + activeFragment);
 
             return true;
         }
@@ -183,9 +182,9 @@ public class MainActivity extends AppCompatActivity {
             mBackPressed = System.currentTimeMillis();
         }
 
-        else if(activeFragment.equals(fragmentManager.findFragmentByTag(conversationFragmentTag))){
-            fragmentTransaction.replace(R.id.fragment_container, chatFragment, messagesFragmentTag).commit();
-            fragmentTransaction.addToBackStack(messagesFragmentTag);
+        else if(activeFragment.equals(fragmentManager.findFragmentByTag(receiverChatFragmentTag))){
+            fragmentTransaction.replace(R.id.fragment_container, chatFragment, chatFragmentTag).commit();
+            fragmentTransaction.addToBackStack(chatFragmentTag);
             activeFragment = chatFragment;
             bottomNavigationView.setSelectedItemId(R.id.nav_chat);
         }

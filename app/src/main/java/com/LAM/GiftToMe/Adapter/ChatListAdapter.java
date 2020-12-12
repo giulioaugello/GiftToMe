@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
+import com.LAM.GiftToMe.Fragment.ReceiverChatFragment;
+import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
@@ -24,8 +26,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHolder> {
@@ -50,7 +55,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChatListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ChatListAdapter.ViewHolder holder, final int position) {
 
         holder.userName.setText(arrayChat.get(position).getUsername());
         holder.nameGift.setText(arrayChat.get(position).getGiftName());
@@ -63,7 +68,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "Pazzesco", Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = ((AppCompatActivity) activity).getSupportFragmentManager();
+                ReceiverChatFragment receiverChatFragment = new ReceiverChatFragment(arrayChat.get(position).getUsername(), arrayChat.get(position).getGiftName());
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.righttoleft, R.anim.none);
+                fragmentTransaction.replace(R.id.fragment_container, receiverChatFragment, MainActivity.receiverChatFragmentTag).commit();
+                fragmentTransaction.addToBackStack(MainActivity.receiverChatFragmentTag);
+                MainActivity.activeFragment = receiverChatFragment;
             }
         });
 
@@ -77,7 +88,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder{
 
         private CardView card;
-        private ImageView imageCategory, imageTwitterUser;
+        private ImageView imageTwitterUser;
         private TextView userName, nameGift;
 
         public ViewHolder(@NonNull View itemView) {
@@ -85,7 +96,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
             card = itemView.findViewById(R.id.card_chat);
             imageTwitterUser = itemView.findViewById(R.id.image_twitter);
-            imageCategory = itemView.findViewById(R.id.image_category);
             userName = itemView.findViewById(R.id.user_name_gift);
             nameGift = itemView.findViewById(R.id.name_gift);
 
@@ -115,6 +125,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                 error.printStackTrace();
             }
         });
+
     }
 
     //aggiorna la lista

@@ -1,7 +1,6 @@
 package com.LAM.GiftToMe.Fragment;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,22 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.LAM.GiftToMe.Adapter.ChatListAdapter;
-import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.FirestoreListener;
 import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.UsefulClass.MyGift;
-import com.LAM.GiftToMe.UsefulClass.UsersGift;
 
-import com.airbnb.lottie.L;
 import com.google.firebase.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +28,6 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -75,7 +68,7 @@ public class ChatFragment extends Fragment {
             }
 
             @Override
-            public void onDateRetrieve(List<Date> listenerTimestamps) {
+            public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
 
             }
 
@@ -112,8 +105,6 @@ public class ChatFragment extends Fragment {
 
                 }
                 //Log.i("chatchat", "ChatModel: " +  arrayListGiftName);
-
-
 
 
                 setupRecyclerView(chatmodel);
@@ -154,8 +145,121 @@ public class ChatFragment extends Fragment {
             }
         });
 
+        final List<Timestamp> timestamps = new ArrayList<>();
+        final List<String> messages = new ArrayList<>();
+
+        Chat.getTimestamps("L_A_M98", "Giulio2803", "Prova8", new FirestoreListener() {
+            @Override
+            public void onMessageRetrieve(List<String> listenerMessages) {
+
+            }
+
+            @Override
+            public void onDateRetrieve(final List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+
+                timestamps.addAll(listenerTimestamps);
+                messages.addAll(listenerMessages);
+                //Log.i("chatchat", "Timestamps: " + timestamps + " ... " + messages);
+
+
+
+
+
+
+
+
+
+                Chat.getMyTimestamps("Giulio2803", "L_A_M98", "Prova8", new FirestoreListener() {
+                    @Override
+                    public void onMessageRetrieve(List<String> listenerMessages) {
+
+                    }
+
+                    @Override
+                    public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+                        Log.i("chatchat", "Messages: " + listenerTimestamps + " ... " + listenerMessages + " ... " + timestamps + " ... " +  messages);
+
+                        int fullSize = timestamps.size() + listenerTimestamps.size();
+                        Log.i("chatchat", "fullsize: " + fullSize);
+
+                        //fullSize = 3
+                        for (int i = 0; i < timestamps.size(); i++){
+
+                            if (listenerTimestamps.size() == 0) { //se hanno solo contattato un mio regalo ma ancora non rispondo
+
+                                Log.i("chatchat", "Ancora non rispondo, mostro solo i suoi messaggi");
+
+                            }else {
+
+                                for (int j = 0; j < listenerTimestamps.size(); j++){
+
+                                    if (timestamps.get(i).compareTo(listenerTimestamps.get(j)) < 0){
+                                        //Log.i("chatchat", "J: " + j + " " + listenerTimestamps.size());
+
+                                        if (j == listenerTimestamps.size()-1){
+                                            Log.i("chatchat", "Ultimo elemento");
+                                            break;
+                                        }else if (i == timestamps.size()-1){
+                                            Log.i("chatchat", "i ha solo un elemento");
+                                        }else{
+                                            Log.i("chatchat", "Prima timestamps");
+                                            break;
+                                        }
+
+                                    }else{
+                                        Log.i("chatchat", "Prima listenerTimestamps");
+                                    }
+
+                                }
+
+                            }
+
+
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+
+                    }
+
+                    @Override
+                    public void onReceiverRetrieve(String receiver) {
+
+                    }
+
+                    @Override
+                    public void onTaskError(Exception taskException) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+
+            }
+
+            @Override
+            public void onReceiverRetrieve(String receiver) {
+
+            }
+
+            @Override
+            public void onTaskError(Exception taskException) {
+
+            }
+        });
+
+
+
+
         return v;
     }
+
 
     private void setupRecyclerView(ArrayList<ReceiverModel> receiverModels){
         chatListAdapter = new ChatListAdapter(mContext, receiverModels, getActivity(), this);
