@@ -17,6 +17,7 @@ import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.FirestoreListener;
 import com.LAM.GiftToMe.FCMFirebase.ModelUserMessage;
 import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
+import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
@@ -81,7 +82,7 @@ public class ReceiverChatFragment extends Fragment {
         final List<Timestamp> timestamps = new ArrayList<>();
         final List<String> messages = new ArrayList<>();
 
-        Chat.getTimestamps("L_A_M98", "Giulio2803", "Prova8", new FirestoreListener() {
+        Chat.getTimestamps(receiverName, MainActivity.userName, giftName, new FirestoreListener() {
             @Override
             public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -97,7 +98,7 @@ public class ReceiverChatFragment extends Fragment {
                 // sopra hanno le i
                 //sotto le j
 
-                Chat.getMyTimestamps("Giulio2803", "L_A_M98", "Prova8", new FirestoreListener() {
+                Chat.getMyTimestamps(MainActivity.userName, receiverName, giftName, new FirestoreListener() {
                     @Override
                     public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -117,7 +118,7 @@ public class ReceiverChatFragment extends Fragment {
 
                                 //Log.i("chatchat", "Ancora non rispondo, mostro solo i suoi messaggi");
                                 Log.i("chatchat", messages.get(i));
-                                ModelUserMessage modelUserMessage = new ModelUserMessage("L_A_M98", "Giulio2803", messages.get(i));
+                                ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, messages.get(i));
                                 arrayMessages.add(modelUserMessage);
 
                             }else {
@@ -132,13 +133,13 @@ public class ReceiverChatFragment extends Fragment {
 
                                             //Log.i("chatchat", "Prima timestamps"); //mostro l'ultimo
                                             Log.i("chatchat", messages.get(i));
-                                            ModelUserMessage modelUserMessage = new ModelUserMessage("L_A_M98", "Giulio2803", messages.get(i));
+                                            ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, messages.get(i));
                                             arrayMessages.add(modelUserMessage);
 
                                             if (j == listenerTimestamps.size()-1){ //se sono all'ultimo elemento di listener
                                                 //Log.i("chatchat", "Ultimo elemento di listener"); //lo mostro
                                                 Log.i("chatchat", listenerMessages.get(j));
-                                                ModelUserMessage modelUserMessageJ = new ModelUserMessage("Giulio2803", "L_A_M98", listenerMessages.get(j));
+                                                ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, listenerMessages.get(j));
                                                 arrayMessages.add(modelUserMessageJ);
 
                                             }else { //altrimenti mostro tutti i rimanenti listener
@@ -146,7 +147,7 @@ public class ReceiverChatFragment extends Fragment {
                                                 for (int k = j; k < listenerTimestamps.size(); k++){
                                                     //Log.i("chatchat", "Mostro tutti i rimanenti j");
                                                     Log.i("chatchat", listenerMessages.get(k));
-                                                    ModelUserMessage modelUserMessageJ = new ModelUserMessage("Giulio2803", "L_A_M98", listenerMessages.get(k));
+                                                    ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, listenerMessages.get(k));
                                                     arrayMessages.add(modelUserMessageJ);
                                                 }
                                                 break;
@@ -158,7 +159,7 @@ public class ReceiverChatFragment extends Fragment {
                                             //Log.i("chatchat", "Prima timestamps");
                                             Log.i("chatchat", messages.get(i));
                                             //Log.i("chatchat", "JJJ: " + j);
-                                            ModelUserMessage modelUserMessage = new ModelUserMessage("L_A_M98", "Giulio2803", messages.get(i));
+                                            ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, messages.get(i));
                                             arrayMessages.add(modelUserMessage);
                                             index = j;
                                             break;
@@ -171,13 +172,13 @@ public class ReceiverChatFragment extends Fragment {
 
                                             //Log.i("chatchat", "Prima listenerTimestamps");
                                             Log.i("chatchat", listenerMessages.get(j));
-                                            ModelUserMessage modelUserMessageJ = new ModelUserMessage("Giulio2803", "L_A_M98", listenerMessages.get(j));
+                                            ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, listenerMessages.get(j));
                                             arrayMessages.add(modelUserMessageJ);
 
                                             for (int k = i; k < timestamps.size(); k++){
                                                 //Log.i("chatchat", "Mostro tutti i rimanenti i ");
                                                 Log.i("chatchat", messages.get(k));
-                                                ModelUserMessage modelUserMessage = new ModelUserMessage("L_A_M98", "Giulio2803", messages.get(k));
+                                                ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, messages.get(k));
                                                 arrayMessages.add(modelUserMessage);
                                                 i = k;
                                             }
@@ -186,7 +187,7 @@ public class ReceiverChatFragment extends Fragment {
 
                                             //Log.i("chatchat", "Prima listenerTimestamps");
                                             Log.i("chatchat", listenerMessages.get(j));
-                                            ModelUserMessage modelUserMessageJ = new ModelUserMessage("Giulio2803", "L_A_M98", listenerMessages.get(j));
+                                            ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, listenerMessages.get(j));
                                             arrayMessages.add(modelUserMessageJ);
 
                                         }
