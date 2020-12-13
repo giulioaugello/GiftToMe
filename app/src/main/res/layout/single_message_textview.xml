@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:textSize="15sp"
-        android:textColor="#1B1B1B"
+        android:textColor="@color/ghost_white"
         android:layout_margin="10dp"/>
 
 

@@ -83,8 +83,6 @@ public class DBFirestore {
         model.put("chatMyGift", chatListMyGift);
 
         collectionReference.add(model);
-        //ModelUser modelUser = new ModelUser(username, token);
-        //collectionReference.add(modelUser);
 
     }
 
