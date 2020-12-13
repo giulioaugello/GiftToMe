@@ -189,28 +189,68 @@ public class ChatFragment extends Fragment {
 
                                 Log.i("chatchat", "Ancora non rispondo, mostro solo i suoi messaggi");
 
+
                             }else {
 
-                                for (int j = 0; j < listenerTimestamps.size(); j++){
+//                                if (timestamps.size() == 1){ //se ho solo un messaggio, mostro quello (che è sicuramente il primo) e tutti quelli di j
+//                                    Log.i("chatchat", "Mostro timestamps.get(0)");
+//
+//                                    for (int j = 0; j < listenerTimestamps.size(); j++){
+//                                        Log.i("chatchat", "Mostro Tutti gli j");
+//                                    }
+//
+//                                }else {
 
-                                    if (timestamps.get(i).compareTo(listenerTimestamps.get(j)) < 0){
-                                        //Log.i("chatchat", "J: " + j + " " + listenerTimestamps.size());
+                                    for (int j = 0; j < listenerTimestamps.size(); j++){
 
-                                        if (j == listenerTimestamps.size()-1){
-                                            Log.i("chatchat", "Ultimo elemento");
-                                            break;
-                                        }else if (i == timestamps.size()-1){
-                                            Log.i("chatchat", "i ha solo un elemento");
-                                        }else{
-                                            Log.i("chatchat", "Prima timestamps");
-                                            break;
+                                        if (timestamps.get(i).compareTo(listenerTimestamps.get(j)) < 0){ //se timestamps < listener
+                                            //Log.i("chatchat", "J: " + j + " " + listenerTimestamps.size());
+
+                                            if (i == timestamps.size()-1){ //se sono all'ultimo elemento di timestamps
+
+                                                Log.i("chatchat", "Prima timestamps"); //mostro l'ultimo
+
+                                                if (j == listenerTimestamps.size()-1){ //se sono all'ultimo elemento di listener
+                                                    Log.i("chatchat", "Ultimo elemento di listener"); //lo mostro
+
+                                                }else { //altrimenti mostro tutti i rimanenti listener
+
+                                                    for (int k = j; k < listenerTimestamps.size(); k++){
+                                                        Log.i("chatchat", "Mostro tutti i rimanenti j");
+                                                    }
+                                                    break;
+
+                                                }
+
+                                            }else{ //se i non è l'ultimo elemento
+
+                                                Log.i("chatchat", "Prima timestamps");
+                                                break;
+
+                                            }
+
+                                        }else{ //se timestamps >= listener
+
+                                            if (j == listenerTimestamps.size()-1){
+
+                                                Log.i("chatchat", "Prima listenerTimestamps");
+
+                                                for (int k = i; k < timestamps.size(); k++){
+                                                    Log.i("chatchat", "Mostro tutti i rimanenti i " + i + k);
+                                                    i = k;
+                                                }
+
+                                            }else {
+
+                                                Log.i("chatchat", "Prima listenerTimestamps");
+
+                                            }
+
+
                                         }
-
-                                    }else{
-                                        Log.i("chatchat", "Prima listenerTimestamps");
                                     }
 
-                                }
+//                                }
 
                             }
 
