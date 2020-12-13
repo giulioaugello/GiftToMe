@@ -143,6 +143,8 @@ public class DBFirestore {
                 Map<String, Object> model = new HashMap<>();
                 model.put("username", data.get("username"));
                 model.put("token", tokens);
+                model.put("chat", data.get("chat"));
+                model.put("chatMyGift", data.get("chatMyGift"));
                 collectionReference.document(id).set(model);
             }
         }
@@ -174,6 +176,8 @@ public class DBFirestore {
                 Map<String, Object> model = new HashMap<>();
                 model.put("username", data.get("username"));
                 model.put("token", tokens);
+                model.put("chat", data.get("chat"));
+                model.put("chatMyGift", data.get("chatMyGift"));
                 collectionReference.document(id).set(model);
             }
         }
