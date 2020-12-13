@@ -162,7 +162,8 @@ public class ChatFragment extends Fragment {
                 //Log.i("chatchat", "Timestamps: " + timestamps + " ... " + messages);
 
 
-
+                // sopra hanno le i
+                //sotto le j
 
 
 
@@ -180,7 +181,8 @@ public class ChatFragment extends Fragment {
                         Log.i("chatchat", "Messages: " + listenerTimestamps + " ... " + listenerMessages + " ... " + timestamps + " ... " +  messages);
 
                         int fullSize = timestamps.size() + listenerTimestamps.size();
-                        Log.i("chatchat", "fullsize: " + fullSize);
+                        //Log.i("chatchat", "fullsize: " + fullSize);
+                        int index = 0;
 
                         //fullSize = 3
                         for (int i = 0; i < timestamps.size(); i++){
@@ -188,20 +190,14 @@ public class ChatFragment extends Fragment {
                             if (listenerTimestamps.size() == 0) { //se hanno solo contattato un mio regalo ma ancora non rispondo
 
                                 Log.i("chatchat", "Ancora non rispondo, mostro solo i suoi messaggi");
-
+                                Log.i("chatchat", messages.get(i));
 
                             }else {
 
-//                                if (timestamps.size() == 1){ //se ho solo un messaggio, mostro quello (che è sicuramente il primo) e tutti quelli di j
-//                                    Log.i("chatchat", "Mostro timestamps.get(0)");
-//
-//                                    for (int j = 0; j < listenerTimestamps.size(); j++){
-//                                        Log.i("chatchat", "Mostro Tutti gli j");
-//                                    }
-//
-//                                }else {
 
-                                    for (int j = 0; j < listenerTimestamps.size(); j++){
+                                    for (int j = index; j < listenerTimestamps.size(); j++){
+
+                                        //Log.i("chatchat", i + " ... " + j);
 
                                         if (timestamps.get(i).compareTo(listenerTimestamps.get(j)) < 0){ //se timestamps < listener
                                             //Log.i("chatchat", "J: " + j + " " + listenerTimestamps.size());
@@ -209,14 +205,17 @@ public class ChatFragment extends Fragment {
                                             if (i == timestamps.size()-1){ //se sono all'ultimo elemento di timestamps
 
                                                 Log.i("chatchat", "Prima timestamps"); //mostro l'ultimo
+                                                Log.i("chatchat", messages.get(i));
 
                                                 if (j == listenerTimestamps.size()-1){ //se sono all'ultimo elemento di listener
                                                     Log.i("chatchat", "Ultimo elemento di listener"); //lo mostro
+                                                    Log.i("chatchat", listenerMessages.get(j));
 
                                                 }else { //altrimenti mostro tutti i rimanenti listener
 
                                                     for (int k = j; k < listenerTimestamps.size(); k++){
                                                         Log.i("chatchat", "Mostro tutti i rimanenti j");
+                                                        Log.i("chatchat", listenerMessages.get(k));
                                                     }
                                                     break;
 
@@ -225,6 +224,9 @@ public class ChatFragment extends Fragment {
                                             }else{ //se i non è l'ultimo elemento
 
                                                 Log.i("chatchat", "Prima timestamps");
+                                                Log.i("chatchat", messages.get(i));
+                                                //Log.i("chatchat", "JJJ: " + j);
+                                                index = j;
                                                 break;
 
                                             }
@@ -234,15 +236,18 @@ public class ChatFragment extends Fragment {
                                             if (j == listenerTimestamps.size()-1){
 
                                                 Log.i("chatchat", "Prima listenerTimestamps");
+                                                Log.i("chatchat", listenerMessages.get(j));
 
                                                 for (int k = i; k < timestamps.size(); k++){
-                                                    Log.i("chatchat", "Mostro tutti i rimanenti i " + i + k);
+                                                    Log.i("chatchat", "Mostro tutti i rimanenti i ");
+                                                    Log.i("chatchat", messages.get(k));
                                                     i = k;
                                                 }
 
                                             }else {
 
                                                 Log.i("chatchat", "Prima listenerTimestamps");
+                                                Log.i("chatchat", listenerMessages.get(j));
 
                                             }
 
