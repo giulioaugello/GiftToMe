@@ -82,4 +82,9 @@ public class ReceiverChatAdapter extends RecyclerView.Adapter<ReceiverChatAdapte
 
         }
     }
+
+    public void updateList(ArrayList<ModelUserMessage> list){
+        arrayMessage = list;
+        notifyDataSetChanged();
+    }
 }

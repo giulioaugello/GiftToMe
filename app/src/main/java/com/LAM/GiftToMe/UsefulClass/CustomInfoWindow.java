@@ -15,13 +15,7 @@ import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
-import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.android.volley.VolleyError;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
@@ -109,7 +103,7 @@ public class CustomInfoWindow extends MarkerInfoWindow {
                 DBFirestore.getToken(receiverUserName, message, mContext);
 
                 //Chat.sendMessage(MainActivity.userName, issuer, yourReply);
-                Chat.sendMessage(MainActivity.userName, issuer, yourReply, title);
+                Chat.sendMessageFromGift(MainActivity.userName, issuer, yourReply, title);
 
                 replyGiftDialog.dismiss();
 

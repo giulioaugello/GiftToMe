@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.LAM.GiftToMe.Adapter.ChatListAdapter;
 import com.LAM.GiftToMe.Adapter.ReceiverChatAdapter;
@@ -67,15 +68,38 @@ public class ReceiverChatFragment extends Fragment {
 
         text = v.findViewById(R.id.message_text);
         send = v.findViewById(R.id.send_message);
-        twPhoto = v.findViewById(R.id.tw_photo);
+
 
         TextView messageUsername = v.findViewById(R.id.tw_username);
         TextView messageGiftName = v.findViewById(R.id.mes_gift_name);
 
         messageUsername.setText(receiverName);
         messageGiftName.setText(giftName);
+
+        twPhoto = v.findViewById(R.id.tw_photo);
         getTwitterProfileImage(receiverName, twPhoto);
 
+
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String yourReply = text.getText().toString();
+
+                if (yourReply.isEmpty()){
+                    Toast.makeText(mContext, "Inserisci un messaggio", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Chat.sendMessage(MainActivity.userName, receiverName, yourReply, giftName);
+
+                ModelUserMessage newMessage = new ModelUserMessage(MainActivity.userName, receiverName, yourReply);
+                arrayMessages.add(newMessage);
+                receiverChatAdapter.updateList(arrayMessages); //aggiorna la recyclerview
+                text.setText("");
+                recyclerView.scrollToPosition(receiverChatAdapter.getItemCount() - 1); //mi serve per tenere il focus sull'ultimo messaggio inviato
+
+            }
+        });
 
 
 
@@ -94,7 +118,7 @@ public class ReceiverChatFragment extends Fragment {
                 timestamps.addAll(listenerTimestamps);
                 messages.addAll(listenerMessages);
                 //Log.i("chatchat", "Timestamps: " + timestamps + " ... " + messages);
-                Log.i("chatchat", "Gift: " + giftName);
+                //Log.i("chatchat", "Gift: " + giftName);
 
                 // sopra hanno le i
                 //sotto le j
@@ -108,7 +132,7 @@ public class ReceiverChatFragment extends Fragment {
                     @Override
                     public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
                         //Log.i("chatchat", "Messages: " + listenerTimestamps + " ... " + listenerMessages + " ... " + timestamps + " ... " +  messages);
-                        Log.i("chatchat", "Gift: " + giftName);
+                        //Log.i("chatchat", "Gift: " + giftName);
 
                         int fullSize = timestamps.size() + listenerTimestamps.size();
 
@@ -257,7 +281,8 @@ public class ReceiverChatFragment extends Fragment {
         receiverChatAdapter = new ReceiverChatAdapter(mContext, modelUserMessages, getActivity(), this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-        //linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.scrollToPosition(receiverChatAdapter.getItemCount() - 1);
 
         recyclerView.setLayoutManager(linearLayoutManager);
 

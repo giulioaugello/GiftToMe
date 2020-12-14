@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,27 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.Chat;
-import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
-import com.LAM.GiftToMe.FCMFirebase.FirestoreListener;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
-import com.LAM.GiftToMe.Twitter.VolleyListener;
-import com.LAM.GiftToMe.UsefulClass.EditString;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
-import com.android.volley.VolleyError;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -141,7 +126,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
 //
 //                DBFirestore.getToken(receiverUserName, message, mContext);
 
-                Chat.sendMessage(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getName());
+                Chat.sendMessageFromGift(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getName());
 
 //                Chat.getTimestamps("L_A_M98", "Giulio2803", "gift", new FirestoreListener() {
 //                    @Override
