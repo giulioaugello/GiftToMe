@@ -31,6 +31,7 @@ public class Chat {
     private static int indexMyGift = 0;
     private static int indexName = 0;
     public static List<String> listString;
+    public static List<String> listNameMyGift;
 
 
     public static void sendMessage(final String username, final String receiver, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
@@ -673,6 +674,60 @@ public class Chat {
         });
 
 
+    }
+
+    public static void getArrayMyGift(final String username, final Context mContext, final FirestoreListener firestoreListener){
+        listNameMyGift = new ArrayList<>();
+        final List<Map<String, Object>> myList = new ArrayList<>();
+
+        final FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+
+                        List<Map<String, Object>> chatMyGift = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+
+                        if (chatMyGift != null){
+                            for (int i = 0; i < chatMyGift.size(); i++){
+
+                                List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(i).get("arrayMyGift");
+
+                                for (int j = 0; j < giftList.size(); j++){
+
+                                    getGiftNameFromSender(queryDocumentSnapshot, (String) giftList.get(j).get("sender"), giftList,  i, j);
+
+                                    myList.add(giftList.get(j));
+
+                                }
+
+                            }
+
+                            firestoreListener.onChatRetrieve(myList);
+                        }else{
+                            Toast.makeText(mContext, "Non hai nessuna chat", Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                }else {
+                    firestoreListener.onTaskError(task.getException());
+                }
+            }
+        });
+    }
+
+    public static void getGiftNameFromSender(QueryDocumentSnapshot queryDocumentSnapshot, final String sender, final List<Map<String, Object>> giftList, final int i, final int j){
+
+        String myGiftName = "";
+
+        if (giftList.get(j).get("sender").equals(sender)){
+            myGiftName = (String) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(i).get("myGiftName");
+            listNameMyGift.add(myGiftName);
+            Log.i("chatchat", "ListNameMyGift: " + listNameMyGift);
+        }
     }
 
     public static void getReceiverArray(String username, final FirestoreListener firestoreListener){

@@ -51,6 +51,34 @@
         android:paddingBottom="10dp"
         android:background="@drawable/round_corner_profile">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:id="@+id/reply_array_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Le tue risposte"
+                android:textSize="17sp"
+                android:textColor="@color/colorChipSelected"
+                android:layout_weight="1"
+                android:background="@null"/>
+
+            <Button
+                android:id="@+id/mygift_array_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="I tuoi regali"
+                android:textSize="17sp"
+                android:textColor="@color/colorPrimary"
+                android:layout_weight="1"
+                android:background="@null"/>
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/no_chat"
             android:layout_width="match_parent"
@@ -67,7 +95,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:visibility="visible"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_mychat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

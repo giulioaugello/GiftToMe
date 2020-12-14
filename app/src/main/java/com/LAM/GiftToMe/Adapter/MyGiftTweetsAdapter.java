@@ -362,7 +362,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
 
     public static void reloadFragment(Fragment fragment, Activity activity){
 
-        Log.i("fragmentfragment", "Sono in " + fragment.getTag());
+        //Log.i("fragmentfragment", "Sono in " + fragment.getTag());
 
         FragmentManager fragmentManager = ((AppCompatActivity)activity).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

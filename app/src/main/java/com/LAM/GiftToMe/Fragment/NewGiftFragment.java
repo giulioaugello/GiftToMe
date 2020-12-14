@@ -255,8 +255,8 @@ public class NewGiftFragment extends Fragment {
                     @Override
                     public void run() {
                         dialog.dismiss();
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.newGiftFragmentTag);
-                        MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
+                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.newgift_fragment_tag));
+                        //MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
                         clearForm(linearLayout);
                     }
 

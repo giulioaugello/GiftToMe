@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
-import com.LAM.GiftToMe.Fragment.ReceiverChatFragment;
+import com.LAM.GiftToMe.Fragment.ChatFragment;
+import com.LAM.GiftToMe.Fragment.ReplyChatFragment;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
@@ -68,13 +68,15 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 FragmentManager fragmentManager = ((AppCompatActivity) activity).getSupportFragmentManager();
-                ReceiverChatFragment receiverChatFragment = new ReceiverChatFragment(arrayChat.get(position).getUsername(), arrayChat.get(position).getGiftName());
+                ReplyChatFragment replyChatFragment = new ReplyChatFragment(arrayChat.get(position).getUsername(), arrayChat.get(position).getGiftName());
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.righttoleft, R.anim.none);
-                fragmentTransaction.replace(R.id.fragment_container, receiverChatFragment, MainActivity.receiverChatFragmentTag).commit();
+                fragmentTransaction.replace(R.id.fragment_container, replyChatFragment, MainActivity.receiverChatFragmentTag).commit();
                 fragmentTransaction.addToBackStack(MainActivity.receiverChatFragmentTag);
-                MainActivity.activeFragment = receiverChatFragment;
+                MainActivity.activeFragment = replyChatFragment;
+
             }
         });
 

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +16,6 @@ import android.widget.TextView;
 import com.LAM.GiftToMe.Adapter.ChatListAdapter;
 import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.FirestoreListener;
-import com.LAM.GiftToMe.FCMFirebase.ModelUserMessage;
 import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
@@ -35,14 +35,17 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ChatFragment extends Fragment {
 
     private Context mContext;
-    private ArrayList<ReceiverModel> chatmodel;
-    private RecyclerView recyclerView;
+    private ArrayList<ReceiverModel> chatModel, chatModelMyGift;
+    private RecyclerView recyclerViewReply, recyclerViewMyGift;
     private ChatListAdapter chatListAdapter;
 
     private EditText searchGift;
     private ImageView searchButton;
-    private ArrayList<String> arrayListGiftName;
+    private ArrayList<String> arrayListGiftName, arrayListMyGift;
     private TextView noChat;
+
+    public static boolean isMyGift;
+    private Button replyArrayButton, myGiftArrayButton;
 
     @Nullable
     @Override
@@ -52,15 +55,22 @@ public class ChatFragment extends Fragment {
 
         mContext = getActivity().getApplicationContext();
 
-        chatmodel = new ArrayList<>();
+        chatModel = new ArrayList<>();
+        chatModelMyGift = new ArrayList<>();
 
-        recyclerView = v.findViewById(R.id.recyclerview_chat);
+        recyclerViewReply = v.findViewById(R.id.recyclerview_chat);
+        recyclerViewMyGift = v.findViewById(R.id.recyclerview_mychat);
 
         searchGift = v.findViewById(R.id.gift_search_edit);
 
         noChat = v.findViewById(R.id.no_chat);
 
-        //Chat.createSender("Giulio2803", "Prova");
+        isMyGift = false;
+
+        replyArrayButton = v.findViewById(R.id.reply_array_button);
+        myGiftArrayButton = v.findViewById(R.id.mygift_array_button);
+
+
 
         Chat.getArrayGift(MainActivity.userName, mContext, new FirestoreListener() {
             @Override
@@ -102,13 +112,13 @@ public class ChatFragment extends Fragment {
                     receiverModel.setTimestamps((ArrayList<Date>) listenerChat.get(k).get("timestamps"));
 
                     arrayListGiftName.add((String) listenerChat.get(k).get("giftName"));
-                    chatmodel.add(receiverModel);
+                    chatModel.add(receiverModel);
 
                 }
                 //Log.i("chatchat", "ChatModel: " +  arrayListGiftName);
 
 
-                setupRecyclerView(chatmodel);
+                setupRecyclerView(chatModel, recyclerViewReply);
 
                 //per la ricerca dei regali
                 searchGift.addTextChangedListener(new TextWatcher() {
@@ -147,11 +157,97 @@ public class ChatFragment extends Fragment {
         });
 
 
+        Chat.getArrayMyGift(MainActivity.userName, mContext, new FirestoreListener() {
+            @Override
+            public void onMessageRetrieve(List<String> listenerMessages) {
+
+            }
+
+            @Override
+            public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+
+            }
+
+            @Override
+            public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+                Log.i("chatchat", "ListenerChat: " + listenerChat);
+                arrayListMyGift = new ArrayList<>();
+
+                for (int k = 0; k < listenerChat.size(); k++){
+
+                    //String gifts = (String) listenerChat.get(k).get("giftName");
+//                    List<String> messages = (List<String>) listenerChat.get(k).get("messages");
+//                    List<Timestamp> timestamps = (List<Timestamp>) listenerChat.get(k).get("timestamps");
+
+//                    Log.i("chatchat", "gifts: " + gifts);
+//                    Log.i("chatchat", "messages: " + messages + messages.get(0));
+//                    Log.i("chatchat", "timestamps: " + timestamps);
+
+                    final ReceiverModel receiverModel = new ReceiverModel();
+
+                    receiverModel.setUsername((String) listenerChat.get(k).get("sender"));
+                    receiverModel.setGiftName(Chat.listNameMyGift.get(k));
+                    receiverModel.setMessages((ArrayList<String>) listenerChat.get(k).get("messages"));
+                    receiverModel.setTimestamps((ArrayList<Date>) listenerChat.get(k).get("timestamps"));
+
+                    arrayListMyGift.add((String) listenerChat.get(k).get("sender"));
+                    chatModelMyGift.add(receiverModel);
+
+                }
+                //Log.i("chatchat", "ChatModel: " +  arrayListGiftName);
+
+
+                setupRecyclerView(chatModelMyGift, recyclerViewMyGift);
+            }
+
+            @Override
+            public void onReceiverRetrieve(String receiver) {
+
+            }
+
+            @Override
+            public void onTaskError(Exception taskException) {
+
+            }
+        });
+
+
+
+        replyArrayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                isMyGift = false;
+
+                myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorPrimary, null));
+                recyclerViewMyGift.setVisibility(View.GONE);
+
+                replyArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
+                recyclerViewReply.setVisibility(View.VISIBLE);
+            }
+        });
+
+        myGiftArrayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                isMyGift = true;
+
+                replyArrayButton.setTextColor(getResources().getColor(R.color.colorPrimary, null));
+                recyclerViewReply.setVisibility(View.GONE);
+
+                myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
+                recyclerViewMyGift.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+
         return v;
     }
 
 
-    private void setupRecyclerView(ArrayList<ReceiverModel> receiverModels){
+    private void setupRecyclerView(ArrayList<ReceiverModel> receiverModels, RecyclerView recyclerView){
         chatListAdapter = new ChatListAdapter(mContext, receiverModels, getActivity(), this);
 
         //in testa esce l'ultima persona aggiunta nel database (tranne se già esisteva)
@@ -166,7 +262,7 @@ public class ChatFragment extends Fragment {
     //filtra sul nome dei regali
     private void filter(String text){
         ArrayList<ReceiverModel> temp = new ArrayList();
-        for(ReceiverModel receiverModel: chatmodel){
+        for(ReceiverModel receiverModel: chatModel){
 
             //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
             if(receiverModel.getGiftName().toLowerCase().contains(text) || receiverModel.getGiftName().contains(text) || receiverModel.getGiftName().toUpperCase().contains(text)){
