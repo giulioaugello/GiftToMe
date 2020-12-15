@@ -93,6 +93,7 @@ public class ReplyChatFragment extends Fragment {
                 ModelUserMessage newMessage = new ModelUserMessage(MainActivity.userName, receiverName, yourReply);
                 arrayMessages.add(newMessage);
                 replyChatAdapter.updateList(arrayMessages); //aggiorna la recyclerview
+                Log.i("chatchat", "COUNT: " + replyChatAdapter.getItemCount() + " ... " + arrayMessages.size());
                 text.setText("");
                 recyclerView.scrollToPosition(replyChatAdapter.getItemCount() - 1); //mi serve per tenere il focus sull'ultimo messaggio inviato
 
@@ -104,10 +105,8 @@ public class ReplyChatFragment extends Fragment {
 
         if (!ChatFragment.isMyGift){
 
-            final List<Timestamp> timestamps = new ArrayList<>();
-            final List<String> messages = new ArrayList<>();
 
-            Chat.getTimestamps(MainActivity.userName, receiverName, giftName, new FirestoreListener() {
+            Chat.getTimestamps2(MainActivity.userName, receiverName, giftName, new FirestoreListener() {
                 @Override
                 public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -115,19 +114,20 @@ public class ReplyChatFragment extends Fragment {
 
                 @Override
                 public void onDateRetrieve(final List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
-
+                    final List<Timestamp> timestamps = new ArrayList<>();
+                    final List<String> messages = new ArrayList<>();
                     //Chat.provaSnapshot(MainActivity.userName);
 
                     timestamps.addAll(listenerTimestamps);
                     messages.addAll(listenerMessages);
-                    Log.i("chatchat", "MMM: " + messages);
-                    //Log.i("chatchat", "Timestamps: " + timestamps + " ... " + messages);
+                    //Log.i("chatchat", "MMM: " + messages);
+                    Log.i("chatchat", "Timestamps: " + timestamps.size());
                     //Log.i("chatchat", "Gift: " + giftName);
 
                     // sopra hanno le i
                     //sotto le j
 
-                    Chat.getMyTimestamps(receiverName, MainActivity.userName, giftName, new FirestoreListener() {
+                    Chat.getMyTimestamps2(receiverName, MainActivity.userName, giftName, new FirestoreListener() {
                         @Override
                         public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -135,6 +135,9 @@ public class ReplyChatFragment extends Fragment {
 
                         @Override
                         public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+                            arrayMessages.clear();
+                            Log.i("chatchat", "AAA: " + arrayMessages.size());
+                            //Log.i("chatchat", "MMM1: " + listenerMessages);
                             //Log.i("chatchat", "Messages: " + listenerTimestamps + " ... " + listenerMessages + " ... " + timestamps + " ... " +  messages);
                             //Log.i("chatchat", "Gift: " + giftName);
 
@@ -236,7 +239,7 @@ public class ReplyChatFragment extends Fragment {
                             }
 
 
-                            //Log.i("chatchat", "ARRAYMESSAGE: " + arrayMessages);
+                            Log.i("chatchat", "ARRAYMESSAGE: " + arrayMessages.size());
                             setupRecyclerView(arrayMessages);
 
                         }
@@ -276,10 +279,8 @@ public class ReplyChatFragment extends Fragment {
             });
         }else {
 
-            final List<Timestamp> timestamps = new ArrayList<>();
-            final List<String> messages = new ArrayList<>();
 
-            Chat.getMyTimestamps(MainActivity.userName, receiverName, giftName, new FirestoreListener() {
+            Chat.getMyTimestamps2(MainActivity.userName, receiverName, giftName, new FirestoreListener() {
                 @Override
                 public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -288,6 +289,8 @@ public class ReplyChatFragment extends Fragment {
                 @Override
                 public void onDateRetrieve(final List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
 
+                    final List<Timestamp> timestamps = new ArrayList<>();
+                    final List<String> messages = new ArrayList<>();
                     //Chat.provaSnapshot(MainActivity.userName);
 
                     timestamps.addAll(listenerTimestamps);
@@ -296,7 +299,7 @@ public class ReplyChatFragment extends Fragment {
                     //Log.i("chatchat", "Gift: " + giftName);
 
 
-                    Chat.getTimestamps(receiverName, MainActivity.userName, giftName, new FirestoreListener() {
+                    Chat.getTimestamps2(receiverName, MainActivity.userName, giftName, new FirestoreListener() {
                         @Override
                         public void onMessageRetrieve(List<String> listenerMessages) {
 
