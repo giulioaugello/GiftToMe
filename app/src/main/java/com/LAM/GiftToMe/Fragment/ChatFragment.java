@@ -56,7 +56,6 @@ public class ChatFragment extends Fragment {
         mContext = getActivity().getApplicationContext();
 
         chatModel = new ArrayList<>();
-        chatModelMyGift = new ArrayList<>();
 
         recyclerViewReply = v.findViewById(R.id.recyclerview_chat);
         recyclerViewMyGift = v.findViewById(R.id.recyclerview_mychat);
@@ -157,7 +156,7 @@ public class ChatFragment extends Fragment {
         });
 
 
-        Chat.getArrayMyGift(MainActivity.userName, mContext, new FirestoreListener() {
+        Chat.getArrayMyGift2(MainActivity.userName, mContext, new FirestoreListener() {
             @Override
             public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -170,8 +169,9 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
-                Log.i("chatchat", "ListenerChat: " + listenerChat);
                 arrayListMyGift = new ArrayList<>();
+                chatModelMyGift = new ArrayList<>();
+                //Log.i("chatchat", "getArrayMyGift: " + chatModelMyGift.size() + " ... " + listenerChat.size());
 
                 for (int k = 0; k < listenerChat.size(); k++){
 
@@ -198,6 +198,9 @@ public class ChatFragment extends Fragment {
 
 
                 setupRecyclerView(chatModelMyGift, recyclerViewMyGift);
+                listenerChat.clear();
+                Chat.listNameMyGift.clear();
+                chatListAdapter.updateList(chatModelMyGift);
             }
 
             @Override
