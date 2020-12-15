@@ -88,7 +88,11 @@ public class ReplyChatFragment extends Fragment {
                     return;
                 }
 
-                Chat.sendMessage(MainActivity.userName, receiverName, yourReply, giftName);
+                if (!ChatFragment.isMyGift){
+                    Chat.sendMessage(MainActivity.userName, receiverName, yourReply, giftName);
+                }else {
+                    Chat.sendMessageMyGift(MainActivity.userName, receiverName, yourReply, giftName);
+                }
 
                 ModelUserMessage newMessage = new ModelUserMessage(MainActivity.userName, receiverName, yourReply);
                 arrayMessages.add(newMessage);
@@ -309,6 +313,8 @@ public class ReplyChatFragment extends Fragment {
                         public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
                             //Log.i("chatchat", "Messages: " + listenerTimestamps + " ... " + listenerMessages + " ... " + timestamps + " ... " +  messages);
                             //Log.i("chatchat", "Gift: " + giftName);
+
+                            arrayMessages.clear();
 
                             int fullSize = timestamps.size() + listenerTimestamps.size();
 

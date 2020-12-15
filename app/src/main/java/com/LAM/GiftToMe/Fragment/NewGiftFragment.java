@@ -71,6 +71,8 @@ public class NewGiftFragment extends Fragment {
         addressForm = v.findViewById(R.id.addr_gift);
         recapGift = v.findViewById(R.id.add_gift);
 
+        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.newgift_fragment_tag));
+
         Chip sportChip, electronicChip, clothingChip, musicChip, otherChip;
         sportChip = v.findViewById(R.id.sport_chip_new);
         electronicChip = v.findViewById(R.id.electronic_chip_new);
@@ -255,8 +257,7 @@ public class NewGiftFragment extends Fragment {
                     @Override
                     public void run() {
                         dialog.dismiss();
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.newgift_fragment_tag));
-                        //MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
+                        MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
                         clearForm(linearLayout);
                     }
 

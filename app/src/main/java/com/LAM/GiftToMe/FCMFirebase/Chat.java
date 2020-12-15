@@ -36,10 +36,63 @@ public class Chat {
     private static int indexName = 0;
     public static List<String> listString;
     public static List<String> listNameMyGift;
-    public static List<String> prove;
-    public static List<String> proveMy;
 
 
+    public static void sendMessageMyGift(final String username, final String sender, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
+
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+                        List<Map<String, Object>> chatMyGift = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+                        Map<String, Object> model = new HashMap<>();
+                        model.put("username", queryDocumentSnapshot.getData().get("username"));
+                        model.put("token", queryDocumentSnapshot.getData().get("token"));
+                        model.put("chat", queryDocumentSnapshot.getData().get("chat"));
+
+                        if (chatMyGift != null){
+
+                            int indexG = 0;
+                            for (int i = 0; i < chatMyGift.size(); i++){
+                                Log.i("chatchat", "myGiftName: " + chatMyGift.get(i).get("myGiftName"));
+                                if (chatMyGift.get(i).get("myGiftName").equals(giftName)){ //cerco l'indice del regalo che mi serve per myGiftList
+                                    indexG = i;
+                                    break;
+                                }
+                            }
+
+                            List<Map<String, Object>> myGiftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(indexG).get("arrayMyGift");
+
+                            if (checkSenderExist(myGiftList, sender)){
+                                ArrayList<String> messagesArrayList = (ArrayList<String>) myGiftList.get(indexSender).get("messages");
+                                messagesArrayList.add(reply);
+
+                                ArrayList<Date> datesArrayList = (ArrayList<Date>) myGiftList.get(indexSender).get("timestamps");
+                                Date date = new Date();
+                                datesArrayList.add(date);
+
+                                myGiftList.get(indexSender).put("messages", messagesArrayList);
+                                myGiftList.get(indexSender).put("timestamps", datesArrayList);
+
+                                chatMyGift.get(indexG).put("myGiftName", giftName);
+                                chatMyGift.get(indexG).put("arrayMyGift", myGiftList);
+
+                                model.put("chatMyGift", chatMyGift);
+
+                                collectionReference.document(queryDocumentSnapshot.getId()).set(model);
+                            }else {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    }
 
 
     public static void sendMessage(final String username, final String receiver, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
@@ -586,74 +639,6 @@ public class Chat {
     }
 
 
-    public static void provaSnapshot(String username, final int indexR, final int indexG, final FirestoreListener firestoreListener){
-        prove = new ArrayList<>();
-
-        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = firestoreDB.collection("users");
-        collectionReference.whereEqualTo("username", username).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.w(TAG, "Listen failed.", error);
-                    return;
-                }
-
-                List<String> messages = new ArrayList<>();
-
-                for (QueryDocumentSnapshot queryDocumentSnapshot : value) {
-
-                    List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
-
-                    if (chat != null) {
-                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(indexR).get("arrayGift");
-                        List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
-                        messages.addAll(myMessages);
-                        Log.i("chatchat", "messages: " + messages);
-                        firestoreListener.onMessageRetrieve(messages);
-                    }
-
-                }
-            }
-        });
-    }
-
-    public static void provaSnapshotMy(String username, final int indexR, final int indexG, final FirestoreListener firestoreListener){
-        proveMy = new ArrayList<>();
-
-        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = firestoreDB.collection("users");
-        collectionReference.whereEqualTo("username", username).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.w(TAG, "Listen failed.", error);
-                    return;
-                }
-
-                List<String> messages = new ArrayList<>();
-
-                for (QueryDocumentSnapshot queryDocumentSnapshot : value) {
-
-                    List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
-
-
-                    if (chat != null) {
-                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(indexR).get("arrayMyGift");
-                        List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
-                        messages.addAll(myMessages);
-                        Log.i("chatchat", "messages1: " + messages);
-                        firestoreListener.onMessageRetrieve(messages);
-                    }
-
-                }
-            }
-        });
-    }
-
-
-
-
     public static void getMyTimestamps2(final String username, final String sender, final String giftName, final FirestoreListener listener){
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = firestoreDB.collection("users");
@@ -700,79 +685,79 @@ public class Chat {
 
 
     //ritorna List con tutti i messaggi da username a receiver
-    public static void getMyTimestamps(final String username, final String sender, final String giftName, final FirestoreListener listener){
-
-        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = firestoreDB.collection("users");
-        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
-                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
-
-                        int indexR = 0; //indice del regalo
-                        for (int i = 0; i < chat.size(); i++){
-                            //Log.i("chatchat", "receiver: " + chat.get(i).get("receiver") + ", message: " + chat.get(i).get("messages") + ", timestamp: " + chat.get(i).get("timestamps"));
-                            if (chat.get(i).get("myGiftName").equals(giftName)){
-                                indexR = i;
-                                break;
-                            }
-                        }
-
-                        //lista dei regali del destinatario
-                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(indexR).get("arrayMyGift");
-
-                        int indexG = 0; //indice del sender
-                        for (int j = 0; j < giftList.size(); j++){
-                            //Log.i("chatchat", "receiver: " + chat.get(i).get("receiver") + ", message: " + chat.get(i).get("messages") + ", timestamp: " + chat.get(i).get("timestamps"));
-                            if (giftList.get(j).get("sender").equals(sender)){
-                                indexG = j;
-                                break;
-                            }
-                        }
-
-                        final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
-                        List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
-//                        provaSnapshotMy(username, indexR, indexG, new FirestoreListener() {
-//                            @Override
-//                            public void onMessageRetrieve(List<String> listenerMessages) {
-//                                listener.onDateRetrieve(myTimestamps, listenerMessages);
+//    public static void getMyTimestamps(final String username, final String sender, final String giftName, final FirestoreListener listener){
+//
+//        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+//        final CollectionReference collectionReference = firestoreDB.collection("users");
+//        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()){
+//                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+//                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+//
+//                        int indexR = 0; //indice del regalo
+//                        for (int i = 0; i < chat.size(); i++){
+//                            //Log.i("chatchat", "receiver: " + chat.get(i).get("receiver") + ", message: " + chat.get(i).get("messages") + ", timestamp: " + chat.get(i).get("timestamps"));
+//                            if (chat.get(i).get("myGiftName").equals(giftName)){
+//                                indexR = i;
+//                                break;
 //                            }
+//                        }
 //
-//                            @Override
-//                            public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+//                        //lista dei regali del destinatario
+//                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(indexR).get("arrayMyGift");
 //
+//                        int indexG = 0; //indice del sender
+//                        for (int j = 0; j < giftList.size(); j++){
+//                            //Log.i("chatchat", "receiver: " + chat.get(i).get("receiver") + ", message: " + chat.get(i).get("messages") + ", timestamp: " + chat.get(i).get("timestamps"));
+//                            if (giftList.get(j).get("sender").equals(sender)){
+//                                indexG = j;
+//                                break;
 //                            }
+//                        }
 //
-//                            @Override
-//                            public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+//                        final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
+//                        List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
+////                        provaSnapshotMy(username, indexR, indexG, new FirestoreListener() {
+////                            @Override
+////                            public void onMessageRetrieve(List<String> listenerMessages) {
+////                                listener.onDateRetrieve(myTimestamps, listenerMessages);
+////                            }
+////
+////                            @Override
+////                            public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+////
+////                            }
+////
+////                            @Override
+////                            public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+////
+////                            }
+////
+////                            @Override
+////                            public void onReceiverRetrieve(String receiver) {
+////
+////                            }
+////
+////                            @Override
+////                            public void onTaskError(Exception taskException) {
+////
+////                            }
+////                        });
 //
-//                            }
+//                        Log.i("chatchat", "sender: " + giftList.get(indexG).get("sender"));
 //
-//                            @Override
-//                            public void onReceiverRetrieve(String receiver) {
+//                        //listener.onDateRetrieve(myTimestamps, proveMy);
+//                        listener.onDateRetrieve(myTimestamps, myMessages);
+//                    }
+//                }else {
+//                    listener.onTaskError(task.getException());
+//                }
+//            }
+//        });
 //
-//                            }
-//
-//                            @Override
-//                            public void onTaskError(Exception taskException) {
-//
-//                            }
-//                        });
-
-                        Log.i("chatchat", "sender: " + giftList.get(indexG).get("sender"));
-
-                        //listener.onDateRetrieve(myTimestamps, proveMy);
-                        listener.onDateRetrieve(myTimestamps, myMessages);
-                    }
-                }else {
-                    listener.onTaskError(task.getException());
-                }
-            }
-        });
-
-    }
+//    }
 
     public static void getTimestamps2(final String username, final String receiver, final String giftName, final FirestoreListener listener){
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
@@ -822,79 +807,79 @@ public class Chat {
 
 
     //ritorna List con i timestamps e i messaggi da username a receiver
-    public static void getTimestamps(final String username, final String receiver, final String giftName, final FirestoreListener listener){
-
-        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = firestoreDB.collection("users");
-        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
-                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
-
-                        int indexR = 0; //indice del destinatario
-                        for (int i = 0; i < chat.size(); i++){
-                            //Log.i("chatchat", "receiver: " + chat.get(i).get("receiver") + ", message: " + chat.get(i).get("messages") + ", timestamp: " + chat.get(i).get("timestamps"));
-                            if (chat.get(i).get("receiver").equals(receiver)){
-                                indexR = i;
-                                break;
-                            }
-                        }
-
-                        //lista dei regali del destinatario
-                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(indexR).get("arrayGift");
-
-                        int indexG = 0; //indice del regalo
-                        for (int j = 0; j < giftList.size(); j++){
-                            //Log.i("chatchat", "receiver: " + chat.get(i).get("receiver") + ", message: " + chat.get(i).get("messages") + ", timestamp: " + chat.get(i).get("timestamps"));
-                            if (giftList.get(j).get("giftName").equals(giftName)){
-                                indexG = j;
-                                break;
-                            }
-                        }
-
-                        final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
-                        List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
-
-//                        provaSnapshot(username, indexR, indexG, new FirestoreListener() {
-//                            @Override
-//                            public void onMessageRetrieve(List<String> listenerMessages) {
+//    public static void getTimestamps(final String username, final String receiver, final String giftName, final FirestoreListener listener){
 //
-//                                listener.onDateRetrieve(myTimestamps, listenerMessages);
+//        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+//        final CollectionReference collectionReference = firestoreDB.collection("users");
+//        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()){
+//                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+//                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+//
+//                        int indexR = 0; //indice del destinatario
+//                        for (int i = 0; i < chat.size(); i++){
+//                            //Log.i("chatchat", "receiver: " + chat.get(i).get("receiver") + ", message: " + chat.get(i).get("messages") + ", timestamp: " + chat.get(i).get("timestamps"));
+//                            if (chat.get(i).get("receiver").equals(receiver)){
+//                                indexR = i;
+//                                break;
 //                            }
+//                        }
 //
-//                            @Override
-//                            public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+//                        //lista dei regali del destinatario
+//                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(indexR).get("arrayGift");
 //
+//                        int indexG = 0; //indice del regalo
+//                        for (int j = 0; j < giftList.size(); j++){
+//                            //Log.i("chatchat", "receiver: " + chat.get(i).get("receiver") + ", message: " + chat.get(i).get("messages") + ", timestamp: " + chat.get(i).get("timestamps"));
+//                            if (giftList.get(j).get("giftName").equals(giftName)){
+//                                indexG = j;
+//                                break;
 //                            }
+//                        }
 //
-//                            @Override
-//                            public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+//                        final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
+//                        List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
 //
-//                            }
+////                        provaSnapshot(username, indexR, indexG, new FirestoreListener() {
+////                            @Override
+////                            public void onMessageRetrieve(List<String> listenerMessages) {
+////
+////                                listener.onDateRetrieve(myTimestamps, listenerMessages);
+////                            }
+////
+////                            @Override
+////                            public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+////
+////                            }
+////
+////                            @Override
+////                            public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+////
+////                            }
+////
+////                            @Override
+////                            public void onReceiverRetrieve(String receiver) {
+////
+////                            }
+////
+////                            @Override
+////                            public void onTaskError(Exception taskException) {
+////
+////                            }
+////                        });
 //
-//                            @Override
-//                            public void onReceiverRetrieve(String receiver) {
+//                        listener.onDateRetrieve(myTimestamps, myMessages);
+//                    }
+//                }else{
+//                    listener.onTaskError(task.getException());
+//                }
+//            }
+//        });
 //
-//                            }
 //
-//                            @Override
-//                            public void onTaskError(Exception taskException) {
-//
-//                            }
-//                        });
-
-                        listener.onDateRetrieve(myTimestamps, myMessages);
-                    }
-                }else{
-                    listener.onTaskError(task.getException());
-                }
-            }
-        });
-
-
-    }
+//    }
 
     public static void getArrayMyGift(final String username, final Context mContext, final FirestoreListener firestoreListener){
         listNameMyGift = new ArrayList<>();
@@ -1005,5 +990,71 @@ public class Chat {
         });
 
     }
+
+
+//    public static void provaSnapshot(String username, final int indexR, final int indexG, final FirestoreListener firestoreListener){
+//        prove = new ArrayList<>();
+//
+//        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+//        final CollectionReference collectionReference = firestoreDB.collection("users");
+//        collectionReference.whereEqualTo("username", username).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                if (error != null) {
+//                    Log.w(TAG, "Listen failed.", error);
+//                    return;
+//                }
+//
+//                List<String> messages = new ArrayList<>();
+//
+//                for (QueryDocumentSnapshot queryDocumentSnapshot : value) {
+//
+//                    List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+//
+//                    if (chat != null) {
+//                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(indexR).get("arrayGift");
+//                        List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
+//                        messages.addAll(myMessages);
+//                        Log.i("chatchat", "messages: " + messages);
+//                        firestoreListener.onMessageRetrieve(messages);
+//                    }
+//
+//                }
+//            }
+//        });
+//    }
+//
+//    public static void provaSnapshotMy(String username, final int indexR, final int indexG, final FirestoreListener firestoreListener){
+//        proveMy = new ArrayList<>();
+//
+//        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+//        final CollectionReference collectionReference = firestoreDB.collection("users");
+//        collectionReference.whereEqualTo("username", username).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                if (error != null) {
+//                    Log.w(TAG, "Listen failed.", error);
+//                    return;
+//                }
+//
+//                List<String> messages = new ArrayList<>();
+//
+//                for (QueryDocumentSnapshot queryDocumentSnapshot : value) {
+//
+//                    List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+//
+//
+//                    if (chat != null) {
+//                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(indexR).get("arrayMyGift");
+//                        List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
+//                        messages.addAll(myMessages);
+//                        Log.i("chatchat", "messages1: " + messages);
+//                        firestoreListener.onMessageRetrieve(messages);
+//                    }
+//
+//                }
+//            }
+//        });
+//    }
 
 }
