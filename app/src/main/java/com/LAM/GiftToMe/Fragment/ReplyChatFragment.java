@@ -12,12 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.LAM.GiftToMe.Adapter.ChatListAdapter;
-import com.LAM.GiftToMe.Adapter.ReceiverChatAdapter;
+import com.LAM.GiftToMe.Adapter.ReplyChatAdapter;
 import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.FirestoreListener;
 import com.LAM.GiftToMe.FCMFirebase.ModelUserMessage;
-import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
@@ -44,7 +42,7 @@ public class ReplyChatFragment extends Fragment {
 
     private Context mContext;
     private RecyclerView recyclerView;
-    private ReceiverChatAdapter receiverChatAdapter;
+    private ReplyChatAdapter replyChatAdapter;
     private ArrayList<ModelUserMessage> arrayMessages = new ArrayList<>();
 
     private String receiverName, giftName;
@@ -94,9 +92,9 @@ public class ReplyChatFragment extends Fragment {
 
                 ModelUserMessage newMessage = new ModelUserMessage(MainActivity.userName, receiverName, yourReply);
                 arrayMessages.add(newMessage);
-                receiverChatAdapter.updateList(arrayMessages); //aggiorna la recyclerview
+                replyChatAdapter.updateList(arrayMessages); //aggiorna la recyclerview
                 text.setText("");
-                recyclerView.scrollToPosition(receiverChatAdapter.getItemCount() - 1); //mi serve per tenere il focus sull'ultimo messaggio inviato
+                recyclerView.scrollToPosition(replyChatAdapter.getItemCount() - 1); //mi serve per tenere il focus sull'ultimo messaggio inviato
 
             }
         });
@@ -118,8 +116,11 @@ public class ReplyChatFragment extends Fragment {
                 @Override
                 public void onDateRetrieve(final List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
 
+                    //Chat.provaSnapshot(MainActivity.userName);
+
                     timestamps.addAll(listenerTimestamps);
                     messages.addAll(listenerMessages);
+                    Log.i("chatchat", "MMM: " + messages);
                     //Log.i("chatchat", "Timestamps: " + timestamps + " ... " + messages);
                     //Log.i("chatchat", "Gift: " + giftName);
 
@@ -139,6 +140,7 @@ public class ReplyChatFragment extends Fragment {
 
                             int fullSize = timestamps.size() + listenerTimestamps.size();
 
+
                             int index = 0;
 
                             for (int i = 0; i < timestamps.size(); i++){
@@ -146,7 +148,7 @@ public class ReplyChatFragment extends Fragment {
                                 if (listenerTimestamps.size() == 0) { //se hanno solo contattato un mio regalo ma ancora non rispondo
 
                                     //Log.i("chatchat", "Ancora non rispondo, mostro solo i suoi messaggi");
-                                    Log.i("chatchat", messages.get(i));
+                                    //Log.i("chatchat", messages.get(i));
                                     ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(i));
                                     arrayMessages.add(modelUserMessage);
 
@@ -161,13 +163,13 @@ public class ReplyChatFragment extends Fragment {
                                             if (i == timestamps.size()-1){ //se sono all'ultimo elemento di timestamps
 
                                                 //Log.i("chatchat", "Prima timestamps"); //mostro l'ultimo
-                                                Log.i("chatchat", messages.get(i));
+                                                //Log.i("chatchat", messages.get(i));
                                                 ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(i));
                                                 arrayMessages.add(modelUserMessage);
 
                                                 if (j == listenerTimestamps.size()-1){ //se sono all'ultimo elemento di listener
                                                     //Log.i("chatchat", "Ultimo elemento di listener"); //lo mostro
-                                                    Log.i("chatchat", listenerMessages.get(j));
+                                                    //Log.i("chatchat", listenerMessages.get(j));
                                                     ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(j));
                                                     arrayMessages.add(modelUserMessageJ);
 
@@ -175,7 +177,7 @@ public class ReplyChatFragment extends Fragment {
 
                                                     for (int k = j; k < listenerTimestamps.size(); k++){
                                                         //Log.i("chatchat", "Mostro tutti i rimanenti j");
-                                                        Log.i("chatchat", listenerMessages.get(k));
+                                                        //Log.i("chatchat", listenerMessages.get(k));
                                                         ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(k));
                                                         arrayMessages.add(modelUserMessageJ);
                                                     }
@@ -186,7 +188,7 @@ public class ReplyChatFragment extends Fragment {
                                             }else{ //se i non è l'ultimo elemento
 
                                                 //Log.i("chatchat", "Prima timestamps");
-                                                Log.i("chatchat", messages.get(i));
+                                                //Log.i("chatchat", messages.get(i));
                                                 //Log.i("chatchat", "JJJ: " + j);
                                                 ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(i));
                                                 arrayMessages.add(modelUserMessage);
@@ -200,13 +202,13 @@ public class ReplyChatFragment extends Fragment {
                                             if (j == listenerTimestamps.size()-1){
 
                                                 //Log.i("chatchat", "Prima listenerTimestamps");
-                                                Log.i("chatchat", listenerMessages.get(j));
+                                                //Log.i("chatchat", listenerMessages.get(j));
                                                 ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(j));
                                                 arrayMessages.add(modelUserMessageJ);
 
                                                 for (int k = i; k < timestamps.size(); k++){
                                                     //Log.i("chatchat", "Mostro tutti i rimanenti i ");
-                                                    Log.i("chatchat", messages.get(k));
+                                                    //Log.i("chatchat", messages.get(k));
                                                     ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(k));
                                                     arrayMessages.add(modelUserMessage);
                                                     i = k;
@@ -215,7 +217,7 @@ public class ReplyChatFragment extends Fragment {
                                             }else {
 
                                                 //Log.i("chatchat", "Prima listenerTimestamps");
-                                                Log.i("chatchat", listenerMessages.get(j));
+                                                //Log.i("chatchat", listenerMessages.get(j));
                                                 ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(j));
                                                 arrayMessages.add(modelUserMessageJ);
 
@@ -234,7 +236,7 @@ public class ReplyChatFragment extends Fragment {
                             }
 
 
-                            Log.i("chatchat", "ARRAYMESSAGE: " + arrayMessages);
+                            //Log.i("chatchat", "ARRAYMESSAGE: " + arrayMessages);
                             setupRecyclerView(arrayMessages);
 
                         }
@@ -286,9 +288,11 @@ public class ReplyChatFragment extends Fragment {
                 @Override
                 public void onDateRetrieve(final List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
 
+                    //Chat.provaSnapshot(MainActivity.userName);
+
                     timestamps.addAll(listenerTimestamps);
                     messages.addAll(listenerMessages);
-                    Log.i("chatchat", "Timestamps: " + timestamps + " ... " + messages);
+                    //Log.i("chatchat", "Timestamps: " + timestamps + " ... " + messages);
                     //Log.i("chatchat", "Gift: " + giftName);
 
 
@@ -300,7 +304,7 @@ public class ReplyChatFragment extends Fragment {
 
                         @Override
                         public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
-                            Log.i("chatchat", "Messages: " + listenerTimestamps + " ... " + listenerMessages + " ... " + timestamps + " ... " +  messages);
+                            //Log.i("chatchat", "Messages: " + listenerTimestamps + " ... " + listenerMessages + " ... " + timestamps + " ... " +  messages);
                             //Log.i("chatchat", "Gift: " + giftName);
 
                             int fullSize = timestamps.size() + listenerTimestamps.size();
@@ -312,7 +316,7 @@ public class ReplyChatFragment extends Fragment {
                                 if (timestamps.size() == 0) { //se hanno solo contattato un mio regalo ma ancora non rispondo
 
                                     //Log.i("chatchat", "Ancora non rispondo, mostro solo i suoi messaggi");
-                                    Log.i("chatchat", listenerMessages.get(i));
+                                    //Log.i("chatchat", listenerMessages.get(i));
                                     ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(i));
                                     arrayMessages.add(modelUserMessage);
 
@@ -327,22 +331,22 @@ public class ReplyChatFragment extends Fragment {
                                             if (i == listenerTimestamps.size()-1){ //se sono all'ultimo elemento di timestamps
 
                                                 //Log.i("chatchat", "Prima timestamps"); //mostro l'ultimo
-                                                Log.i("chatchat", listenerMessages.get(i));
-                                                ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, listenerMessages.get(i));
+                                                //Log.i("chatchat", listenerMessages.get(i));
+                                                ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(i));
                                                 arrayMessages.add(modelUserMessage);
 
                                                 if (j == timestamps.size()-1){ //se sono all'ultimo elemento di listener
                                                     //Log.i("chatchat", "Ultimo elemento di listener"); //lo mostro
-                                                    Log.i("chatchat", messages.get(j));
-                                                    ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, messages.get(j));
+                                                    //Log.i("chatchat", messages.get(j));
+                                                    ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(j));
                                                     arrayMessages.add(modelUserMessageJ);
 
                                                 }else { //altrimenti mostro tutti i rimanenti listener
 
                                                     for (int k = j; k < timestamps.size(); k++){
                                                         //Log.i("chatchat", "Mostro tutti i rimanenti j");
-                                                        Log.i("chatchat", messages.get(k));
-                                                        ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, messages.get(k));
+                                                        //Log.i("chatchat", messages.get(k));
+                                                        ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(k));
                                                         arrayMessages.add(modelUserMessageJ);
                                                     }
                                                     break;
@@ -352,9 +356,9 @@ public class ReplyChatFragment extends Fragment {
                                             }else{ //se i non è l'ultimo elemento
 
                                                 //Log.i("chatchat", "Prima timestamps");
-                                                Log.i("chatchat", listenerMessages.get(i));
+                                                //Log.i("chatchat", listenerMessages.get(i));
                                                 //Log.i("chatchat", "JJJ: " + j);
-                                                ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, listenerMessages.get(i));
+                                                ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(i));
                                                 arrayMessages.add(modelUserMessage);
                                                 index = j;
                                                 break;
@@ -366,14 +370,14 @@ public class ReplyChatFragment extends Fragment {
                                             if (j == timestamps.size()-1){
 
                                                 //Log.i("chatchat", "Prima listenerTimestamps");
-                                                Log.i("chatchat", messages.get(j));
-                                                ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, messages.get(j));
+                                                //Log.i("chatchat", messages.get(j));
+                                                ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(j));
                                                 arrayMessages.add(modelUserMessageJ);
 
                                                 for (int k = i; k < listenerTimestamps.size(); k++){
                                                     //Log.i("chatchat", "Mostro tutti i rimanenti i ");
-                                                    Log.i("chatchat", listenerMessages.get(k));
-                                                    ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, listenerMessages.get(k));
+                                                    //Log.i("chatchat", listenerMessages.get(k));
+                                                    ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(k));
                                                     arrayMessages.add(modelUserMessage);
                                                     i = k;
                                                 }
@@ -381,8 +385,8 @@ public class ReplyChatFragment extends Fragment {
                                             }else {
 
                                                 //Log.i("chatchat", "Prima listenerTimestamps");
-                                                Log.i("chatchat", messages.get(j));
-                                                ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, messages.get(j));
+                                                //Log.i("chatchat", messages.get(j));
+                                                ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(j));
                                                 arrayMessages.add(modelUserMessageJ);
 
                                             }
@@ -400,7 +404,7 @@ public class ReplyChatFragment extends Fragment {
                             }
 
 
-                            Log.i("chatchat", "ARRAYMESSAGE: " + arrayMessages);
+                            //Log.i("chatchat", "ARRAYMESSAGE: " + arrayMessages);
                             setupRecyclerView(arrayMessages);
 
                         }
@@ -451,15 +455,15 @@ public class ReplyChatFragment extends Fragment {
     }
 
     private void setupRecyclerView(ArrayList<ModelUserMessage> modelUserMessages){
-        receiverChatAdapter = new ReceiverChatAdapter(mContext, modelUserMessages, getActivity(), this);
+        replyChatAdapter = new ReplyChatAdapter(mContext, modelUserMessages, getActivity(), this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setStackFromEnd(true);
-        recyclerView.scrollToPosition(receiverChatAdapter.getItemCount() - 1);
+        recyclerView.scrollToPosition(replyChatAdapter.getItemCount() - 1);
 
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        recyclerView.setAdapter(receiverChatAdapter);
+        recyclerView.setAdapter(replyChatAdapter);
     }
 
     private void getTwitterProfileImage(String username, final ImageView profileImage){

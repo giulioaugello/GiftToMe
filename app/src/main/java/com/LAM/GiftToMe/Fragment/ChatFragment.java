@@ -242,6 +242,8 @@ public class ChatFragment extends Fragment {
             }
         });
 
+        //Chat.provaSnapshot("Giulio2803");
+
 
         return v;
     }

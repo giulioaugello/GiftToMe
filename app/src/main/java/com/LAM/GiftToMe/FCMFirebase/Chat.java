@@ -9,7 +9,10 @@ import com.LAM.GiftToMe.Fragment.ChatFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -21,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class Chat {
 
@@ -32,6 +36,35 @@ public class Chat {
     private static int indexName = 0;
     public static List<String> listString;
     public static List<String> listNameMyGift;
+    public static List<String> prove = new ArrayList<>();
+
+
+    public static void provaSnapshot(String username){
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w(TAG, "Listen failed.", error);
+                    return;
+                }
+
+                for (QueryDocumentSnapshot queryDocumentSnapshot : value) {
+
+                    List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+
+                    if (chat != null) {
+                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(0).get("arrayGift");
+                        List<String> messagesArrayList = (List<String>) giftList.get(0).get("messages");
+                        prove = messagesArrayList;
+                        Log.i("chatchat", "messages: " + messagesArrayList + ", " + prove);
+                    }
+
+                }
+            }
+        });
+    }
 
 
     public static void sendMessage(final String username, final String receiver, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
@@ -239,12 +272,12 @@ public class Chat {
 
                     ArrayList<String> messagesArrayList = (ArrayList<String>) giftList.get(indexGift).get("messages");
                     messagesArrayList.add(reply);
-                    Log.i("chatchat", "Messages " + messagesArrayList);
+                    //Log.i("chatchat", "Messages " + messagesArrayList);
 
                     ArrayList<Date> datesArrayList = (ArrayList<Date>) giftList.get(indexGift).get("timestamps");
                     Date date = new Date();
                     datesArrayList.add(date);
-                    Log.i("chatchat", "Dates " + datesArrayList + " " + chat.get(indexReceiver).get("receiver"));
+                    //Log.i("chatchat", "Dates " + datesArrayList + " " + chat.get(indexReceiver).get("receiver"));
 
                     giftList.get(indexGift).put("messages", messagesArrayList);
                     giftList.get(indexGift).put("timestamps", datesArrayList);

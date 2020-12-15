@@ -7,23 +7,20 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.LAM.GiftToMe.FCMFirebase.ModelUserMessage;
-import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ReceiverChatAdapter extends RecyclerView.Adapter<ReceiverChatAdapter.ViewHolder> {
+public class ReplyChatAdapter extends RecyclerView.Adapter<ReplyChatAdapter.ViewHolder> {
 
     private Context mContext;
     private Activity activity;
@@ -31,7 +28,7 @@ public class ReceiverChatAdapter extends RecyclerView.Adapter<ReceiverChatAdapte
     private ArrayList<ModelUserMessage> arrayMessage;
 
 
-    public ReceiverChatAdapter(Context mContext, ArrayList<ModelUserMessage> arrayMessage, Activity activity, Fragment fragment) {
+    public ReplyChatAdapter(Context mContext, ArrayList<ModelUserMessage> arrayMessage, Activity activity, Fragment fragment) {
         this.mContext = mContext;
         this.activity = activity;
         this.fragment = fragment;
@@ -40,13 +37,13 @@ public class ReceiverChatAdapter extends RecyclerView.Adapter<ReceiverChatAdapte
 
     @NonNull
     @Override
-    public ReceiverChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ReplyChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.single_message_textview, parent, false);
-        return new ReceiverChatAdapter.ViewHolder(v);
+        return new ReplyChatAdapter.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReceiverChatAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ReplyChatAdapter.ViewHolder holder, int position) {
 
         GradientDrawable shapeBackground;
 
