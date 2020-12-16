@@ -238,6 +238,8 @@ public class ChatFragment extends Fragment {
             }
         });
 
+        //Log.i("chatchat", "MYMY: " +  isMyGift);
+
 
         return v;
     }
@@ -271,28 +273,31 @@ public class ChatFragment extends Fragment {
             //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
             if(receiverModel.getGiftName().toLowerCase().contains(text) || receiverModel.getGiftName().contains(text) || receiverModel.getGiftName().toUpperCase().contains(text)){
                 temp.add(receiverModel);
+                Log.i("temptemp", "MYMY: " +  temp);
             }
 
         }
 
         if (temp.size() == 0){
 
-            replyArrayButton.setTextColor(getResources().getColor(R.color.colorPrimary, null));
-            recyclerViewReply.setVisibility(View.GONE);
+            if (!text.isEmpty()){
+                replyArrayButton.setTextColor(getResources().getColor(R.color.colorPrimary, null));
+                recyclerViewReply.setVisibility(View.GONE);
 
-            myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
-            recyclerViewMyGift.setVisibility(View.VISIBLE);
+                myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
+                recyclerViewMyGift.setVisibility(View.VISIBLE);
 
-            for(ReceiverModel receiverModel: chatModelMyGift){
+                for(ReceiverModel receiverModel: chatModelMyGift){
 
-                //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
-                if(receiverModel.getGiftName().toLowerCase().contains(text) || receiverModel.getGiftName().contains(text) || receiverModel.getGiftName().toUpperCase().contains(text)){
-                    temp1.add(receiverModel);
+                    //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
+                    if(receiverModel.getGiftName().toLowerCase().contains(text) || receiverModel.getGiftName().contains(text) || receiverModel.getGiftName().toUpperCase().contains(text)){
+                        temp1.add(receiverModel);
+                    }
+
                 }
-
+                //update recyclerview
+                chatListAdapter.updateList(temp1);
             }
-            //update recyclerview
-            chatListAdapter.updateList(temp1);
 
         }else {
             //update recyclerview
