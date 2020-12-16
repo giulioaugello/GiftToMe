@@ -309,36 +309,36 @@ public class UserTweetsFragment extends Fragment {
 
         //setUpBottomSheetDialog();
 
-        //per la ricerca dei regali
-        searchLocation.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                // filter your list from your input
-                filter(s.toString());
-                //you can use runnable postDelayed like 500 ms to delay search text
-            }
-        });
+//        //per la ricerca dei regali
+//        searchLocation.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//                // filter your list from your input
+//                filter(s.toString());
+//                //you can use runnable postDelayed like 500 ms to delay search text
+//            }
+//        });
 
         return v;
     }
 
-    //filtra sul nome dei regali
-    private void filter(String text){
-        ArrayList<UsersGift> tempSport = new ArrayList();
-        ArrayList<UsersGift> tempEle = new ArrayList();
-
-
+//    //filtra sul nome dei regali
+//    private void filter(String text){
+//        ArrayList<UsersGift> tempSport = new ArrayList();
+//        ArrayList<UsersGift> tempEle = new ArrayList();
+//
+//
 //        for(UsersGift usersGift: sportA){
 //
 //            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
@@ -360,9 +360,9 @@ public class UserTweetsFragment extends Fragment {
 //
 //        }
 //        userTweetsAdapter.updateList(tempEle);
-
-
-    }
+//
+//
+//    }
 
 
     private void checkIsEmpty(ArrayList<UsersGift> arrayList, RecyclerView recyclerView, TextView textView){

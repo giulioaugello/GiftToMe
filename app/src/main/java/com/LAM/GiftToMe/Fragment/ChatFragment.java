@@ -266,7 +266,6 @@ public class ChatFragment extends Fragment {
         replyArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
         recyclerViewReply.setVisibility(View.VISIBLE);
 
-
         for(ReceiverModel receiverModel: chatModel){
 
             //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
@@ -276,14 +275,13 @@ public class ChatFragment extends Fragment {
 
         }
 
-
         if (temp.size() == 0){
+
             replyArrayButton.setTextColor(getResources().getColor(R.color.colorPrimary, null));
             recyclerViewReply.setVisibility(View.GONE);
 
             myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
             recyclerViewMyGift.setVisibility(View.VISIBLE);
-
 
             for(ReceiverModel receiverModel: chatModelMyGift){
 
@@ -295,6 +293,7 @@ public class ChatFragment extends Fragment {
             }
             //update recyclerview
             chatListAdapter.updateList(temp1);
+
         }else {
             //update recyclerview
             chatListAdapter.updateList(temp);
