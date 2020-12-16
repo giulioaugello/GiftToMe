@@ -266,7 +266,6 @@ public class ChatFragment extends Fragment {
         replyArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
         recyclerViewReply.setVisibility(View.VISIBLE);
 
-        myGiftArrayButton.setEnabled(false);
 
         for(ReceiverModel receiverModel: chatModel){
 
@@ -285,7 +284,6 @@ public class ChatFragment extends Fragment {
             myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
             recyclerViewMyGift.setVisibility(View.VISIBLE);
 
-            replyArrayButton.setEnabled(false);
 
             for(ReceiverModel receiverModel: chatModelMyGift){
 

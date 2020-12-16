@@ -17,6 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.Fragment.UserTweetsFragment;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
@@ -39,11 +40,6 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     private Activity activity;
     private Fragment fragment;
     private ArrayList<UsersGift> usersGifts;
-    private static final String TAG = "UserGiftRecyclerViewTAG";
-    private TextView nameLong, descriptionLong, addressLong;
-    private ImageView imageCategory;
-    private String nameString,addressString,descriptionString,categoryString, issuer;
-    private ScrollView scroll;
 
     public UserTweetsAdapter(Context mContext, ArrayList<UsersGift> usersGifts, Activity activity, Fragment fragment) {
         this.mContext = mContext;
@@ -135,4 +131,9 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     }
 
 
+    //aggiorna la lista
+    public void updateList(ArrayList<UsersGift> list){
+        usersGifts = list;
+        notifyDataSetChanged();
+    }
 }

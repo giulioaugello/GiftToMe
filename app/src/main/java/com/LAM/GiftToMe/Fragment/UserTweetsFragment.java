@@ -12,7 +12,9 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 
 import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.Adapter.UserTweetsAdapter;
+import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
@@ -306,8 +309,61 @@ public class UserTweetsFragment extends Fragment {
 
         //setUpBottomSheetDialog();
 
+        //per la ricerca dei regali
+        searchLocation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                // filter your list from your input
+                filter(s.toString());
+                //you can use runnable postDelayed like 500 ms to delay search text
+            }
+        });
+
         return v;
     }
+
+    //filtra sul nome dei regali
+    private void filter(String text){
+        ArrayList<UsersGift> tempSport = new ArrayList();
+        ArrayList<UsersGift> tempEle = new ArrayList();
+
+
+//        for(UsersGift usersGift: sportA){
+//
+//            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
+//            if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
+//                tempSport.add(usersGift);
+//                Log.i("giftgift", "addressSport " + usersGift.getAddress());
+//            }
+//
+//        }
+//        userTweetsAdapter.updateList(tempSport);
+//
+//        for(UsersGift usersGift: electronicsA){
+//
+//            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
+//            if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
+//                tempEle.add(usersGift);
+//                Log.i("giftgift", "addressEle " + usersGift.getAddress());
+//            }
+//
+//        }
+//        userTweetsAdapter.updateList(tempEle);
+
+
+    }
+
 
     private void checkIsEmpty(ArrayList<UsersGift> arrayList, RecyclerView recyclerView, TextView textView){
         if (arrayList.isEmpty()){
