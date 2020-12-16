@@ -42,7 +42,6 @@ public class ChatFragment extends Fragment {
     private EditText searchGift;
     private ImageView searchButton;
     private ArrayList<String> arrayListGiftName, arrayListMyGift;
-    private TextView noChat;
 
     public static boolean isMyGift;
     private Button replyArrayButton, myGiftArrayButton;
@@ -61,8 +60,6 @@ public class ChatFragment extends Fragment {
         recyclerViewMyGift = v.findViewById(R.id.recyclerview_mychat);
 
         searchGift = v.findViewById(R.id.gift_search_edit);
-
-        noChat = v.findViewById(R.id.no_chat);
 
         isMyGift = false;
 
@@ -86,10 +83,6 @@ public class ChatFragment extends Fragment {
             public void onChatRetrieve(final List<Map<String, Object>> listenerChat) {
 
                 //Log.i("chatchat", "listener: " + listenerChat.size());
-                if (listenerChat.size() == 0){
-                    noChat.setVisibility(View.VISIBLE);
-                    return;
-                }
 
                 arrayListGiftName = new ArrayList<>();
 

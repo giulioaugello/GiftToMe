@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.LAM.GiftToMe.Adapter.ReplyChatAdapter;
 import com.LAM.GiftToMe.FCMFirebase.Chat;
+import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
 import com.LAM.GiftToMe.FCMFirebase.FirestoreListener;
 import com.LAM.GiftToMe.FCMFirebase.ModelUserMessage;
 import com.LAM.GiftToMe.MainActivity;
@@ -94,11 +95,24 @@ public class ReplyChatFragment extends Fragment {
                     Chat.sendMessageMyGift(MainActivity.userName, receiverName, yourReply, giftName);
                 }
 
+
+                final ArrayList<String> message = new ArrayList<>();
+                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
+                String notificationText = mContext.getResources().getString(R.string.reply_notification_text, MainActivity.userName, giftName);
+
+                message.add(notificationTitle);
+                message.add(notificationText);
+
+                DBFirestore.getToken(receiverName, message, mContext); //invia la notifica
+
                 ModelUserMessage newMessage = new ModelUserMessage(MainActivity.userName, receiverName, yourReply);
                 arrayMessages.add(newMessage);
                 replyChatAdapter.updateList(arrayMessages); //aggiorna la recyclerview
                 Log.i("chatchat", "COUNT: " + replyChatAdapter.getItemCount() + " ... " + arrayMessages.size());
                 text.setText("");
+
+
+
                 recyclerView.scrollToPosition(replyChatAdapter.getItemCount() - 1); //mi serve per tenere il focus sull'ultimo messaggio inviato
 
             }
