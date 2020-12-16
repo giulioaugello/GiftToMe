@@ -112,28 +112,7 @@ public class ChatFragment extends Fragment {
 
                 setupRecyclerView(chatModel, recyclerViewReply);
 
-                //per la ricerca dei regali
-                searchGift.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                        // TODO Auto-generated method stub
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        // TODO Auto-generated method stub
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                        // filter your list from your input
-                        filter(s.toString());
-                        //you can use runnable postDelayed like 500 ms to delay search text
-                    }
-                });
 
             }
 
@@ -238,7 +217,28 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        //Chat.provaSnapshot("Giulio2803");
+        //per la ricerca dei regali
+        searchGift.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                // filter your list from your input
+                filter(s.toString());
+                //you can use runnable postDelayed like 500 ms to delay search text
+            }
+        });
 
 
         return v;
@@ -260,6 +260,16 @@ public class ChatFragment extends Fragment {
     //filtra sul nome dei regali
     private void filter(String text){
         ArrayList<ReceiverModel> temp = new ArrayList();
+        ArrayList<ReceiverModel> temp1 = new ArrayList();
+
+        myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorPrimary, null));
+        recyclerViewMyGift.setVisibility(View.GONE);
+
+        replyArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
+        recyclerViewReply.setVisibility(View.VISIBLE);
+
+        myGiftArrayButton.setEnabled(false);
+
         for(ReceiverModel receiverModel: chatModel){
 
             //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
@@ -268,7 +278,32 @@ public class ChatFragment extends Fragment {
             }
 
         }
-        //update recyclerview
-        chatListAdapter.updateList(temp);
+
+
+        if (temp.size() == 0){
+            replyArrayButton.setTextColor(getResources().getColor(R.color.colorPrimary, null));
+            recyclerViewReply.setVisibility(View.GONE);
+
+            myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
+            recyclerViewMyGift.setVisibility(View.VISIBLE);
+
+            replyArrayButton.setEnabled(false);
+
+            for(ReceiverModel receiverModel: chatModelMyGift){
+
+                //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
+                if(receiverModel.getGiftName().toLowerCase().contains(text) || receiverModel.getGiftName().contains(text) || receiverModel.getGiftName().toUpperCase().contains(text)){
+                    temp1.add(receiverModel);
+                }
+
+            }
+            //update recyclerview
+            chatListAdapter.updateList(temp1);
+        }else {
+            //update recyclerview
+            chatListAdapter.updateList(temp);
+        }
+
+
     }
 }
