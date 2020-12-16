@@ -91,6 +91,11 @@ public class CustomInfoWindow extends MarkerInfoWindow {
             public void onClick(View v) {
                 final String yourReply = replyGiftText.getText().toString();
 
+                if (yourReply.isEmpty()){
+                    Toast.makeText(mContext, "Inserisci una risposta", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 final ArrayList<String> message = new ArrayList<>();
                 String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
                 String notificationText = mContext.getResources().getString(R.string.reply_notification_text, MainActivity.userName, title);

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.Chat;
+import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
@@ -115,6 +116,11 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
             public void onClick(View v) {
                 final String yourReply = replyGiftText.getText().toString();
 
+                if (yourReply.isEmpty()){
+                    Toast.makeText(mContext, "Inserisci una risposta", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
 //                final ArrayList<String> message = new ArrayList<>();
 //                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
 //                String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
@@ -124,7 +130,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
 //
 //                String receiverUserName = usersGifts.get(position).getIssuer();
 //
-//                DBFirestore.getToken(receiverUserName, message, mContext);
+                //DBFirestore.getToken(receiverUserName, message, mContext);
 
                 Chat.sendMessageFromGift(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getName());
 
