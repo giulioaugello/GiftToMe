@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                             newGiftFragment = new NewGiftFragment();
                         }
                         selectedFragment = newGiftFragment;
-                        fragmentTag = chatFragmentTag;
+                        fragmentTag = newGiftFragmentTag;
 //                    }else{
 //                        Toast.makeText(getApplicationContext(), "Devi accedere per poter aggiungere un regalo",Toast.LENGTH_LONG).show();
 //                        return false;

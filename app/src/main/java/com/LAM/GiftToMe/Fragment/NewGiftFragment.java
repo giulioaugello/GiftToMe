@@ -257,7 +257,7 @@ public class NewGiftFragment extends Fragment {
                     @Override
                     public void run() {
                         dialog.dismiss();
-                        //MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
+                        MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
                         clearForm(linearLayout);
                     }
 
