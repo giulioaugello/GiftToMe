@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         else if(activeFragment.equals(getSupportFragmentManager().findFragmentByTag(settingsFragmentTag)) || activeFragment.equals(getSupportFragmentManager().findFragmentByTag(myGiftFragmentTag))){
-            fragmentTransaction.setCustomAnimations(R.anim.toptobottom, R.anim.toptobottom);
+            fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.toptobottom);
             fragmentTransaction.replace(R.id.fragment_container, profileFragment, profileFragmentTag).commit();
             fragmentTransaction.addToBackStack(profileFragmentTag);
             activeFragment = profileFragment;

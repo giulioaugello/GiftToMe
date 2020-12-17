@@ -69,6 +69,7 @@ public class UserTweetsFragment extends Fragment {
     private ArrayList<UsersGift> sportA, electronicsA, clothingA, musicA, otherA;
     private UserTweetsAdapter userTweetsAdapter;
     public static FloatingActionButton fab;
+    private ArrayList<UserTweetsAdapter> arrayAdapter = new ArrayList<>();
 
     private Fragment fragment;
 
@@ -309,36 +310,39 @@ public class UserTweetsFragment extends Fragment {
 
         //setUpBottomSheetDialog();
 
-//        //per la ricerca dei regali
-//        searchLocation.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//                // filter your list from your input
-//                filter(s.toString());
-//                //you can use runnable postDelayed like 500 ms to delay search text
-//            }
-//        });
+        //per la ricerca dei regali
+        searchLocation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                // filter your list from your input
+                filter(s.toString());
+                //you can use runnable postDelayed like 500 ms to delay search text
+            }
+        });
 
         return v;
     }
 
 //    //filtra sul nome dei regali
-//    private void filter(String text){
-//        ArrayList<UsersGift> tempSport = new ArrayList();
-//        ArrayList<UsersGift> tempEle = new ArrayList();
-//
-//
+    private void filter(String text){
+        ArrayList<UsersGift> tempSport = new ArrayList();
+        ArrayList<UsersGift> tempEle = new ArrayList();
+        ArrayList<UsersGift> tempClo = new ArrayList();
+        ArrayList<UsersGift> tempMus = new ArrayList();
+        ArrayList<UsersGift> tempOth = new ArrayList();
+
+
 //        for(UsersGift usersGift: sportA){
 //
 //            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
@@ -348,7 +352,7 @@ public class UserTweetsFragment extends Fragment {
 //            }
 //
 //        }
-//        userTweetsAdapter.updateList(tempSport);
+//        arrayAdapter.get(0).updateList(tempSport);
 //
 //        for(UsersGift usersGift: electronicsA){
 //
@@ -359,10 +363,36 @@ public class UserTweetsFragment extends Fragment {
 //            }
 //
 //        }
-//        userTweetsAdapter.updateList(tempEle);
-//
-//
-//    }
+//        arrayAdapter.get(1).updateList(tempEle);
+
+        updateSearch(sportA, text, 0);
+        updateSearch(electronicsA, text, 1);
+        updateSearch(clothingA, text, 2);
+        updateSearch(musicA, text, 3);
+        updateSearch(otherA, text, 4);
+
+
+    }
+
+    private void updateSearch(ArrayList<UsersGift> category, String text, int i){
+
+        if (category.size() != 0){
+
+            ArrayList<UsersGift> temp = new ArrayList();
+
+            for(UsersGift usersGift: category){
+
+                //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
+                if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
+                    temp.add(usersGift);
+                    //Log.i("giftgift", "addressSport " + usersGift.getAddress());
+                }
+
+            }
+            arrayAdapter.get(i).updateList(temp);
+        }
+
+    }
 
 
     private void checkIsEmpty(ArrayList<UsersGift> arrayList, RecyclerView recyclerView, TextView textView){
@@ -411,6 +441,8 @@ public class UserTweetsFragment extends Fragment {
     private void setupRecyclerView(ArrayList<UsersGift> usersGiftsList, RecyclerView recyclerView){
 
         userTweetsAdapter = new UserTweetsAdapter(mContext, usersGiftsList, getActivity(),this);
+        arrayAdapter.add(userTweetsAdapter);
+        Log.i("giftgift", "ArrayAdapter: " + arrayAdapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(userTweetsAdapter);

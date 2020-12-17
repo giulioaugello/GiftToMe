@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment {
     private ImageView logo;
     private TextView twitterUsername;
     private ConstraintLayout constraintLayout, secondConstraint, constraintBeginning;
-    private CardView myGift;
+    private CardView myGift, settings;
     private LinearLayout linearSettings;
     private ImageView twitterBanner, twitterPhoto;
 
@@ -79,15 +79,20 @@ public class ProfileFragment extends Fragment {
 
         loginButton = v.findViewById(R.id.login_button);
         logoutButton = v.findViewById(R.id.logout);
+
         text = v.findViewById(R.id.text);
         logo = v.findViewById(R.id.logo);
-        twitterUsername = v.findViewById(R.id.twitterUsername);
+
         constraintLayout = v.findViewById(R.id.constraint);
         secondConstraint = v.findViewById(R.id.secondConstraint);
-        myGift = v.findViewById(R.id.myGift);
+
         linearSettings = v.findViewById(R.id.linearSettings);
+        myGift = v.findViewById(R.id.myGift);
+        settings = v.findViewById(R.id.settings);
+
         twitterPhoto = v.findViewById(R.id.twitterPhoto);
         twitterBanner = v.findViewById(R.id.twitterBanner);
+        twitterUsername = v.findViewById(R.id.twitterUsername);
         constraintBeginning = v.findViewById(R.id.constraint_beginning);
 
         prefs = mContext.getSharedPreferences(getResources().getString(R.string.fcm_pref_name), Context.MODE_PRIVATE);
@@ -156,6 +161,20 @@ public class ProfileFragment extends Fragment {
                 fragmentTransaction.replace(R.id.fragment_container, myGiftFragment, myGiftFragmentTag).commit();
                 fragmentTransaction.addToBackStack(myGiftFragmentTag);
                 MainActivity.activeFragment = myGiftFragment;
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String settingsFragmentTag = getResources().getString(R.string.settings_fragment_tag);
+                SettingsFragment settingsFragment = new SettingsFragment();
+                FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.none);
+                fragmentTransaction.replace(R.id.fragment_container, settingsFragment, settingsFragmentTag).commit();
+                fragmentTransaction.addToBackStack(settingsFragmentTag);
+                MainActivity.activeFragment = settingsFragment;
             }
         });
 
