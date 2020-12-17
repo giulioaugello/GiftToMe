@@ -109,51 +109,68 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_marginTop="10dp"
-                        android:gravity="center"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_map_color">
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="177dp"
-                            android:layout_height="177dp"
-                            app:cardCornerRadius="10dp"
-                            android:layout_marginEnd="5dp">
 
-                            <ImageView
-                                android:layout_width="177dp"
-                                android:layout_height="177dp"
-                                android:src="@drawable/light_map"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="2"
+                            android:gravity="center">
 
-                        </androidx.cardview.widget.CardView>
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="175dp"
+                                android:layout_height="175dp"
+                                app:cardCornerRadius="10dp">
 
+                                <ImageView
+                                    android:layout_width="175dp"
+                                    android:layout_height="175dp"
+                                    android:src="@drawable/light_map"/>
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="177dp"
-                            android:layout_height="177dp"
-                            app:cardCornerRadius="10dp"
-                            android:layout_marginStart="5dp">
+                            </androidx.cardview.widget.CardView>
 
-                            <ImageView
-                                android:layout_width="177dp"
-                                android:layout_height="177dp"
-                                android:src="@drawable/dark_map"/>
+                            <RadioButton
+                                android:id="@+id/light_radio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:checked="true"/>
 
-                        </androidx.cardview.widget.CardView>
+                        </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="2"
+                            android:gravity="center">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="175dp"
+                                android:layout_height="175dp"
+                                app:cardCornerRadius="10dp">
+
+                                <ImageView
+                                    android:layout_width="175dp"
+                                    android:layout_height="175dp"
+                                    android:src="@drawable/dark_map"/>
+
+                            </androidx.cardview.widget.CardView>
+
+                            <RadioButton
+                                android:id="@+id/dark_radio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="false"
+                                android:layout_marginTop="10dp"/>
+
+                        </LinearLayout>
 
                     </LinearLayout>
-
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/animationSwitch"
-                        android:layout_width="150dp"
-                        android:layout_height="50dp"
-                        app:lottie_autoPlay="false"
-                        app:lottie_loop="false"
-                        app:lottie_rawRes="@raw/switch_map"
-                        app:lottie_speed="3"
-                        android:layout_marginTop="10dp"
-                        android:layout_gravity="center"/>
 
                 </LinearLayout>
 
@@ -188,12 +205,22 @@
                         app:cardElevation="0dp">
 
                         <com.airbnb.lottie.LottieAnimationView
-                            android:id="@+id/animationDarkMode"
+                            android:id="@+id/animationDarkModeOn"
                             android:layout_width="75dp"
                             android:layout_height="75dp"
                             app:lottie_autoPlay="false"
                             app:lottie_loop="false"
-                            app:lottie_rawRes="@raw/from_light_to_dark"/>
+                            app:lottie_rawRes="@raw/from_light_to_dark"
+                            android:visibility="gone"/>
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/animationDarkModeOff"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            app:lottie_autoPlay="false"
+                            app:lottie_loop="false"
+                            app:lottie_rawRes="@raw/from_dark_to_light"
+                            android:visibility="gone"/>
 
                     </androidx.cardview.widget.CardView>
 
