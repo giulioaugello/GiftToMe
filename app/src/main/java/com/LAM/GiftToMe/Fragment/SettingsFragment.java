@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -34,7 +35,7 @@ public class SettingsFragment extends Fragment {
     private RadioGroup radioGroup;
 
     private boolean isDarkModeOn;
-    private boolean isDarkMap; //prendere dalle shared preferences
+    private boolean isDarkMap;
 
     @Nullable
     @Override
@@ -61,16 +62,50 @@ public class SettingsFragment extends Fragment {
         //sharedPreferences.edit().clear().apply();
 
         final SharedPreferences.Editor editor = sharedPreferences.edit();
-        isDarkModeOn = sharedPreferences.getBoolean("darkMode",false);
 
+        float currentRadius = sharedPreferences.getFloat("radiusSearch",100);
+        isDarkModeOn = sharedPreferences.getBoolean("darkMode",false);
         isDarkMap = sharedPreferences.getBoolean("darkMap",false);
 
-        //Log.i("settingssettings", "IsDarkModeOn: " + isDarkModeOn);
+        int position = 0;
 
+        switch((int)currentRadius){
+            case 100:
+                position = 0;
+                break;
+            case 300:
+                position = 1;
+                break;
+            case 500:
+                position = 2;
+                break;
+            case 1000:
+                position = 3;
+                break;
+        }
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext, R.array.radius_search, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setSelected(false);  // otherwise listener will be called on initialization
+        spinner.setSelection(position,true);  // otherwise listener will be called on initialization
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                float radius = Float.parseFloat(parent.getItemAtPosition(position).toString());
+
+                //metto nelle sharedPreferences
+                editor.putFloat("radiusSearch",radius).apply();
+                MainActivity.radiusSearch = radius;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //inizializza switch e animazione
         if (!isDarkModeOn){
@@ -80,7 +115,7 @@ public class SettingsFragment extends Fragment {
             darkModeOff.setVisibility(View.VISIBLE);
             switchDarkMode.setChecked(true);
         }
-
+        //inizializzo quale radio button deve essere checked
         if (!isDarkMap){
             lightRadio.setChecked(true);
         }else {
@@ -93,15 +128,18 @@ public class SettingsFragment extends Fragment {
 
                 //RadioButton radioChecked = v.findViewById(checkedId);
                 switch (checkedId){
-                    case R.id.light_radio:
+                    case R.id.light_radio: //se è checked il lightRadio
                         isDarkMap = false;
+
+                        //metto nelle sharedPreferences
                         editor.putBoolean("darkMap", false).apply();
                         MainActivity.darkMapOn = isDarkMap;
-
                         Log.i("settingssettings", "IsDarkMap: " + isDarkMap);
                         break;
-                    case R.id.dark_radio:
+                    case R.id.dark_radio: //se è checked il darkRadio
                         isDarkMap = true;
+
+                        //metto nelle sharedPreferences
                         editor.putBoolean("darkMap", true).apply();
                         MainActivity.darkMapOn = isDarkMap;
                         Log.i("settingssettings", "IsDarkMap1: " + isDarkMap);
