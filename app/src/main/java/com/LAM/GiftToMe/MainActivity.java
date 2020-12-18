@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     public static TwitterSession session;
     public static String userName,token,tokenSecret;
     public static Long userId;
+    public static float radiusSearch;
+    public static Boolean darkModeOn, darkMapOn;
 
     public static String homeFragmentTag, usersGiftListFragmentTag, chatFragmentTag, newGiftFragmentTag, profileFragmentTag, conversationFragmentTag, settingsFragmentTag, myGiftFragmentTag, receiverChatFragmentTag;
 
@@ -102,8 +104,15 @@ public class MainActivity extends AppCompatActivity {
             tokenSecret = sharedPreferences.getString(sharedTokenSecret, null);
         }
 
+        //Listener per bottomNavigation
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+
+        //SharedPreferences per Settings
+        SharedPreferences settingsSharedPreferences = getSharedPreferences("settingsPref", MODE_PRIVATE);
+        radiusSearch = settingsSharedPreferences.getFloat("radiusSearch",100);
+        darkModeOn = settingsSharedPreferences.getBoolean("darkMode", false);
+        darkMapOn = settingsSharedPreferences.getBoolean("darkMap", false);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {

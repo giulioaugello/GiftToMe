@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="56dp"
-        android:paddingTop="15dp"
+        android:paddingTop="45dp"
         android:paddingBottom="10dp"
         android:background="@drawable/round_corner_profile">
         
@@ -115,6 +115,27 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_map_color">
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="2"
+                            android:gravity="center">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="165dp"
+                                android:layout_height="165dp"
+                                app:cardCornerRadius="10dp">
+
+                                <ImageView
+                                    android:layout_width="165dp"
+                                    android:layout_height="165dp"
+                                    android:src="@drawable/light_map"/>
+
+                            </androidx.cardview.widget.CardView>
+
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -124,53 +145,53 @@
                             android:gravity="center">
 
                             <androidx.cardview.widget.CardView
-                                android:layout_width="175dp"
-                                android:layout_height="175dp"
+                                android:layout_width="165dp"
+                                android:layout_height="165dp"
                                 app:cardCornerRadius="10dp">
 
                                 <ImageView
-                                    android:layout_width="175dp"
-                                    android:layout_height="175dp"
-                                    android:src="@drawable/light_map"/>
+                                    android:layout_width="165dp"
+                                    android:layout_height="165dp"
+                                    android:src="@drawable/dark_map"/>
 
                             </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"/>
+
+                        <RadioGroup
+                            android:id="@+id/radio_group_settings"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1">
 
                             <RadioButton
                                 android:id="@+id/light_radio"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:checked="true"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_weight="2"
-                            android:gravity="center">
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="175dp"
-                                android:layout_height="175dp"
-                                app:cardCornerRadius="10dp">
-
-                                <ImageView
-                                    android:layout_width="175dp"
-                                    android:layout_height="175dp"
-                                    android:src="@drawable/dark_map"/>
-
-                            </androidx.cardview.widget.CardView>
+                                android:layout_weight="2"
+                                android:layout_marginStart="2dp"/>
 
                             <RadioButton
                                 android:id="@+id/dark_radio"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:checked="false"
-                                android:layout_marginTop="10dp"/>
+                                android:layout_weight="1"/>
 
-                        </LinearLayout>
+                        </RadioGroup>
 
                     </LinearLayout>
 
@@ -243,8 +264,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="0"
-                        android:gravity="center|end"
-                        android:checked="false"/>
+                        android:gravity="center|end"/>
 
 
                 </LinearLayout>

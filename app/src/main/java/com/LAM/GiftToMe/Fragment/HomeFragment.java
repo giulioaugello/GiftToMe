@@ -250,7 +250,11 @@ public class HomeFragment extends Fragment implements LocationListener {
     private void setupMap(){
 
         map.setTileSource(TileSourceFactory.MAPNIK);
-        //map.getOverlayManager().getTilesOverlay().setColorFilter(TilesOverlay.INVERT_COLORS); //mappa in dark mode
+
+        //mappa in dark mode
+        if (MainActivity.darkMapOn){
+            map.getOverlayManager().getTilesOverlay().setColorFilter(TilesOverlay.INVERT_COLORS);
+        }
 
         map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER); //per togliere i tasti zoom built in
         //map.getZoomController().getDisplay().setPositions(false, CustomZoomButtonsDisplay.HorizontalPosition.LEFT, CustomZoomButtonsDisplay.VerticalPosition.TOP);
