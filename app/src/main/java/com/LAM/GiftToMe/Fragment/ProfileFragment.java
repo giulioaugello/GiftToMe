@@ -73,7 +73,7 @@ public class ProfileFragment extends Fragment {
 
         initializeTwitter();
 
-        v = inflater.inflate(R.layout.profile_fragment, container, false);
+        v = inflater.inflate(R.layout.profile_fragment2, container, false);
 
         mContext = getActivity().getApplicationContext();
 
