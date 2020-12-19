@@ -1,10 +1,112 @@
 <resources>
-    <!-- Base application theme. -->
+    <!-- Base / LightMode application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="textColorPrimary">@color/colorPrimary</item>
+        <item name="textColorSelected">@color/colorChipSelected</item>
+        <item name="textColorGhost">@color/ghost_white</item>
+        <item name="textColorWhite">@color/white</item>
+        <item name="textColorBlack">@color/black</item>
+        <item name="textColorGrey">@color/dafaultTextColor</item>
+
+        <item name="textColorHintPrimary">@color/colorPrimary</item>
+        <item name="textColorHintSelected">@color/colorChipSelected</item>
+        <item name="textColorHintWhite">@color/white</item>
+
+        <item name="backgroundTintPrimary">@color/colorPrimary</item>
+        <item name="backgroundTintSelected">@color/colorChipSelected</item>
+        <item name="backgroundTintWhite">@color/white</item>
+
+        <item name="backgroundPrimary">@color/colorPrimary</item>
+        <item name="backgroundGhost">@color/ghost_white</item>
+        <item name="backgroundWhite">@color/white</item>
+
+        <item name="startColorGradient">@color/colorPrimary</item>
+        <item name="endColorGradient">@color/endColorGradient</item>
+
+        <item name="centerColorGradient">@color/centerColorGradient</item>
+        <item name="endColorGradient1">@color/colorPrimary</item>
+
+        <item name="itemIconTint">@color/colorPrimary</item>
+        <item name="itemTextColor">@color/colorChipSelected</item>
+
+        <item name="colorDrawablePrimary">@color/colorPrimary</item>
+        <item name="colorDrawableSelected">@color/colorChipSelected</item>
+        <item name="colorDrawableGhost">@color/ghost_white</item>
+
+        <item name="fillColorPrimary">@color/colorPrimary</item>
+        <item name="fillColorSelected">@color/colorChipSelected</item>
+        <item name="fillColorGhost">@color/ghost_white</item>
+        <item name="fillColorWhite">@color/white</item>
+        <item name="fillColorBlack">@color/black</item>
+
+        <item name="cardBackgroundColorPrimary">@color/colorPrimary</item>
+        <item name="cardBackgroundColorGhost">@color/ghost_white</item>
+
+        <item name="chipBackgroundColorPrimary">@color/colorPrimary</item>
+        <item name="chipBackgroundColorGhost">@color/ghost_white</item>
+
+        <item name="drawableTintGhost">@color/ghost_white</item>
+
+    </style>
+
+    <!-- DarkMode application theme. -->
+    <style name="darktheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="textColorPrimary">@color/colorPrimary</item>
+        <item name="textColorSelected">@color/colorChipSelected</item>
+        <item name="textColorGhost">@color/ghost_white</item>
+        <item name="textColorWhite">@color/white</item>
+        <item name="textColorBlack">@color/black</item>
+        <item name="textColorGrey">@color/dafaultTextColor</item>
+
+        <item name="textColorHintPrimary">@color/colorPrimary</item>
+        <item name="textColorHintSelected">@color/colorChipSelected</item>
+        <item name="textColorHintWhite">@color/white</item>
+
+        <item name="backgroundTintPrimary">@color/colorPrimary</item>
+        <item name="backgroundTintSelected">@color/colorChipSelected</item>
+        <item name="backgroundTintWhite">@color/white</item>
+
+        <item name="backgroundPrimary">@color/backgroundStrong</item>
+        <item name="backgroundGhost">@color/backgroundLight</item>
+        <item name="backgroundWhite">@color/white</item>
+
+        <item name="startColorGradient">@color/colorPrimary</item>
+        <item name="endColorGradient">@color/endColorGradient</item>
+
+        <item name="centerColorGradient">@color/centerColorGradient</item>
+        <item name="endColorGradient1">@color/colorPrimary</item>
+
+        <item name="itemIconTint">@color/colorPrimary</item>
+        <item name="itemTextColor">@color/colorChipSelected</item>
+
+        <item name="colorDrawablePrimary">@color/backgroundStrong</item>
+        <item name="colorDrawableSelected">@color/backgroundLight</item>
+        <item name="colorDrawableGhost">@color/ghost_white</item>
+
+        <item name="fillColorPrimary">@color/colorPrimary</item>
+        <item name="fillColorSelected">@color/colorChipSelected</item>
+        <item name="fillColorGhost">@color/ghost_white</item>
+        <item name="fillColorWhite">@color/white</item>
+        <item name="fillColorBlack">@color/black</item>
+
+        <item name="cardBackgroundColorPrimary">@color/colorPrimary</item>
+        <item name="cardBackgroundColorGhost">@color/ghost_white</item>
+
+        <item name="chipBackgroundColorPrimary">@color/colorPrimary</item>
+        <item name="chipBackgroundColorGhost">@color/ghost_white</item>
+
+        <item name="drawableTintGhost">@color/ghost_white</item>
+
     </style>
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">

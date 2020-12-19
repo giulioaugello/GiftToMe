@@ -18,7 +18,7 @@
             android:text="Sei sicuro di voler eliminare questo regalo?"
             android:gravity="center"
             android:textSize="20sp"
-            android:textColor="#E12719"
+            android:textColor="#F44336"
             android:padding="8dp"
             android:layout_marginTop="10dp"/>
 

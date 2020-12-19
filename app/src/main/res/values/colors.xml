@@ -4,7 +4,19 @@
     <color name="colorPrimaryDark">#56ab2f</color>
     <color name="colorAccent">#56ab2f</color>
 
+    <!--  Color LightMode  -->
     <color name="colorChipSelected">#F44336</color>
     <color name="ghost_white">#F8F8FF</color>
     <color name="chipUnchecked">#56ab2f</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="defaultButtonBackgroud">#A6A6A6</color>
+    <color name="dafaultTextColor">#808080</color>
+    <color name="endColorGradient">#a8e063</color>
+    <color name="centerColorGradient">#7FCD1F</color>
+
+    <!--  Color DarkMode  -->
+    <color name="backgroundStrong">#212121</color>
+    <color name="backgroundLight">#3d3d3d</color>
+
 </resources>
