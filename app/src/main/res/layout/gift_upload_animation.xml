@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="Regalo aggiunto con successo!!!"
             android:textSize="23sp"
-            android:textColor="#F44336"
+            android:textColor="@color/colorChipSelected"
             android:gravity="center"
             android:layout_margin="5dp"/>
 

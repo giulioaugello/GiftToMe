@@ -3,6 +3,7 @@ package com.LAM.GiftToMe.Fragment;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,13 +15,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
+import com.LAM.GiftToMe.UsefulClass.MyGift;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 public class SettingsFragment extends Fragment {
@@ -36,6 +40,7 @@ public class SettingsFragment extends Fragment {
 
     private boolean isDarkModeOn;
     private boolean isDarkMap;
+    private Fragment fragment;
 
     @Nullable
     @Override
@@ -43,6 +48,7 @@ public class SettingsFragment extends Fragment {
         final View v =  inflater.inflate(R.layout.settings_fragment, container, false);
 
         mContext = getActivity().getApplicationContext();
+        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.settings_fragment_tag));
 
         spinner = v.findViewById(R.id.radius_spinner);
 
@@ -153,6 +159,16 @@ public class SettingsFragment extends Fragment {
         switchDarkMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                int isNightTheme = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+//
+//                switch (isNightTheme){
+//                    case Configuration.UI_MODE_NIGHT_NO:
+//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//                        break;
+//                    case Configuration.UI_MODE_NIGHT_YES:
+//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//                        break;
+//                }
                 if (!isDarkModeOn){
                     isDarkModeOn = true;
                     editor.putBoolean("darkMode", true).apply();
@@ -173,6 +189,9 @@ public class SettingsFragment extends Fragment {
                         public void onAnimationEnd(Animator animation) {
                             darkModeOn.setVisibility(View.GONE);
                             darkModeOff.setVisibility(View.VISIBLE);
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                            Log.i("darkdark", "dark1: " + isDarkModeOn);
+                            //MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
                         }
 
                         @Override
@@ -186,7 +205,7 @@ public class SettingsFragment extends Fragment {
                         }
                     });
 
-                    Log.i("settingssettings", "IsDarkModeOn IF: " + isDarkModeOn);
+                    Log.i("darkdark", "IsDarkModeOn IF: " + isDarkModeOn);
                 }else {
                     isDarkModeOn = false;
                     editor.putBoolean("darkMode", false).apply();
@@ -197,7 +216,7 @@ public class SettingsFragment extends Fragment {
 
                     darkModeOff.playAnimation();
 
-                    darkModeOn.addAnimatorListener(new Animator.AnimatorListener() {
+                    darkModeOff.addAnimatorListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
 
@@ -207,6 +226,9 @@ public class SettingsFragment extends Fragment {
                         public void onAnimationEnd(Animator animation) {
                             darkModeOff.setVisibility(View.GONE);
                             darkModeOn.setVisibility(View.VISIBLE);
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                            Log.i("darkdark", "dark2: " + isDarkModeOn);
+                            //MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
                         }
 
                         @Override
@@ -219,14 +241,11 @@ public class SettingsFragment extends Fragment {
 
                         }
                     });
-                    Log.i("settingssettings", "IsDarkModeOn ELSE: " + isDarkModeOn);
+                    Log.i("darkdark", "IsDarkModeOn ELSE: " + isDarkModeOn);
                 }
 
             }
         });
-
-
-
 
         return v;
     }

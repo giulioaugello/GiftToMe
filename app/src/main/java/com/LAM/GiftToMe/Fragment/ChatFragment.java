@@ -262,7 +262,7 @@ public class ChatFragment extends Fragment {
         ArrayList<ReceiverModel> temp = new ArrayList();
         ArrayList<ReceiverModel> temp1 = new ArrayList();
 
-        myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorPrimary, null));
+        myGiftArrayButton.setTextColor(getResources().getColor(R.color.primaryAndWhite, null));
         recyclerViewMyGift.setVisibility(View.GONE);
 
         replyArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
@@ -281,7 +281,7 @@ public class ChatFragment extends Fragment {
         if (temp.size() == 0){
 
             if (!text.isEmpty()){
-                replyArrayButton.setTextColor(getResources().getColor(R.color.colorPrimary, null));
+                replyArrayButton.setTextColor(getResources().getColor(R.color.primaryAndWhite, null));
                 recyclerViewReply.setVisibility(View.GONE);
 
                 myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));

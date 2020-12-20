@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:chipcloud="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="#56ab2f"
+    android:background="@color/colorPrimary"
     android:layout_gravity="center">
 
     <ScrollView
@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nuovo Regalo"
-                android:textColor="#F44336"
+                android:textColor="@color/colorChipSelected"
                 android:gravity="center"
                 android:textSize="30sp"
                 android:padding="4dp"/>
@@ -42,9 +42,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
                 android:hint="Nome Regalo"
-                android:textColor="#F44336"
-                android:textColorHint="#F44336"
-                android:backgroundTint="#F44336"/>
+                android:textColor="@color/colorChipSelected"
+                android:textColorHint="@color/colorChipSelected"
+                android:backgroundTint="@color/colorChipSelected"/>
 
             <EditText
                 android:id="@+id/descr_gift"
@@ -53,9 +53,9 @@
                 android:layout_margin="6dp"
                 android:fontFamily="sans-serif"
                 android:hint="Descrizione"
-                android:textColor="#F44336"
-                android:textColorHint="#F44336"
-                android:backgroundTint="#F44336"/>
+                android:textColor="@color/colorChipSelected"
+                android:textColorHint="@color/colorChipSelected"
+                android:backgroundTint="@color/colorChipSelected"/>
 
             <EditText
                 android:id="@+id/addr_gift"
@@ -67,9 +67,9 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="sans-serif"
                 android:hint="Indirizzo (Via, Numero Civico, Città)"
-                android:textColor="#F44336"
-                android:textColorHint="#F44336"
-                android:backgroundTint="#F44336"/>
+                android:textColor="@color/colorChipSelected"
+                android:textColorHint="@color/colorChipSelected"
+                android:backgroundTint="@color/colorChipSelected"/>
 
 
             <com.google.android.material.chip.ChipGroup
@@ -90,9 +90,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sport"
+                        android:textColor="@color/black"
                         android:textAlignment="center"
                         android:theme="@style/Theme.MaterialComponents.Light"
-                        app:chipBackgroundColor="#56ab2f"
+                        app:chipBackgroundColor="@color/colorPrimary"
                         app:chipIcon="@drawable/sport"
                         app:iconStartPadding="5dp"
                         android:layout_margin="4dp"/>
@@ -102,9 +103,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Electronics"
+                        android:textColor="@color/black"
                         android:textAlignment="center"
                         android:theme="@style/Theme.MaterialComponents.Light"
-                        app:chipBackgroundColor="#56ab2f"
+                        app:chipBackgroundColor="@color/colorPrimary"
                         app:chipIcon="@drawable/electronic"
                         app:iconStartPadding="5dp"
                         android:layout_margin="4dp"/>
@@ -114,9 +116,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Clothing"
+                        android:textColor="@color/black"
                         android:textAlignment="center"
                         android:theme="@style/Theme.MaterialComponents.Light"
-                        app:chipBackgroundColor="#56ab2f"
+                        app:chipBackgroundColor="@color/colorPrimary"
                         app:chipIcon="@drawable/clothing"
                         app:iconStartPadding="5dp"
                         android:layout_margin="4dp"/>
@@ -134,9 +137,10 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
                         android:text="Music&amp;Books"
+                        android:textColor="@color/black"
                         android:textAlignment="center"
                         android:theme="@style/Theme.MaterialComponents.Light"
-                        app:chipBackgroundColor="#56ab2f"
+                        app:chipBackgroundColor="@color/colorPrimary"
                         app:chipIcon="@drawable/music"
                         app:iconStartPadding="5dp"/>
 
@@ -146,9 +150,10 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
                         android:text="Other"
+                        android:textColor="@color/black"
                         android:textAlignment="center"
                         android:theme="@style/Theme.MaterialComponents.Light"
-                        app:chipBackgroundColor="#56ab2f"
+                        app:chipBackgroundColor="@color/colorPrimary"
                         app:chipIcon="@drawable/file"
                         app:iconStartPadding="5dp" />
 
@@ -165,7 +170,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:text="Aggiungi Regalo"
-                android:textColor="#F8F8FF"
+                android:textColor="@color/textWhite"
                 android:textSize="15sp"
                 android:background="@drawable/button_addgift"/>
 

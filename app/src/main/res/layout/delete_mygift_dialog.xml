@@ -18,7 +18,7 @@
             android:text="Sei sicuro di voler eliminare questo regalo?"
             android:gravity="center"
             android:textSize="20sp"
-            android:textColor="#F44336"
+            android:textColor="@color/colorChipSelected"
             android:padding="8dp"
             android:layout_marginTop="10dp"/>
 
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="No" />
+                android:text="No"/>
 
             <Button
                 android:id="@+id/delete_button"
@@ -49,8 +49,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Si"
-                android:textColor="#f8f8ff"
-                android:backgroundTint="#F44336"/>
+                android:textColor="@color/textWhite"
+                android:backgroundTint="@color/colorChipSelected"/>
 
         </LinearLayout>
 

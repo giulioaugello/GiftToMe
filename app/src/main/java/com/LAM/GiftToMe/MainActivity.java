@@ -2,6 +2,7 @@ package com.LAM.GiftToMe;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -66,11 +67,11 @@ public class MainActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        userTweetsFragment = new UserTweetsFragment();
+        //userTweetsFragment = new UserTweetsFragment();
         //primo fragment
         homeFragment = new HomeFragment();
         activeFragment = homeFragment;
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
 
         //get FragmentTags
         homeFragmentTag = getResources().getString(R.string.map_fragment_tag);
@@ -113,6 +114,22 @@ public class MainActivity extends AppCompatActivity {
         radiusSearch = settingsSharedPreferences.getFloat("radiusSearch",100);
         darkModeOn = settingsSharedPreferences.getBoolean("darkMode", false);
         darkMapOn = settingsSharedPreferences.getBoolean("darkMap", false);
+
+//        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES || darkModeOn){
+//            Log.i("darkdark", "dark: " + darkModeOn);
+//            //setTheme(R.style.darktheme);
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//        }else{
+//            Log.i("darkdark", "Nodark: " + darkModeOn);
+//            //setTheme(R.style.AppTheme);
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//        }
+
+//        if (!darkModeOn){
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//        }else {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -252,13 +269,25 @@ public class MainActivity extends AppCompatActivity {
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
+//            if (activeFragment == homeFragment){
+//                ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) HomeFragment.floatingActionButton.getLayoutParams();
+//                params1.verticalBias = 0.8f;
+//                HomeFragment.floatingActionButton.setLayoutParams(params1);
+//            }else if (activeFragment == HomeFragment.userTweetsFragment){
+//                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) UserTweetsFragment.fab.getLayoutParams();
+//                params.verticalBias = 0.8f;
+//                UserTweetsFragment.fab.setLayoutParams(params);
+//            }else if (activeFragment.equals(fragmentManager.findFragmentByTag(myGiftFragmentTag))){
+//                MyGiftFragment.recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+//            }
+
             if (activeFragment == homeFragment){
                 ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) HomeFragment.floatingActionButton.getLayoutParams();
                 params1.verticalBias = 0.8f;
                 HomeFragment.floatingActionButton.setLayoutParams(params1);
-            }else if (activeFragment == HomeFragment.userTweetsFragment){
+            }else if (activeFragment.equals(fragmentManager.findFragmentByTag(usersGiftListFragmentTag))){
                 ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) UserTweetsFragment.fab.getLayoutParams();
-                params.verticalBias = 0.8f;
+                params.verticalBias = 0.7f;
                 UserTweetsFragment.fab.setLayoutParams(params);
             }else if (activeFragment.equals(fragmentManager.findFragmentByTag(myGiftFragmentTag))){
                 MyGiftFragment.recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
@@ -266,11 +295,23 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
 
+//            if (activeFragment == homeFragment){
+//                ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) HomeFragment.floatingActionButton.getLayoutParams();
+//                params1.verticalBias = 0.88f;
+//                HomeFragment.floatingActionButton.setLayoutParams(params1);
+//            }else if (activeFragment == HomeFragment.userTweetsFragment){
+//                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) UserTweetsFragment.fab.getLayoutParams();
+//                params.verticalBias = 0.88f;
+//                UserTweetsFragment.fab.setLayoutParams(params);
+//            }else if (activeFragment.equals(fragmentManager.findFragmentByTag(myGiftFragmentTag))){
+//                MyGiftFragment.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+//            }
+
             if (activeFragment == homeFragment){
                 ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) HomeFragment.floatingActionButton.getLayoutParams();
                 params1.verticalBias = 0.88f;
                 HomeFragment.floatingActionButton.setLayoutParams(params1);
-            }else if (activeFragment == HomeFragment.userTweetsFragment){
+            }else if (activeFragment.equals(fragmentManager.findFragmentByTag(usersGiftListFragmentTag))){
                 ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) UserTweetsFragment.fab.getLayoutParams();
                 params.verticalBias = 0.88f;
                 UserTweetsFragment.fab.setLayoutParams(params);
@@ -298,6 +339,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString(sharedToken, token).apply();
             editor.putString(sharedTokenSecret, tokenSecret).apply();
         }
+
     }
 
     @Override

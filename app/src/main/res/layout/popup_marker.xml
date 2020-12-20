@@ -7,7 +7,7 @@
     app:cardCornerRadius="10dp"
     android:layout_marginBottom="10dp"
     android:layout_marginTop="10dp"
-    app:cardBackgroundColor="@color/ghost_white">
+    app:cardBackgroundColor="@color/textWhite">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,9 +76,9 @@
             android:background="@drawable/button_addgift"
             android:drawableEnd="@drawable/ic_baseline_textsms_24"
             android:drawablePadding="10dp"
-            android:drawableTint="#F8F8FF"
+            android:drawableTint="@color/textWhite"
             android:padding="15dp"
-            android:textColor="@color/ghost_white" />
+            android:textColor="@color/textWhite" />
 
 
     </LinearLayout>

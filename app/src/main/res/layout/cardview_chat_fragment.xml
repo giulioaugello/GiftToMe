@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nome Utente"
                 android:textSize="22sp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/primaryAndWhite"
                 android:textStyle="bold"/>
 
             <LinearLayout
@@ -60,6 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Nome Regalo"
+                    android:textColor="@color/black"
                     android:textSize="20sp"
                     android:layout_marginStart="3dp"/>
 

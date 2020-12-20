@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Riepilogo"
-            android:textColor="#F44336"
+            android:textColor="@color/colorChipSelected"
             android:textSize="28sp"
             android:gravity="center"
             android:padding="5dp"/>
@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textColor="#56ab2f"
+                    android:textColor="@color/primaryAndWhite"
                     android:textSize="22sp"
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"/>
@@ -66,7 +66,7 @@
                     android:layout_weight="0"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_baseline_border_style_24"
-                    app:tint="#F44336" />
+                    app:tint="@color/colorChipSelected" />
 
                 <TextView
                     android:id="@+id/recap_name"
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"
-                    android:textColor="#56ab2f"
+                    android:textColor="@color/primaryAndWhite"
                     android:textSize="22sp" />
 
             </LinearLayout>
@@ -91,13 +91,13 @@
                     android:layout_weight="0"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_baseline_border_left_24"
-                    app:tint="#F44336" />
+                    app:tint="@color/colorChipSelected" />
 
                 <TextView
                     android:id="@+id/recap_descr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#56ab2f"
+                    android:textColor="@color/primaryAndWhite"
                     android:textSize="22sp"
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"/>
@@ -116,13 +116,13 @@
                     android:layout_weight="0"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_baseline_border2_style_24"
-                    app:tint="#F44336" />
+                    app:tint="@color/colorChipSelected" />
 
                 <TextView
                     android:id="@+id/recap_addr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#56ab2f"
+                    android:textColor="@color/primaryAndWhite"
                     android:textSize="22sp"
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"/>
@@ -153,8 +153,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Inserisci regalo"
-                android:textColor="#f8f8ff"
-                android:backgroundTint="#F44336"/>
+                android:textColor="@color/textWhite"
+                android:backgroundTint="@color/colorChipSelected"/>
 
         </LinearLayout>
 

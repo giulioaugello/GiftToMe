@@ -102,7 +102,7 @@ public class HomeFragment extends Fragment implements LocationListener {
     private ArrayList<Marker> removeFirstMarker = new ArrayList<>();
     public static FloatingActionButton floatingActionButton;
 
-    public static UserTweetsFragment userTweetsFragment;
+    //public static UserTweetsFragment userTweetsFragment;
 
     private RadiusMarkerClusterer poiMarkers;
 
@@ -220,7 +220,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userTweetsFragment = new UserTweetsFragment();
+                UserTweetsFragment userTweetsFragment = new UserTweetsFragment();
                 FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.righttoleft, R.anim.none);
                 fragmentTransaction.replace(R.id.fragment_container, userTweetsFragment, MainActivity.usersGiftListFragmentTag).commit();

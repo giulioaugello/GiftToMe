@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#56ab2f">
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:id="@+id/linear_map"
@@ -53,7 +53,7 @@
                 android:background="@drawable/button_addgift"
                 android:padding="3dp"
                 android:src="@drawable/ic_baseline_arrow_drop_down_24"
-                app:tint="#FFFFFF" />
+                app:tint="@color/textWhite" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,11 +71,11 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#56ab2f"
+                    android:backgroundTint="@color/primaryAndWhite"
                     android:hint="Inserisci una posizione"
                     android:padding="10dp"
-                    android:textColor="#56ab2f"
-                    android:textColorHint="#56ab2f"
+                    android:textColor="@color/primaryAndWhite"
+                    android:textColorHint="@color/primaryAndWhite"
                     android:textSize="20sp" />
 
                 <ImageView
@@ -85,7 +85,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="0"
                     android:src="@drawable/ic_baseline_navigation_24"
-                    app:tint="#56ab2f" />
+                    app:tint="@color/primaryAndWhite" />
 
             </LinearLayout>
 
@@ -102,7 +102,7 @@
         android:padding="3dp"
         android:src="@drawable/ic_baseline_add_24"
         android:visibility="gone"
-        app:tint="#FFFFFF"
+        app:tint="@color/textWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top_bar"
@@ -119,7 +119,7 @@
         android:padding="3dp"
         android:src="@drawable/ic_baseline_remove_24"
         android:visibility="gone"
-        app:tint="#FFFFFF"
+        app:tint="@color/textWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/zoom_in"
@@ -136,7 +136,7 @@
         android:padding="3dp"
         android:src="@drawable/ic_baseline_gps_fixed_24"
         android:visibility="gone"
-        app:tint="#FFFFFF"
+        app:tint="@color/textWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/zoom_out"
@@ -150,7 +150,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorChipSelected"
         android:src="@drawable/ic_baseline_format_list_bulleted_24"
-        android:tint="@color/ghost_white"
+        android:tint="@color/textWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

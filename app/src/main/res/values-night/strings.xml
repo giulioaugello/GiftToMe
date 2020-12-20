@@ -1,0 +1,79 @@
+<resources>
+    <string name="app_name">GiftToMeApp</string>
+
+    <!--  Twitter API credentials -->
+    <string name="CONSUMER_KEY" translatable="false">FDuIWWAoNzMAgJFnJFOKVGvAe</string>
+    <string name="CONSUMER_SECRET" translatable="false">dRGTLXzxSmWwT3ekam0vRRhFl8g8PaeLKAsrzTlxRCzrT80K1p</string>
+
+    <!--  FCM Server Key  -->
+    <string name="FCM_Server_Key" translatable="false">AAAAU8t-klw:APA91bEC9DUa-MkumJ75_nlcsA3jIVfe2vZoM13grj4LJpVOsqQwkbeYXgC7QywntBpj4val5Mk9wPfMkSEmq-rSt8iAo9tbn-A7dqeqSYV4c9h14ymCqCBEBVheqxepADJb_zPKk-O9</string>
+
+    <!--  User Shared Preferences  -->
+    <string name="shared_preferences_user_name" translatable="false">userName</string>
+    <string name="shared_preferences_token" translatable="false">token</string>
+    <string name="shared_preferences_token_secret" translatable="false">tokenSecret</string>
+    <string name="shared_preferences_user_id" translatable="false">userId</string>
+    <!--    Shared Preferences Notification info-->
+    <string name="fcm_pref_name" translatable="false">FCMTokenPref</string>
+    <string name="fcm_token" translatable="false">FCMToken</string>
+
+    <!--    UserGift Parsing-->
+    <string name="user_gift_parsing_name" translatable="false">name</string>
+    <string name="user_gift_parsing_category" translatable="false">category</string>
+    <string name="user_gift_parsing_description" translatable="false">description</string>
+    <string name="user_gift_parsing_lat" translatable="false">lat</string>
+    <string name="user_gift_parsing_lon" translatable="false">lon</string>
+
+    <!--    Strings to parse JSON-->
+    <string name="json_id" translatable="false">id</string>
+    <string name="json_text" translatable="false">text</string>
+    <string name="json_full_text" translatable="false">full_text</string>
+    <string name="json_sender" translatable="false">sender</string>
+    <string name="json_receiver" translatable="false">receiver</string>
+    <string name="json_message" translatable="false">message</string>
+    <string name="json_statuses" translatable="false">statuses</string>
+    <string name="json_hashtags" translatable="false">hashtags</string>
+    <string name="json_entities" translatable="false">entities</string>
+    <string name="json_issuer" translatable="false">issuer</string>
+    <string name="json_target" translatable="false">target</string>
+    <string name="json_errors" translatable="false">errors</string>
+    <string name="json_code" translatable="false">code</string>
+    <string name="json_in_reply_to_status_id" translatable="false">in_reply_to_status_id</string>
+    <string name="json_profile_image_url_https" translatable="false">profile_image_url_https</string>
+    <string name="json_profile_image_normal" translatable="false">_normal</string>
+    <string name="json_profile_banner_url" translatable="false">profile_banner_url</string>
+
+    <!--    Fragment tags-->
+    <string name="map_fragment_tag" translatable="false">MapFragment</string>
+    <string name="users_tweets_fragment_tag" translatable="false">UserTweetsFragment</string>
+    <string name="newgift_fragment_tag" translatable="false">NewGiftFragment</string>
+    <string name="chat_fragment_tag" translatable="false">ChatFragment</string>
+    <string name="profile_fragment_tag" translatable="false">ProfileFragment</string>
+    <string name="conversation_fragment_tag" translatable="false">ConversationFragment</string>
+    <string name="mygift_fragment_tag" translatable="false">MyGiftFragment</string>
+    <string name="settings_fragment_tag" translatable="false">SettingsFragment</string>
+    <string name="receiverchat_fragment_tag" translatable="false">ReceiverChatFragment</string>
+
+    <string name="double_tap_to_exit_message">Press back button again to exit</string>
+
+    <!--    Notifications String-->
+    <string name="notification_title" translatable="false">title</string>
+    <string name="notification_body" translatable="false">body</string>
+    <string name="notification_data" translatable="false">data</string>
+    <string name="notification_to" translatable="false">to</string>
+    <string name="notification_priority" translatable="false">priority</string>
+    <string name="notification_priority_value" translatable="false">high</string>
+    <!--    Reply notification title-->
+    <string name="reply_notification_title">Reply received</string>
+    <!--    Reply notification text-->
+    <string name="reply_notification_text">You have received an answer from %1$s for the article %2$s</string>
+
+    <!--    Raggio (in metri)-->
+    <string-array name="radius_search">
+        <item>100</item>
+        <item>300</item>
+        <item>500</item>
+        <item>1000</item>
+    </string-array>
+
+</resources>

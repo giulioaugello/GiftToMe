@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Contatta tizio per il regalo: NOME REGALO"
-        android:textColor="@color/ghost_white"
+        android:textColor="@color/textWhite"
         android:textSize="20sp"
         android:gravity="center"
         android:layout_marginTop="10dp"
@@ -36,9 +36,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Risposta"
-            android:textColor="#F44336"
-            android:textColorHint="#F44336"
-            android:backgroundTint="#F44336"/>
+            android:textColor="@color/colorChipSelected"
+            android:textColorHint="@color/colorChipSelected"
+            android:backgroundTint="@color/colorChipSelected"/>
 
     </LinearLayout>
 
@@ -47,12 +47,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Invia"
-        android:textColor="#F8F8FF"
+        android:textColor="@color/textWhite"
         android:textSize="20sp"
         android:background="@drawable/button_addgift"
         android:drawableEnd="@drawable/ic_baseline_textsms_24"
         android:drawablePadding="10dp"
-        android:drawableTint="#F8F8FF"
+        android:drawableTint="@color/textWhite"
         android:padding="10dp"
         android:gravity="center"
         android:layout_margin="10dp"/>

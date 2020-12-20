@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nome Regalo"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/textWhite"
                 android:textSize="25sp"
                 android:layout_weight="1"
                 android:layout_marginEnd="10dp"/>
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Descrizione:"
-            android:textColor="#F44336"
+            android:textColor="@color/colorChipSelected"
             android:textSize="22sp"/>
 
         <TextView
@@ -49,14 +49,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Qui andrà la descrizione del regalo"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/textWhite"
             android:textSize="20sp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Indirizzo:"
-            android:textColor="#F44336"
+            android:textColor="@color/colorChipSelected"
             android:textSize="22sp"/>
 
         <TextView
@@ -64,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Qui andrà l'indirizzo"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/textWhite"
             android:textSize="20sp"/>
 
 

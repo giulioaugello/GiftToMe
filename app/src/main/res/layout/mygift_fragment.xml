@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:background="#56ab2f">
+    android:background="@color/colorPrimary">
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -28,9 +28,10 @@
                 android:layout_margin="4dp"
                 android:padding="12dp"
                 android:text="Sport"
+                android:textColor="@color/black"
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipBackgroundColor="#F8F8FF"
+                app:chipBackgroundColor="@color/ghost_white"
                 app:chipIcon="@drawable/sport"
                 app:iconStartPadding="5dp" />
 
@@ -41,9 +42,10 @@
                 android:layout_margin="4dp"
                 android:padding="12dp"
                 android:text="Electronics"
+                android:textColor="@color/black"
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipBackgroundColor="#F8F8FF"
+                app:chipBackgroundColor="@color/ghost_white"
                 app:chipIcon="@drawable/electronic"
                 app:iconStartPadding="5dp" />
 
@@ -54,9 +56,10 @@
                 android:layout_margin="4dp"
                 android:padding="12dp"
                 android:text="Clothing"
+                android:textColor="@color/black"
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipBackgroundColor="#F8F8FF"
+                app:chipBackgroundColor="@color/ghost_white"
                 app:chipIcon="@drawable/clothing"
                 app:iconStartPadding="5dp" />
 
@@ -67,9 +70,10 @@
                 android:layout_margin="4dp"
                 android:padding="12dp"
                 android:text="Music&amp;Books"
+                android:textColor="@color/black"
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipBackgroundColor="#F8F8FF"
+                app:chipBackgroundColor="@color/ghost_white"
                 app:chipIcon="@drawable/musicbook"
                 app:iconStartPadding="5dp" />
 
@@ -80,9 +84,10 @@
                 android:layout_margin="4dp"
                 android:padding="12dp"
                 android:text="Other"
+                android:textColor="@color/black"
                 android:textAlignment="center"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipBackgroundColor="#F8F8FF"
+                app:chipBackgroundColor="@color/ghost_white"
                 app:chipIcon="@drawable/file"
                 app:iconStartPadding="5dp" />
 

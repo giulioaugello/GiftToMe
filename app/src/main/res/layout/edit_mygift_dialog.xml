@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Modifica Regalo"
-            android:textColor="#F44336"
+            android:textColor="@color/colorChipSelected"
             android:gravity="center"
             android:textSize="28sp"
             android:layout_marginTop="10dp"
@@ -41,9 +41,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:hint="Nome Regalo"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF"
-                    android:backgroundTint="#FFFFFF"/>
+                    android:textColor="@color/textWhite"
+                    android:textColorHint="@color/textWhite"
+                    android:backgroundTint="@color/textWhite"/>
 
                 <EditText
                     android:id="@+id/descr_edit"
@@ -52,9 +52,9 @@
                     android:layout_margin="4dp"
                     android:fontFamily="sans-serif"
                     android:hint="Descrizione"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF"
-                    android:backgroundTint="#FFFFFF"/>
+                    android:textColor="@color/textWhite"
+                    android:textColorHint="@color/textWhite"
+                    android:backgroundTint="@color/textWhite"/>
 
                 <EditText
                     android:id="@+id/addr_edit"
@@ -66,9 +66,9 @@
                     android:layout_marginBottom="16dp"
                     android:fontFamily="sans-serif"
                     android:hint="Indirizzo (Via, Numero Civico, Città)"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF"
-                    android:backgroundTint="#FFFFFF"/>
+                    android:textColor="@color/textWhite"
+                    android:textColorHint="@color/textWhite"
+                    android:backgroundTint="@color/textWhite"/>
 
             </LinearLayout>
 
@@ -92,21 +92,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Sport"
-                        android:textColor="#FFFFFF"/>
+                        android:textColor="@color/textWhite"/>
 
                     <RadioButton
                         android:id="@+id/electronicsRadio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Electronics"
-                        android:textColor="#FFFFFF"/>
+                        android:textColor="@color/textWhite"/>
 
                     <RadioButton
                         android:id="@+id/clothingRadio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Clothing"
-                        android:textColor="#FFFFFF"/>
+                        android:textColor="@color/textWhite"/>
 
 
                     <RadioButton
@@ -114,14 +114,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Music&amp;Books"
-                        android:textColor="#FFFFFF"/>
+                        android:textColor="@color/textWhite"/>
 
                     <RadioButton
                         android:id="@+id/otherRadio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Other"
-                        android:textColor="#FFFFFF"/>
+                        android:textColor="@color/textWhite"/>
 
 
                 </RadioGroup>
@@ -143,7 +143,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Annulla" />
+                android:text="Annulla"/>
 
             <Button
                 android:id="@+id/edit"
@@ -151,8 +151,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Modifica"
-                android:textColor="#f8f8ff"
-                android:backgroundTint="#F44336"/>
+                android:textColor="@color/textWhite"
+                android:backgroundTint="@color/colorChipSelected"/>
 
         </LinearLayout>
 

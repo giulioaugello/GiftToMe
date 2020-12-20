@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#56ab2f</color>
-    <color name="colorPrimaryDark">#56ab2f</color>
-    <color name="colorAccent">#56ab2f</color>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#212121</color>
 
     <!--  Color LightMode  -->
     <color name="colorChipSelected">#F44336</color>
-    <color name="ghost_white">#F8F8FF</color>
-    <color name="chipUnchecked">#56ab2f</color>
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
+    <color name="ghost_white">#3d3d3d</color>
+    <color name="chipUnchecked">#212121</color>
+    <color name="white">#000000</color>
+    <color name="black">#FFFFFF</color>
     <color name="defaultButtonBackgroud">#A6A6A6</color>
     <color name="dafaultTextColor">#808080</color>
-    <color name="endColorGradient">#a8e063</color>
-    <color name="centerColorGradient">#7FCD1F</color>
+    <color name="endColorGradient">#515151</color>
+    <color name="centerColorGradient">#656565</color>
     <color name="textWhite">#FFFFFF</color>
-    <color name="primaryAndWhite">#56ab2f</color>
-    <color name="selectedAndWhite">#F44336</color>
+    <color name="primaryAndWhite">#FFFFFF</color>
+    <color name="selectedAndWhite">#FFFFFF</color>
 
     <!--  Color DarkMode  -->
     <color name="backgroundStrong">#212121</color>
@@ -37,8 +37,8 @@
 <!--    <color name="backgroundTintSelected">@color/colorChipSelected</color>-->
 <!--    <color name="backgroundTintWhite">@color/white</color>-->
 
-<!--    <color name="backgroundPrimary">@color/colorPrimary</color>-->
-<!--    <color name="backgroundGhost">@color/ghost_white</color>-->
+<!--    <color name="backgroundPrimary">@color/backgroundStrong</color>-->
+<!--    <color name="backgroundGhost">@color/backgroundLight</color>-->
 <!--    <color name="backgroundWhite">@color/white</color>-->
 
 <!--    <color name="startColorGradient">@color/colorPrimary</color>-->
@@ -46,12 +46,12 @@
 <!--    <color name="centerColorGradient1">@color/centerColorGradient</color>-->
 <!--    <color name="endColorGradient1">@color/colorPrimary</color>-->
 
-<!--    <color name="itemIconTint">@color/colorPrimary</color>-->
-<!--    <color name="itemTextColor">@color/colorChipSelected</color>-->
+<!--    <color name="itemIconTint">@color/colorChipSelected</color>-->
+<!--    <color name="itemTextColor">@color/ghost_white</color>-->
 
 <!--    <color name="colorDrawablePrimary">@color/backgroundStrong</color>-->
-<!--    <color name="colorDrawableSelected">@color/backgroundLight</color>-->
-<!--    <color name="colorDrawableGhost">@color/ghost_white</color>-->
+<!--    <color name="colorDrawableSelected">@color/colorChipSelected</color>-->
+<!--    <color name="colorDrawableGhost">@color/backgroundLight</color>-->
 
 <!--    <color name="fillColorPrimary">@color/colorPrimary</color>-->
 <!--    <color name="fillColorSelected">@color/colorChipSelected</color>-->
@@ -66,5 +66,6 @@
 <!--    <color name="chipBackgroundColorGhost">@color/ghost_white</color>-->
 
 <!--    <color name="drawableTintGhost">@color/ghost_white</color>-->
+
 
 </resources>
