@@ -186,7 +186,8 @@
                             android:layout_height="50dp"
                             app:lottie_autoPlay="true"
                             app:lottie_loop="true"
-                            app:lottie_rawRes="@raw/exit1"
+                            app:lottie_rawRes="@raw/exit"
+                            app:lottie_speed="3"
                             android:background="@drawable/bottom_navigation_background"/>
 
                     </LinearLayout>

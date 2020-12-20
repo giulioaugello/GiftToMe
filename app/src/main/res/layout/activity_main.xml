@@ -11,7 +11,7 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/backgroundPrimary">
+        android:background="@color/colorPrimary">
 
     </FrameLayout>
 
@@ -22,10 +22,10 @@
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_navigation_menu"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="?attr/backgroundGhost"
+        android:background="@color/ghost_white"
         app:elevation="0dp"
-        app:itemIconTint="?attr/itemIconTint"
-        app:itemTextColor="?attr/itemTextColor"
+        app:itemIconTint="@color/primaryAndWhite"
+        app:itemTextColor="@color/selectedAndWhite"
         app:labelVisibilityMode="labeled"/>
 
 

@@ -22,49 +22,5 @@
     <color name="backgroundStrong">#212121</color>
     <color name="backgroundLight">#3d3d3d</color>
 
-<!--    <color name="textColorPrimary">@color/colorPrimary</color>-->
-<!--    <color name="textColorSelected">@color/colorChipSelected</color>-->
-<!--    <color name="textColorGhost">@color/ghost_white</color>-->
-<!--    <color name="textColorWhite">@color/white</color>-->
-<!--    <color name="textColorBlack">@color/black</color>-->
-<!--    <color name="textColorGrey">@color/dafaultTextColor</color>-->
-
-<!--    <color name="textColorHintPrimary">@color/colorPrimary</color>-->
-<!--    <color name="textColorHintSelected">@color/colorChipSelected</color>-->
-<!--    <color name="textColorHintWhite">@color/white</color>-->
-
-<!--    <color name="backgroundTintPrimary">@color/colorPrimary</color>-->
-<!--    <color name="backgroundTintSelected">@color/colorChipSelected</color>-->
-<!--    <color name="backgroundTintWhite">@color/white</color>-->
-
-<!--    <color name="backgroundPrimary">@color/colorPrimary</color>-->
-<!--    <color name="backgroundGhost">@color/ghost_white</color>-->
-<!--    <color name="backgroundWhite">@color/white</color>-->
-
-<!--    <color name="startColorGradient">@color/colorPrimary</color>-->
-
-<!--    <color name="centerColorGradient1">@color/centerColorGradient</color>-->
-<!--    <color name="endColorGradient1">@color/colorPrimary</color>-->
-
-<!--    <color name="itemIconTint">@color/colorPrimary</color>-->
-<!--    <color name="itemTextColor">@color/colorChipSelected</color>-->
-
-<!--    <color name="colorDrawablePrimary">@color/backgroundStrong</color>-->
-<!--    <color name="colorDrawableSelected">@color/backgroundLight</color>-->
-<!--    <color name="colorDrawableGhost">@color/ghost_white</color>-->
-
-<!--    <color name="fillColorPrimary">@color/colorPrimary</color>-->
-<!--    <color name="fillColorSelected">@color/colorChipSelected</color>-->
-<!--    <color name="fillColorGhost">@color/ghost_white</color>-->
-<!--    <color name="fillColorWhite">@color/white</color>-->
-<!--    <color name="fillColorBlack">@color/black</color>-->
-
-<!--    <color name="cardBackgroundColorPrimary">@color/colorPrimary</color>-->
-<!--    <color name="cardBackgroundColorGhost">@color/ghost_white</color>-->
-
-<!--    <color name="chipBackgroundColorPrimary">@color/colorPrimary</color>-->
-<!--    <color name="chipBackgroundColorGhost">@color/ghost_white</color>-->
-
-<!--    <color name="drawableTintGhost">@color/ghost_white</color>-->
 
 </resources>
