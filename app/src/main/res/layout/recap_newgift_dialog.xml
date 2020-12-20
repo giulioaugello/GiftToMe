@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_baseline_border_style_24"
+                    android:src="@drawable/ic_baseline_brightness_1_24"
                     app:tint="@color/colorChipSelected" />
 
                 <TextView
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_baseline_border_left_24"
+                    android:src="@drawable/ic_baseline_brightness_1_24"
                     app:tint="@color/colorChipSelected" />
 
                 <TextView
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_baseline_border2_style_24"
+                    android:src="@drawable/ic_baseline_brightness_1_24"
                     app:tint="@color/colorChipSelected" />
 
                 <TextView

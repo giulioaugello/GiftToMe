@@ -17,6 +17,8 @@
     <color name="textWhite">#FFFFFF</color>
     <color name="primaryAndWhite">#FFFFFF</color>
     <color name="selectedAndWhite">#FFFFFF</color>
+    <color name="primaryAndSelected">#F44336</color>
+    <color name="primaryAndEnd">#515151</color>
 
     <!--  Color DarkMode  -->
     <color name="backgroundStrong">#212121</color>

@@ -24,7 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/ghost_white"
         app:elevation="0dp"
-        app:itemIconTint="@color/primaryAndWhite"
+        app:itemIconTint="@color/primaryAndSelected"
         app:itemTextColor="@color/selectedAndWhite"
         app:labelVisibilityMode="labeled"/>
 
