@@ -121,16 +121,16 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
                     return;
                 }
 
-//                final ArrayList<String> message = new ArrayList<>();
-//                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
-//                String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
-//
-//                message.add(notificationTitle);
-//                message.add(notificationText);
-//
-//                String receiverUserName = usersGifts.get(position).getIssuer();
-//
-                //DBFirestore.getToken(receiverUserName, message, mContext);
+                final ArrayList<String> message = new ArrayList<>();
+                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
+                String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
+
+                message.add(notificationTitle);
+                message.add(notificationText);
+
+                String receiverUserName = usersGifts.get(position).getIssuer();
+
+                DBFirestore.getToken(receiverUserName, message, mContext);
 
                 Chat.sendMessageFromGift(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getName());
 

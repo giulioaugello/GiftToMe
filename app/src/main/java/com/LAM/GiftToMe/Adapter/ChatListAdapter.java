@@ -1,12 +1,16 @@
 package com.LAM.GiftToMe.Adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,7 +59,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChatListAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ChatListAdapter.ViewHolder holder, final int position) {
 
         holder.userName.setText(arrayChat.get(position).getUsername());
         holder.nameGift.setText(arrayChat.get(position).getGiftName());
@@ -81,7 +85,48 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             }
         });
 
+//        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                showRemoveChat(position, holder.card);
+//                return false;
+//            }
+//        });
+
     }
+
+//    private void showRemoveChat(final int position, final CardView cardView){
+//        final Dialog dialog = new Dialog(activity);
+//        dialog.setCancelable(true);
+//
+//        final View v  = activity.getLayoutInflater().inflate(R.layout.delete_mygift_dialog,null);
+//        dialog.setContentView(v);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//        Button cancelDelete, confirmDelete;
+//        cancelDelete = v.findViewById(R.id.cancel_delete);
+//        confirmDelete = v.findViewById(R.id.delete_button);
+//
+//        cancelDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        confirmDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                cardView.setVisibility(View.GONE);
+//                arrayChat.remove(position);
+//                notifyItemRemoved(position);
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//    }
+
 
     @Override
     public int getItemCount() {

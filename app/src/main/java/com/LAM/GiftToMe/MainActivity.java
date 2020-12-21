@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("loginPref", MODE_PRIVATE);
         isLogged = sharedPreferences.getBoolean("isLogged", false); //ritorna false se nn esiste quella chiave
 
-        //se l'utente è loggato recuperiamo le informazioni
+        //recupero variabili salvate
         if(isLogged){
             userName = sharedPreferences.getString(sharedUsername,null);
             userId = sharedPreferences.getLong(sharedUserId, 0);
@@ -127,19 +127,6 @@ public class MainActivity extends AppCompatActivity {
 
         radiusSearch = settingsSharedPreferences.getFloat("radiusSearch",100);
         darkMapOn = settingsSharedPreferences.getBoolean("darkMap", false);
-
-
-
-//        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES || darkModeOn){
-//            Log.i("darkdark", "dark: " + darkModeOn);
-//            //setTheme(R.style.darktheme);
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//        }else{
-//            Log.i("darkdark", "Nodark: " + darkModeOn);
-//            //setTheme(R.style.AppTheme);
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-//        }
-
 
     }
 
