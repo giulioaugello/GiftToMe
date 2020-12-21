@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 
 import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
+import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -216,6 +219,22 @@ public class MyGiftFragment extends Fragment {
 //                activeFilter(otherBool, otherChip, "Other");
                 myGiftTweetsAdapter.filter(arrayActive);
                 //Log.i("checkedchecked", arrayActive + "");
+            }
+        });
+
+
+        ImageView goBackButton = v.findViewById(R.id.go_back_profile_mygift);
+
+        goBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String profileFragmentTag = getResources().getString(R.string.profile_fragment_tag);
+                ProfileFragment profileFragment = new ProfileFragment();
+                FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.toptobottom);
+                fragmentTransaction.replace(R.id.fragment_container, profileFragment, profileFragmentTag).commit();
+                fragmentTransaction.addToBackStack(profileFragmentTag);
+                MainActivity.activeFragment = profileFragment;
             }
         });
 

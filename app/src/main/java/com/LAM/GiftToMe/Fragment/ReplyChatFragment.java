@@ -36,6 +36,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,7 +60,7 @@ public class ReplyChatFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.receiver_chat_fragment, container, false);
+        View v =  inflater.inflate(R.layout.reply_chat_fragment, container, false);
 
         mContext = getActivity().getApplicationContext();
 
@@ -122,8 +123,6 @@ public class ReplyChatFragment extends Fragment {
 
             }
         });
-
-
 
 
         if (!ChatFragment.isMyGift){
@@ -474,7 +473,20 @@ public class ReplyChatFragment extends Fragment {
         }
 
 
+        ImageView goBackButton = v.findViewById(R.id.go_back_chat);
 
+        goBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String chatFragmentTag = getResources().getString(R.string.chat_fragment_tag);
+                ChatFragment chatFragment = new ChatFragment();
+                FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.toptobottom);
+                fragmentTransaction.replace(R.id.fragment_container, chatFragment, chatFragmentTag).commit();
+                fragmentTransaction.addToBackStack(chatFragmentTag);
+                MainActivity.activeFragment = chatFragment;
+            }
+        });
 
 
 

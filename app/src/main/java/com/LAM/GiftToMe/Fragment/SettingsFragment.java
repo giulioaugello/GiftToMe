@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -26,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class SettingsFragment extends Fragment {
 
@@ -249,6 +251,21 @@ public class SettingsFragment extends Fragment {
         });
 
         Log.i("darkdark", "IsDarkModeOn ELSE: " + isDarkModeOn);
+
+        ImageView goBackButton = v.findViewById(R.id.go_back_profile_settings);
+
+        goBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String profileFragmentTag = getResources().getString(R.string.profile_fragment_tag);
+                ProfileFragment profileFragment = new ProfileFragment();
+                FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.toptobottom);
+                fragmentTransaction.replace(R.id.fragment_container, profileFragment, profileFragmentTag).commit();
+                fragmentTransaction.addToBackStack(profileFragmentTag);
+                MainActivity.activeFragment = profileFragment;
+            }
+        });
 
         return v;
     }
