@@ -51,10 +51,10 @@ public class ReplyChatFragment extends Fragment {
     private EditText text;
     private ImageView send, twPhoto;
 
-    public ReplyChatFragment(String receiverName, String giftName){
-        this.receiverName = receiverName;
-        this.giftName = giftName;
-    }
+//    public ReplyChatFragment(String receiverName, String giftName){
+//        this.receiverName = receiverName;
+//        this.giftName = giftName;
+//    }
 
     @Nullable
     @Override
@@ -72,11 +72,16 @@ public class ReplyChatFragment extends Fragment {
         TextView messageUsername = v.findViewById(R.id.tw_username);
         TextView messageGiftName = v.findViewById(R.id.mes_gift_name);
 
+
+        receiverName = getArguments().getString("receiverName");
+        giftName = getArguments().getString("giftName");
+
         messageUsername.setText(receiverName);
         messageGiftName.setText(giftName);
 
         twPhoto = v.findViewById(R.id.tw_photo);
         getTwitterProfileImage(receiverName, twPhoto);
+
 
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -514,4 +519,14 @@ public class ReplyChatFragment extends Fragment {
         });
 
     }
+
+    public static ReplyChatFragment newInstance(String receiverName, String giftName){
+        Bundle args = new Bundle();
+        args.putString("receiverName", receiverName);
+        args.putString("giftName", giftName);
+        ReplyChatFragment replyChatFragment = new ReplyChatFragment();
+        replyChatFragment.setArguments(args);
+        return replyChatFragment;
+    }
+
 }

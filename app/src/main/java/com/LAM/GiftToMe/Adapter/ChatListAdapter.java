@@ -3,6 +3,7 @@ package com.LAM.GiftToMe.Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
-import com.LAM.GiftToMe.Fragment.ChatFragment;
 import com.LAM.GiftToMe.Fragment.ReplyChatFragment;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
@@ -70,7 +70,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             public void onClick(View v) {
 
                 FragmentManager fragmentManager = ((AppCompatActivity) activity).getSupportFragmentManager();
-                ReplyChatFragment replyChatFragment = new ReplyChatFragment(arrayChat.get(position).getUsername(), arrayChat.get(position).getGiftName());
+//                ReplyChatFragment replyChatFragment = new ReplyChatFragment(arrayChat.get(position).getUsername(), arrayChat.get(position).getGiftName());
+                ReplyChatFragment replyChatFragment = ReplyChatFragment.newInstance(arrayChat.get(position).getUsername(), arrayChat.get(position).getGiftName());
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.righttoleft, R.anim.none);
                 fragmentTransaction.replace(R.id.fragment_container, replyChatFragment, MainActivity.receiverChatFragmentTag).commit();
