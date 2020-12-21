@@ -67,10 +67,14 @@ public class MainActivity extends AppCompatActivity {
         settingsSharedPreferences = getSharedPreferences("settingsPref", MODE_PRIVATE);
         darkModeOn = settingsSharedPreferences.getBoolean("darkMode", false);
 
-        if (!darkModeOn){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }else {
+        int nightModeFlags = getApplicationContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+        if (darkModeOn){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            Log.i("darkdark", AppCompatDelegate.MODE_NIGHT_YES + " pippo"); //2
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            Log.i("darkdark", AppCompatDelegate.MODE_NIGHT_NO + " pluto"); //1
         }
 
         super.onCreate(savedInstanceState);

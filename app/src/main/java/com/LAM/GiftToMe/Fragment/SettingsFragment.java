@@ -113,13 +113,14 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        int nightModeFlags = mContext.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         //inizializza switch e animazione
-        if (!isDarkModeOn){
-            darkModeOn.setVisibility(View.VISIBLE);
-            switchDarkMode.setChecked(false);
-        }else {
+        if (isDarkModeOn){
             darkModeOff.setVisibility(View.VISIBLE);
             switchDarkMode.setChecked(true);
+        }else {
+            darkModeOn.setVisibility(View.VISIBLE);
+            switchDarkMode.setChecked(false);
         }
         //inizializzo quale radio button deve essere checked
         if (!isDarkMap){
