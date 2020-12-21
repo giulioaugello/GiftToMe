@@ -71,24 +71,24 @@ public class SettingsFragment extends Fragment {
 
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        float currentRadius = sharedPreferences.getFloat("radiusSearch",100);
+        float radius = sharedPreferences.getFloat("radiusSearch",100);
         isDarkModeOn = sharedPreferences.getBoolean("darkMode",false);
         isDarkMap = sharedPreferences.getBoolean("darkMap",false);
 
-        int position = 0;
+        int index = 0;
 
-        switch((int)currentRadius){
+        switch((int)radius){
             case 100:
-                position = 0;
+                index = 0;
                 break;
             case 300:
-                position = 1;
+                index = 1;
                 break;
             case 500:
-                position = 2;
+                index = 2;
                 break;
             case 1000:
-                position = 3;
+                index = 3;
                 break;
         }
 
@@ -96,7 +96,7 @@ public class SettingsFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setSelected(false);  // otherwise listener will be called on initialization
-        spinner.setSelection(position,true);  // otherwise listener will be called on initialization
+        spinner.setSelection(index,true);  // otherwise listener will be called on initialization
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -115,7 +115,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        int nightModeFlags = mContext.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        //int nightModeFlags = mContext.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         //inizializza switch e animazione
         if (isDarkModeOn){
             darkModeOff.setVisibility(View.VISIBLE);
@@ -162,16 +162,7 @@ public class SettingsFragment extends Fragment {
         switchDarkMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                int isNightTheme = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-//
-//                switch (isNightTheme){
-//                    case Configuration.UI_MODE_NIGHT_NO:
-//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//                        break;
-//                    case Configuration.UI_MODE_NIGHT_YES:
-//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-//                        break;
-//                }
+                
                 if (!isDarkModeOn){
                     isDarkModeOn = true;
 
