@@ -40,6 +40,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     private Activity activity;
     private Fragment fragment;
     private ArrayList<UsersGift> usersGifts;
+    private Context parentContext;
 
     public UserTweetsAdapter(Context mContext, ArrayList<UsersGift> usersGifts, Activity activity, Fragment fragment) {
         this.mContext = mContext;
@@ -52,6 +53,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_users_gift, parent, false);
+        parentContext = parent.getContext();
         return new UserTweetsAdapter.ViewHolder(v);
     }
 
@@ -97,7 +99,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.BottomSheetDialogTheme);
 
-        View bottomSheetView = LayoutInflater.from(mContext).inflate(R.layout.users_gift_bottom_dialog, null);
+        View bottomSheetView = LayoutInflater.from(parentContext).inflate(R.layout.users_gift_bottom_dialog, null);
 
         Button contactUser = bottomSheetView.findViewById(R.id.contact_user_button);
         ImageView categoryUserGift = bottomSheetView.findViewById(R.id.category_user_gift);
