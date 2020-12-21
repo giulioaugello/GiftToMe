@@ -64,7 +64,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { //setta il layout che andrà a repiclare
-        View view = LayoutInflater.from(mContext).inflate(R.layout.cardview_mygift, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_mygift, parent, false);
         return new ViewHolder(view); //il ViewHolder fornisce il layout da popolare con i dati e viene utilizzato dalla RecyclerView per ridurre il numero di layout da creare
     }
 

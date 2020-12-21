@@ -46,7 +46,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.popup_marker, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.popup_marker, parent, false);
         return new PopupAdapter.ViewHolder(v);
     }
 

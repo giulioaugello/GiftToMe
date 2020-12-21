@@ -171,8 +171,6 @@ public class SettingsFragment extends Fragment {
 //                }
                 if (!isDarkModeOn){
                     isDarkModeOn = true;
-                    editor.putBoolean("darkMode", true).apply();
-                    MainActivity.darkModeOn = isDarkModeOn;
 
                     darkModeOff.setVisibility(View.GONE);
                     darkModeOn.setVisibility(View.VISIBLE);
@@ -190,7 +188,9 @@ public class SettingsFragment extends Fragment {
                             darkModeOn.setVisibility(View.GONE);
                             darkModeOff.setVisibility(View.VISIBLE);
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                            Log.i("darkdark", "dark1: " + isDarkModeOn);
+                            editor.putBoolean("darkMode", true).apply();
+                            MainActivity.darkModeOn = isDarkModeOn;
+                            //Log.i("darkdark", "dark1: " + isDarkModeOn);
                             //MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
                         }
 
@@ -205,11 +205,9 @@ public class SettingsFragment extends Fragment {
                         }
                     });
 
-                    Log.i("darkdark", "IsDarkModeOn IF: " + isDarkModeOn);
+                    //Log.i("darkdark", "IsDarkModeOn IF: " + isDarkModeOn);
                 }else {
                     isDarkModeOn = false;
-                    editor.putBoolean("darkMode", false).apply();
-                    MainActivity.darkModeOn = isDarkModeOn;
 
                     darkModeOn.setVisibility(View.GONE);
                     darkModeOff.setVisibility(View.VISIBLE);
@@ -227,7 +225,9 @@ public class SettingsFragment extends Fragment {
                             darkModeOff.setVisibility(View.GONE);
                             darkModeOn.setVisibility(View.VISIBLE);
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                            Log.i("darkdark", "dark2: " + isDarkModeOn);
+                            editor.putBoolean("darkMode", false).apply();
+                            MainActivity.darkModeOn = isDarkModeOn;
+                            //Log.i("darkdark", "dark2: " + isDarkModeOn);
                             //MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
                         }
 
@@ -241,12 +241,15 @@ public class SettingsFragment extends Fragment {
 
                         }
                     });
-                    Log.i("darkdark", "IsDarkModeOn ELSE: " + isDarkModeOn);
+                    //Log.i("darkdark", "IsDarkModeOn ELSE: " + isDarkModeOn);
                 }
 
             }
         });
 
+        Log.i("darkdark", "IsDarkModeOn ELSE: " + isDarkModeOn);
+
         return v;
     }
+
 }

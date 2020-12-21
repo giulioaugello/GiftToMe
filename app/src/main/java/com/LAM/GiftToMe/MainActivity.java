@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public static Fragment activeFragment;
     public BottomNavigationView bottomNavigationView;
 
-    public SharedPreferences sharedPreferences;
+    public SharedPreferences sharedPreferences, settingsSharedPreferences;
     private String sharedUsername,sharedToken,sharedTokenSecret,sharedUserId;
 
     public static Boolean isLogged = false;
@@ -62,6 +62,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //SharedPreferences per Settings
+        settingsSharedPreferences = getSharedPreferences("settingsPref", MODE_PRIVATE);
+        darkModeOn = settingsSharedPreferences.getBoolean("darkMode", false);
+
+        if (!darkModeOn){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+
         super.onCreate(savedInstanceState);
         //per togliere la barra di stato in alto
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -94,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i("LOGLOG", "eccolo: " + sharedToken);
         Log.i("LOGLOG", "eccolo: " + sharedTokenSecret);
 
+        //sharedPreferences Login
         sharedPreferences = getSharedPreferences("loginPref", MODE_PRIVATE);
         isLogged = sharedPreferences.getBoolean("isLogged", false); //ritorna false se nn esiste quella chiave
 
@@ -109,11 +121,10 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-        //SharedPreferences per Settings
-        SharedPreferences settingsSharedPreferences = getSharedPreferences("settingsPref", MODE_PRIVATE);
         radiusSearch = settingsSharedPreferences.getFloat("radiusSearch",100);
-        darkModeOn = settingsSharedPreferences.getBoolean("darkMode", false);
         darkMapOn = settingsSharedPreferences.getBoolean("darkMap", false);
+
+
 
 //        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES || darkModeOn){
 //            Log.i("darkdark", "dark: " + darkModeOn);
@@ -125,11 +136,7 @@ public class MainActivity extends AppCompatActivity {
 //            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 //        }
 
-//        if (!darkModeOn){
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-//        }else {
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//        }
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -340,7 +347,9 @@ public class MainActivity extends AppCompatActivity {
             editor.putString(sharedTokenSecret, tokenSecret).apply();
         }
 
+
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

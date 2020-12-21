@@ -38,7 +38,7 @@ public class ReplyChatAdapter extends RecyclerView.Adapter<ReplyChatAdapter.View
     @NonNull
     @Override
     public ReplyChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.single_message_textview, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_message_textview, parent, false);
         return new ReplyChatAdapter.ViewHolder(v);
     }
 

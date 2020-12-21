@@ -51,7 +51,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.cardview_users_gift, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_users_gift, parent, false);
         return new UserTweetsAdapter.ViewHolder(v);
     }
 
