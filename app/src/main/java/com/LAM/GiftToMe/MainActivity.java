@@ -258,16 +258,6 @@ public class MainActivity extends AppCompatActivity {
                 activeFragment = homeFragment;
             }
 
-            if (Build.VERSION.SDK_INT >= 29) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_ACCESS_REQUEST_CODE);
-
-                } else {
-                    Toast.makeText(this, "Non hai i permessi", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                homeFragment.checkUserLocation();
-            }
         }
 
 //        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {

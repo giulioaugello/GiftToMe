@@ -366,19 +366,21 @@ public class HomeFragment extends Fragment implements LocationListener {
             }, mContext, v);
         }
 
-//        if (Build.VERSION.SDK_INT >= 29) {
-//
-//            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//
-//                AddressPermissionUtils.requestPermissionsIfNecessary(new String[] {
-//
-//                        Manifest.permission.ACCESS_BACKGROUND_LOCATION //permessi per background
-//
-//                }, mContext, v);
-//
-//            }
-//
-//        }
+        if (Build.VERSION.SDK_INT >= 29) {
+
+            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                AddressPermissionUtils.requestPermissionsIfNecessary(new String[] {
+
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION //permessi per background
+
+                }, mContext, v);
+
+            }else{
+                myLocationNewOverlay.enableFollowLocation();
+            }
+
+        }
     }
 
     private int checkIsHighAccuracy(){
@@ -473,7 +475,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         if (requestCode == GPS_SETTING_CODE) {
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3) {
-                checkUserLocation(); //nn aspetta
+                checkUserLocation();
             }
         }
 
