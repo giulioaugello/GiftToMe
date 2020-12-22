@@ -532,7 +532,7 @@ public class Chat {
             String myGifts = (String) chatmyGift.get(i).get("myGiftName");
             if (myGifts.equals(myGiftName)){
                 indexMyGift = i;
-                //Log.i("chatchat", "Receiver boolean: " + myGifts + " " + indexMyGift);
+                //Log.i("chatchat", "GeofenceBroadcastReceiver boolean: " + myGifts + " " + indexMyGift);
                 return true;
             }
         }
@@ -545,7 +545,7 @@ public class Chat {
             String senders = (String) arrayMyGift.get(i).get("sender");
             if (senders.equals(sender)){
                 indexSender = i;
-                //Log.i("chatchat", "Receiver boolean: " + senders + " " + indexReceiver);
+                //Log.i("chatchat", "GeofenceBroadcastReceiver boolean: " + senders + " " + indexReceiver);
                 return true;
             }
         }
@@ -558,7 +558,7 @@ public class Chat {
             String receivers = (String) chat.get(i).get("receiver");
             if (receivers.equals(receiver)){
                 indexReceiver = i;
-                //Log.i("chatchat", "Receiver boolean: " + receivers + " " + indexReceiver);
+                //Log.i("chatchat", "GeofenceBroadcastReceiver boolean: " + receivers + " " + indexReceiver);
                 return true;
             }
         }
@@ -570,7 +570,7 @@ public class Chat {
             String giftInside = (String) gift.get(i).get("giftName");
             if (giftInside.equals(giftName)){
                 indexGift = i;
-                //Log.i("chatchat", "Receiver boolean: " + giftInside + " " + indexGift);
+                //Log.i("chatchat", "GeofenceBroadcastReceiver boolean: " + giftInside + " " + indexGift);
                 return true;
             }
         }

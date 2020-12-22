@@ -44,6 +44,8 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
+        <receiver android:name=".Geofences.GeofenceBroadcastReceiver"/>
+
     </application>
 
 </manifest>

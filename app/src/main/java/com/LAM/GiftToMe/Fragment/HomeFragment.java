@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.Adapter.PopupAdapter;
+import com.LAM.GiftToMe.Geofences.GeofencesMain;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
@@ -42,6 +44,12 @@ import com.LAM.GiftToMe.UsefulClass.AddressPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.CustomInfoWindow;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
 import com.android.volley.VolleyError;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -63,6 +71,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -105,6 +114,9 @@ public class HomeFragment extends Fragment implements LocationListener {
     //public static UserTweetsFragment userTweetsFragment;
 
     private RadiusMarkerClusterer poiMarkers;
+
+    private GeofencingClient geofencingClient;
+    private GeofencesMain geofencesMain;
 
 
     @Nullable
@@ -230,6 +242,10 @@ public class HomeFragment extends Fragment implements LocationListener {
         });
 
 
+        geofencingClient = LocationServices.getGeofencingClient(mContext);
+        geofencesMain = new GeofencesMain();
+
+        removeGeofences();
 
 
         return v;
@@ -335,7 +351,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 //        }
     }
 
-    private void checkUserLocation() {
+    public void checkUserLocation() {
 
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             myLocationNewOverlay.enableFollowLocation(); //segue la posizione dell'utente
@@ -345,10 +361,24 @@ public class HomeFragment extends Fragment implements LocationListener {
 
                     Manifest.permission.ACCESS_FINE_LOCATION, //serve per i permessi della posizione
 
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE //mi serve per far visualizzzare la mappa
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, //mi serve per far visualizzzare la mappa
 
             }, mContext, v);
         }
+
+//        if (Build.VERSION.SDK_INT >= 29) {
+//
+//            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//
+//                AddressPermissionUtils.requestPermissionsIfNecessary(new String[] {
+//
+//                        Manifest.permission.ACCESS_BACKGROUND_LOCATION //permessi per background
+//
+//                }, mContext, v);
+//
+//            }
+//
+//        }
     }
 
     private int checkIsHighAccuracy(){
@@ -779,11 +809,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         //se sono vicino al marker apre da solo il popup?
 
-//        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(marker);
-//
-//        gMap.addMarker(new MarkerOptions().position(latLng).icon(icon));
-//
-//        addGeofence(latLng, MainActivity.radius);
+        //aggiungo geofence
+        addGeofences(address, MainActivity.radiusSearch);
 
     }
 
@@ -796,6 +823,45 @@ public class HomeFragment extends Fragment implements LocationListener {
         }else{
             marker.setIcon(drawable);
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void addGeofences(String address, float radiusSearch){
+        Geofence geofence = geofencesMain.createGeofence(UUID.randomUUID().toString(), AddressPermissionUtils.getCoordsFromAddress(address, mContext), radiusSearch);
+        GeofencingRequest geofencingRequest = geofencesMain.getGeofencingRequest(geofence);
+        PendingIntent intent = geofencesMain.getGeofencePendingIntent(mContext);
+
+        Log.i("geofencegeofence", "Address coords: " + AddressPermissionUtils.getCoordsFromAddress(address, mContext) + ", raggio di ricerca: " + radiusSearch);
+
+        geofencingClient.addGeofences(geofencingRequest, intent)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i("geofencegeofence", "OK");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("geofencegeofence", "Error " + e.getMessage());
+                    }
+                });
+    }
+
+    private void removeGeofences(){
+        geofencingClient.removeGeofences(geofencesMain.getGeofencePendingIntent(mContext))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i("geofencegeofence", "rimosso");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("geofencegeofence", "Error: " + e.getMessage());
+                    }
+                });
     }
 
     @Override

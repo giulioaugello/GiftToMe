@@ -162,7 +162,7 @@ public class SettingsFragment extends Fragment {
         switchDarkMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
                 if (!isDarkModeOn){
                     isDarkModeOn = true;
 

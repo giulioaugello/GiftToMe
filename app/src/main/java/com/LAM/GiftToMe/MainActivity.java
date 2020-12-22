@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -17,6 +18,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -33,8 +35,9 @@ import com.twitter.sdk.android.core.TwitterSession;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int FINE_LOCATION_ACCESS_REQUEST_CODE = 0x1;
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
+    private static final int FINE_LOCATION_ACCESS_REQUEST_CODE = 1001;
+    private static final int BACKGROUND_LOCATION_ACCESS_REQUEST_CODE = 1002;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private HomeFragment homeFragment;
     private NewGiftFragment newGiftFragment;
@@ -240,21 +243,54 @@ public class MainActivity extends AppCompatActivity {
 
                 //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE); //continua a chiedere sempre i permessi che non dai
                 UserTweetsFragment userTweetsFragment = new UserTweetsFragment();
-                FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.righttoleft, R.anim.none);
                 fragmentTransaction.replace(R.id.fragment_container, userTweetsFragment, usersGiftListFragmentTag).commit();
                 fragmentTransaction.addToBackStack(usersGiftListFragmentTag);
                 activeFragment = userTweetsFragment;
 
-            }else{
+            } else {
                 HomeFragment homeFragment = new HomeFragment();
-                FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.lefttoright, R.anim.none);
                 fragmentTransaction.replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
                 fragmentTransaction.addToBackStack(homeFragmentTag);
                 activeFragment = homeFragment;
             }
+
+            if (Build.VERSION.SDK_INT >= 29) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_ACCESS_REQUEST_CODE);
+
+                } else {
+                    Toast.makeText(this, "Non hai i permessi", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                homeFragment.checkUserLocation();
+            }
         }
+
+//        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+//                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//
+//                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE); //continua a chiedere sempre i permessi che non dai
+//                UserTweetsFragment userTweetsFragment = new UserTweetsFragment();
+//                FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.setCustomAnimations(R.anim.righttoleft, R.anim.none);
+//                fragmentTransaction.replace(R.id.fragment_container, userTweetsFragment, usersGiftListFragmentTag).commit();
+//                fragmentTransaction.addToBackStack(usersGiftListFragmentTag);
+//                activeFragment = userTweetsFragment;
+//
+//            }else{
+//                HomeFragment homeFragment = new HomeFragment();
+//                FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.setCustomAnimations(R.anim.lefttoright, R.anim.none);
+//                fragmentTransaction.replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
+//                fragmentTransaction.addToBackStack(homeFragmentTag);
+//                activeFragment = homeFragment;
+//            }
+//        }
     }
 
     @Override
