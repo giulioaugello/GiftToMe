@@ -568,7 +568,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
                 for (UsersGift userGift : arrayUsersGifts) {
                     //aggiungo i marker alla mappa
-                    addMarker(userGift.getGeoPoint(), userGift.getCategory(), userGift.getGiftId(), userGift.getTweetId(), userGift.getName(), userGift.getDescription(), userGift.getAddress(), userGift.getIssuer());
+                    addMarker(userGift.getGeoPoint(), userGift);
 
                 }
 
@@ -732,13 +732,13 @@ public class HomeFragment extends Fragment implements LocationListener {
 
     //creo un marker e lo aggiungo al cluster
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void addMarker(GeoPoint geoPoint, String category, String giftId, String tweetId, String title, String description, String address, String issuer) {
+    private void addMarker(GeoPoint geoPoint, UsersGift usersGift) {
 
         Drawable markerDrawablePie = null;
         Drawable markerDrawableNoPie = null;
         Drawable drawableImagePopup = null;
 
-        switch (category) {
+        switch (usersGift.getCategory()) {
             case "Sport":
                 markerDrawablePie = getResources().getDrawable(R.mipmap.sport_marker, null);
                 markerDrawableNoPie = getResources().getDrawable(R.drawable.sport_marker, null);
@@ -790,13 +790,16 @@ public class HomeFragment extends Fragment implements LocationListener {
 
 
 
-        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, giftId, tweetId, title, description, issuer, address, mContext, getActivity());
+//        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, giftId, tweetId, title, description, issuer, address, mContext, getActivity());
+
+        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, usersGift, mContext, getActivity());
 
         Marker marker = new Marker(map);
         drawableBuildVersion(marker, markerDrawableNoPie, markerDrawablePie);
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        marker.setTitle(giftId);
+        //marker.setTitle(giftId);
+        marker.setTitle(usersGift.getGiftId());
 
         marker.setInfoWindow(customInfoWindow); //setta il popup
         marker.setSubDescription("Tocca per chiudere oppure"); //sottodescrizione
@@ -812,7 +815,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         //se sono vicino al marker apre da solo il popup?
 
         //aggiungo geofence
-        addGeofences(address, MainActivity.radiusSearch);
+        addGeofences(usersGift.getLat(), usersGift.getLon(), MainActivity.radiusSearch);
 
     }
 
@@ -828,12 +831,12 @@ public class HomeFragment extends Fragment implements LocationListener {
     }
 
     @SuppressLint("MissingPermission")
-    private void addGeofences(String address, float radiusSearch){
-        Geofence geofence = geofencesMain.createGeofence(UUID.randomUUID().toString(), AddressPermissionUtils.getCoordsFromAddress(address, mContext), radiusSearch);
+    private void addGeofences(String lat, String lon, float radiusSearch){
+        Geofence geofence = geofencesMain.createGeofence(UUID.randomUUID().toString(), lat, lon, radiusSearch);
         GeofencingRequest geofencingRequest = geofencesMain.getGeofencingRequest(geofence);
         PendingIntent intent = geofencesMain.getGeofencePendingIntent(mContext);
 
-        Log.i("geofencegeofence", "Address coords: " + AddressPermissionUtils.getCoordsFromAddress(address, mContext) + ", raggio di ricerca: " + radiusSearch);
+        Log.i("geofencegeofence", "Address coords: " + lat + " " + lon + ", raggio di ricerca: " + radiusSearch);
 
         geofencingClient.addGeofences(geofencingRequest, intent)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -848,6 +851,7 @@ public class HomeFragment extends Fragment implements LocationListener {
                         Log.i("geofencegeofence", "Error " + e.getMessage());
                     }
                 });
+
     }
 
     private void removeGeofences(){

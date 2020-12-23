@@ -13,11 +13,11 @@ public class GeofencesMain {
 
     PendingIntent geofencePendingIntent;
 
-    public Geofence createGeofence(String id, ArrayList<Double> coords, float radiusSearch){
+    public Geofence createGeofence(String id, String lat, String lon, float radiusSearch){
 
         Geofence.Builder builder = new Geofence.Builder();
         builder.setRequestId(id);
-        builder.setCircularRegion(coords.get(0), coords.get(1), radiusSearch);
+        builder.setCircularRegion(Double.parseDouble(lat), Double.parseDouble(lon), radiusSearch);
         builder.setExpirationDuration(Geofence.NEVER_EXPIRE);
         builder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT);
 
