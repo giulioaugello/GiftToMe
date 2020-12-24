@@ -273,7 +273,7 @@ public class ChatFragment extends Fragment {
             //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
             if(receiverModel.getGiftName().toLowerCase().contains(text) || receiverModel.getGiftName().contains(text) || receiverModel.getGiftName().toUpperCase().contains(text)){
                 temp.add(receiverModel);
-                Log.i("temptemp", "MYMY: " +  temp);
+                Log.i("temptemp", "MYMY: " +  temp + " " + receiverModel.getGiftName());
             }
 
         }
@@ -292,6 +292,7 @@ public class ChatFragment extends Fragment {
                     //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
                     if(receiverModel.getGiftName().toLowerCase().contains(text) || receiverModel.getGiftName().contains(text) || receiverModel.getGiftName().toUpperCase().contains(text)){
                         temp1.add(receiverModel);
+                        Log.i("temptemp", "MYMY1: " +  temp1 + " " + receiverModel.getGiftName());
                     }
 
                 }
@@ -301,6 +302,7 @@ public class ChatFragment extends Fragment {
 
         }else {
             //update recyclerview
+            Log.i("temptemp", "PIPPO");
             chatListAdapter.updateList(temp);
         }
 

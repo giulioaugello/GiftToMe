@@ -385,7 +385,8 @@ public class UserTweetsFragment extends Fragment {
                 //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
                 if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
                     temp.add(usersGift);
-                    //Log.i("giftgift", "addressSport " + usersGift.getAddress());
+                    Log.i("giftgift", "temp: " + temp);
+                    Log.i("giftgift", "addressSport " + usersGift.getAddress());
                 }
 
             }
