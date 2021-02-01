@@ -44,7 +44,7 @@
     <string name="json_profile_banner_url" translatable="false">profile_banner_url</string>
 
     <!--    Fragment tags-->
-    <string name="map_fragment_tag" translatable="false">MapFragment</string>
+    <string name="home_fragment_tag" translatable="false">HomeFragment</string>
     <string name="users_tweets_fragment_tag" translatable="false">UserTweetsFragment</string>
     <string name="newgift_fragment_tag" translatable="false">NewGiftFragment</string>
     <string name="chat_fragment_tag" translatable="false">ChatFragment</string>

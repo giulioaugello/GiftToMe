@@ -36,7 +36,23 @@
             android:textColorHint="@color/primaryAndWhite"
             android:backgroundTint="@color/primaryAndWhite"
             android:layout_weight="1"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="visible" />
+
+        <EditText
+            android:id="@+id/gift_search_edit_mygift"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:hint="Cerca un regalo"
+            android:padding="10dp"
+            android:textColor="@color/primaryAndWhite"
+            android:textColorHint="@color/primaryAndWhite"
+            android:backgroundTint="@color/primaryAndWhite"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

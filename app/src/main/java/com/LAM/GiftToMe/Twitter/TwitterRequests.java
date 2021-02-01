@@ -197,6 +197,8 @@ public class TwitterRequests {
 
     public static void searchTweets(final Context mContext, String q, final VolleyListener volleyListener) {
 
+
+        Log.i("contextcontext",mContext + "");
         String url = "https://api.twitter.com/1.1/search/tweets.json";
 
         String screenNameString = "?q=" + Uri.encode(q);

@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,7 +17,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -92,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
 
         //get FragmentTags
-        homeFragmentTag = getResources().getString(R.string.map_fragment_tag);
+        homeFragmentTag = getResources().getString(R.string.home_fragment_tag);
         usersGiftListFragmentTag = getResources().getString(R.string.users_tweets_fragment_tag);
         newGiftFragmentTag = getResources().getString(R.string.newgift_fragment_tag);
         chatFragmentTag = getResources().getString(R.string.chat_fragment_tag);
@@ -133,7 +131,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+//    @Override
+//    public void onAttachFragment(@NonNull Fragment fragment) {
+//        super.onAttachFragment(fragment);
+//        Context context = getApplicationContext();
+//        if (context == null){
+//            throw new IllegalStateException("Context not attached");
+//        }
+//    }
+
+    private final BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = homeFragment;

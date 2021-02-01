@@ -77,6 +77,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -118,6 +119,12 @@ public class HomeFragment extends Fragment implements LocationListener {
     private GeofencingClient geofencingClient;
     private GeofencesMain geofencesMain;
 
+
+//    @Override
+//    public void onAttach(@NonNull Context context) {
+//        super.onAttach(context);
+//        mContext = context;
+//    }
 
     @Nullable
     @Override
@@ -207,6 +214,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         enablePermissionsAndGPS(); //richiesta permessi e gps
 
+        Log.i("contextcontext",mContext+ "");
         getUsersGifts(); //prende i regali
 
         searchPosition.setOnClickListener(new View.OnClickListener() {
@@ -795,7 +803,11 @@ public class HomeFragment extends Fragment implements LocationListener {
         CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, usersGift, mContext, getActivity());
 
         Marker marker = new Marker(map);
-        drawableBuildVersion(marker, markerDrawableNoPie, markerDrawablePie);
+        try {
+            drawableBuildVersion(marker, markerDrawableNoPie, markerDrawablePie);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         //marker.setTitle(giftId);
@@ -821,6 +833,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
     //In base alla versione di android prendo i drawable da due cartelle diverse (uscivano marker piccoli in android superiore a pie)
     private void drawableBuildVersion(Marker marker, Drawable drawable, Drawable mipmap){
+        Log.i("mipmip", mipmap+"");
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             Bitmap bitmap = ((BitmapDrawable) mipmap).getBitmap();
             Drawable dr = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (64.0f * getResources().getDisplayMetrics().density), (int) (64.0f * getResources().getDisplayMetrics().density), true));

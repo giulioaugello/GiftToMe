@@ -83,6 +83,7 @@ public class DBFirestore {
         model.put("chatMyGift", chatListMyGift);
 
         collectionReference.add(model);
+        Log.i("tokentoken","token ");
 
     }
 

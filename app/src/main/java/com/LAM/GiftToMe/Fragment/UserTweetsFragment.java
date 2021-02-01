@@ -77,6 +77,12 @@ public class UserTweetsFragment extends Fragment {
     private ArrayList<UsersGift> arrayUsersGifts;
     private double[] coordMarker = new double[2];
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = context;;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,7 +97,7 @@ public class UserTweetsFragment extends Fragment {
         noGift4 = v.findViewById(R.id.no_gift4);
         noGift5 = v.findViewById(R.id.no_gift5);
 
-        mContext = getActivity().getApplicationContext();
+//        mContext = getActivity().getApplicationContext();
 
         searchLocation = v.findViewById(R.id.add_position_list);
         searchButtonLocation = v.findViewById(R.id.search_position_list);

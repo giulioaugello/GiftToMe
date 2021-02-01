@@ -84,7 +84,6 @@ public class ReplyChatFragment extends Fragment {
         getTwitterProfileImage(receiverName, twPhoto);
 
 
-
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
