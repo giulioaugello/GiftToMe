@@ -36,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Ciao"
             android:textColor="@color/textWhite"
             android:textSize="25sp"
             android:focusable="true"

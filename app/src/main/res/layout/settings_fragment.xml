@@ -69,7 +69,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Raggio di Ricerca"
+                        android:text="@string/radius"
                         android:textSize="25sp"
                         android:textColor="@color/primaryAndWhite"
                         android:layout_gravity="center_vertical"
@@ -112,7 +112,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Colore mappa"
+                        android:text="@string/map"
                         android:textSize="25sp"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -268,7 +268,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Dark Mode"
+                        android:text="@string/dark"
                         android:textSize="25sp"
                         android:textColor="@color/primaryAndWhite"
                         android:layout_gravity="center_vertical"

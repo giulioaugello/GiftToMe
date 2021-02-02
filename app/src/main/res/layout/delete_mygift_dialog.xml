@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sei sicuro di voler eliminare questo regalo?"
+            android:text="@string/sure"
             android:gravity="center"
             android:textSize="20sp"
             android:textColor="@color/colorChipSelected"
@@ -41,14 +41,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="No"/>
+                android:text="@string/no"/>
 
             <Button
                 android:id="@+id/delete_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Si"
+                android:text="@string/yes"
                 android:textColor="@color/textWhite"
                 android:backgroundTint="@color/colorChipSelected"/>
 

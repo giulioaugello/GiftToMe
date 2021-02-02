@@ -24,7 +24,7 @@
             android:id="@+id/success"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Regalo aggiunto con successo!!!"
+            android:text="@string/ok"
             android:textSize="23sp"
             android:textColor="@color/colorChipSelected"
             android:gravity="center"

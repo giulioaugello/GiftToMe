@@ -129,7 +129,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="Impostazioni"
+                            android:text="@string/settings"
                             android:textColor="@color/textWhite"
                             android:textSize="20sp" />
 
@@ -171,7 +171,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="Esci"
+                            android:text="@string/exit"
                             android:textColor="@color/textWhite"
                             android:textSize="20sp" />
 
@@ -225,7 +225,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="I Miei Regali"
+                        android:text="@string/my_gift"
                         android:textColor="@color/textWhite"
                         android:textSize="30sp" />
 
@@ -290,7 +290,7 @@
                 app:layout_constraintTop_toBottomOf="@id/logo"
                 app:layout_constraintVertical_bias="0.2"
                 android:visibility="visible"
-                android:text="Per ottenere gli oggetti che ti interessano o pubblicarne nuovi:"/>
+                android:text="@string/start"/>
 
             <com.twitter.sdk.android.core.identity.TwitterLoginButton
                 android:id="@+id/login_button"

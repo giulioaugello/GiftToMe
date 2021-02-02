@@ -8,44 +8,44 @@
     android:orientation="vertical"
     android:background="@color/colorPrimary">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_margin="10dp"
-        android:background="@drawable/bottom_navigation_background">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:background="@drawable/bottom_navigation_background">-->
 
-        <EditText
-            android:id="@+id/add_position_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:hint="Inserisci una posizione"
-            android:padding="10dp"
-            android:textColor="@color/primaryAndWhite"
-            android:textColorHint="@color/primaryAndWhite"
-            android:backgroundTint="@color/primaryAndWhite"
-            android:layout_weight="1"
-            android:textSize="20sp" />
+<!--        <EditText-->
+<!--            android:id="@+id/add_position_list"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:hint="Inserisci una posizione"-->
+<!--            android:padding="10dp"-->
+<!--            android:textColor="@color/primaryAndWhite"-->
+<!--            android:textColorHint="@color/primaryAndWhite"-->
+<!--            android:backgroundTint="@color/primaryAndWhite"-->
+<!--            android:layout_weight="1"-->
+<!--            android:textSize="20sp" />-->
 
-        <ImageView
-            android:id="@+id/search_position_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_baseline_navigation_24"
-            app:tint="@color/primaryAndWhite" />
+<!--        <ImageView-->
+<!--            android:id="@+id/search_position_list"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="0"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:src="@drawable/ic_baseline_navigation_24"-->
+<!--            app:tint="@color/primaryAndWhite" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_marginTop="50dp"
         android:background="@drawable/round_corner_profile">
 
         <LinearLayout
@@ -64,7 +64,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Attiva il GPS premendo il pulsante a lato"
+                android:text="@string/gps_on"
                 android:textSize="19sp"
                 android:gravity="center"
                 android:textColor="@color/colorChipSelected"
@@ -112,7 +112,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sport"
+                    android:text="@string/sport"
                     android:textSize="30sp"
                     android:layout_marginStart="8dp"
                     android:textColor="@color/colorChipSelected"/>
@@ -123,7 +123,7 @@
                     android:id="@+id/no_gift1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Non ci sono oggetti per questa categoria"
+                    android:text="@string/no_obj"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginTop="10dp"
@@ -151,7 +151,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Electronics"
+                        android:text="@string/electronics"
                         android:textSize="30sp"
                         android:layout_marginStart="8dp"
                         android:textColor="@color/colorChipSelected"/>
@@ -162,7 +162,7 @@
                     android:id="@+id/no_gift2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Non ci sono oggetti per questa categoria"
+                    android:text="@string/no_obj"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginTop="10dp"
@@ -191,7 +191,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Clothing"
+                        android:text="@string/clothing"
                         android:textSize="30sp"
                         android:layout_marginStart="8dp"
                         android:textColor="@color/colorChipSelected"/>
@@ -202,7 +202,7 @@
                     android:id="@+id/no_gift3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Non ci sono oggetti per questa categoria"
+                    android:text="@string/no_obj"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginTop="10dp"
@@ -231,7 +231,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Music&amp;Books"
+                        android:text="@string/music"
                         android:textSize="30sp"
                         android:layout_marginStart="8dp"
                         android:textColor="@color/colorChipSelected"/>
@@ -242,7 +242,7 @@
                     android:id="@+id/no_gift4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Non ci sono oggetti per questa categoria"
+                    android:text="@string/no_obj"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginTop="10dp"
@@ -271,7 +271,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Other"
+                        android:text="@string/other"
                         android:textSize="30sp"
                         android:layout_marginStart="8dp"
                         android:textColor="@color/colorChipSelected"/>
@@ -282,7 +282,7 @@
                     android:id="@+id/no_gift5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Non ci sono oggetti per questa categoria"
+                    android:text="@string/no_obj"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginTop="10dp"

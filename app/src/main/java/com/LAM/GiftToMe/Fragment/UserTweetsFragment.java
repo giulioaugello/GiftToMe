@@ -99,8 +99,8 @@ public class UserTweetsFragment extends Fragment {
 
 //        mContext = getActivity().getApplicationContext();
 
-        searchLocation = v.findViewById(R.id.add_position_list);
-        searchButtonLocation = v.findViewById(R.id.search_position_list);
+//        searchLocation = v.findViewById(R.id.add_position_list);
+//        searchButtonLocation = v.findViewById(R.id.search_position_list);
 
         recyclerViewSport = v.findViewById(R.id.user_tweets_sport);
         recyclerViewElectronics = v.findViewById(R.id.user_tweets_electronics);
@@ -317,89 +317,89 @@ public class UserTweetsFragment extends Fragment {
         //setUpBottomSheetDialog();
 
         //per la ricerca dei regali
-        searchLocation.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                // filter your list from your input
-                filter(s.toString());
-                //you can use runnable postDelayed like 500 ms to delay search text
-            }
-        });
+//        searchLocation.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//                // filter your list from your input
+//                filter(s.toString());
+//                //you can use runnable postDelayed like 500 ms to delay search text
+//            }
+//        });
 
         return v;
     }
 
 //    //filtra sul nome dei regali
-    private void filter(String text){
-        ArrayList<UsersGift> tempSport = new ArrayList();
-        ArrayList<UsersGift> tempEle = new ArrayList();
-        ArrayList<UsersGift> tempClo = new ArrayList();
-        ArrayList<UsersGift> tempMus = new ArrayList();
-        ArrayList<UsersGift> tempOth = new ArrayList();
-
-
-//        for(UsersGift usersGift: sportA){
+//    private void filter(String text){
+//        ArrayList<UsersGift> tempSport = new ArrayList();
+//        ArrayList<UsersGift> tempEle = new ArrayList();
+//        ArrayList<UsersGift> tempClo = new ArrayList();
+//        ArrayList<UsersGift> tempMus = new ArrayList();
+//        ArrayList<UsersGift> tempOth = new ArrayList();
 //
-//            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
-//            if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
-//                tempSport.add(usersGift);
-//                Log.i("giftgift", "addressSport " + usersGift.getAddress());
+//
+////        for(UsersGift usersGift: sportA){
+////
+////            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
+////            if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
+////                tempSport.add(usersGift);
+////                Log.i("giftgift", "addressSport " + usersGift.getAddress());
+////            }
+////
+////        }
+////        arrayAdapter.get(0).updateList(tempSport);
+////
+////        for(UsersGift usersGift: electronicsA){
+////
+////            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
+////            if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
+////                tempEle.add(usersGift);
+////                Log.i("giftgift", "addressEle " + usersGift.getAddress());
+////            }
+////
+////        }
+////        arrayAdapter.get(1).updateList(tempEle);
+//
+//        updateSearch(sportA, text, 0);
+//        updateSearch(electronicsA, text, 1);
+//        updateSearch(clothingA, text, 2);
+//        updateSearch(musicA, text, 3);
+//        updateSearch(otherA, text, 4);
+//
+//
+//    }
+//
+//    private void updateSearch(ArrayList<UsersGift> category, String text, int i){
+//
+//        if (category.size() != 0){
+//
+//            ArrayList<UsersGift> temp = new ArrayList();
+//
+//            for(UsersGift usersGift: category){
+//
+//                //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
+//                if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
+//                    temp.add(usersGift);
+//                    Log.i("giftgift", "temp: " + temp);
+//                    Log.i("giftgift", "addressSport " + usersGift.getAddress());
+//                }
+//
 //            }
-//
+//            arrayAdapter.get(i).updateList(temp);
 //        }
-//        arrayAdapter.get(0).updateList(tempSport);
 //
-//        for(UsersGift usersGift: electronicsA){
-//
-//            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
-//            if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
-//                tempEle.add(usersGift);
-//                Log.i("giftgift", "addressEle " + usersGift.getAddress());
-//            }
-//
-//        }
-//        arrayAdapter.get(1).updateList(tempEle);
-
-        updateSearch(sportA, text, 0);
-        updateSearch(electronicsA, text, 1);
-        updateSearch(clothingA, text, 2);
-        updateSearch(musicA, text, 3);
-        updateSearch(otherA, text, 4);
-
-
-    }
-
-    private void updateSearch(ArrayList<UsersGift> category, String text, int i){
-
-        if (category.size() != 0){
-
-            ArrayList<UsersGift> temp = new ArrayList();
-
-            for(UsersGift usersGift: category){
-
-                //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
-                if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
-                    temp.add(usersGift);
-                    Log.i("giftgift", "temp: " + temp);
-                    Log.i("giftgift", "addressSport " + usersGift.getAddress());
-                }
-
-            }
-            arrayAdapter.get(i).updateList(temp);
-        }
-
-    }
+//    }
 
 
     private void checkIsEmpty(ArrayList<UsersGift> arrayList, RecyclerView recyclerView, TextView textView){
@@ -416,7 +416,7 @@ public class UserTweetsFragment extends Fragment {
         // Build the alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Attiva la posizione");
-        builder.setMessage("Devi attivare la posizione con modalità alta");
+        builder.setMessage("Devi attivare la posizione");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Show location settings when the user acknowledges the alert dialog

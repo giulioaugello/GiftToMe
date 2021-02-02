@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Modifica Regalo"
+            android:text="@string/edit_title"
             android:textColor="@color/colorChipSelected"
             android:gravity="center"
             android:textSize="28sp"
@@ -40,7 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:hint="Nome Regalo"
+                    android:hint="@string/edit_name"
                     android:textColor="@color/textWhite"
                     android:textColorHint="@color/textWhite"
                     android:backgroundTint="@color/textWhite"/>
@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:fontFamily="sans-serif"
-                    android:hint="Descrizione"
+                    android:hint="@string/edit_description"
                     android:textColor="@color/textWhite"
                     android:textColorHint="@color/textWhite"
                     android:backgroundTint="@color/textWhite"/>
@@ -65,7 +65,7 @@
                     android:layout_marginRight="4dp"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="sans-serif"
-                    android:hint="Indirizzo (Via, Numero Civico, Città)"
+                    android:hint="@string/edit_address"
                     android:textColor="@color/textWhite"
                     android:textColorHint="@color/textWhite"
                     android:backgroundTint="@color/textWhite"/>
@@ -91,36 +91,35 @@
                         android:id="@+id/sportRadio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Sport"
+                        android:text="@string/sport"
                         android:textColor="@color/textWhite"/>
 
                     <RadioButton
                         android:id="@+id/electronicsRadio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Electronics"
+                        android:text="@string/electronics"
                         android:textColor="@color/textWhite"/>
 
                     <RadioButton
                         android:id="@+id/clothingRadio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Clothing"
+                        android:text="@string/clothing"
                         android:textColor="@color/textWhite"/>
-
 
                     <RadioButton
                         android:id="@+id/musicRadio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Music&amp;Books"
+                        android:text="@string/music"
                         android:textColor="@color/textWhite"/>
 
                     <RadioButton
                         android:id="@+id/otherRadio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Other"
+                        android:text="@string/other"
                         android:textColor="@color/textWhite"/>
 
 
@@ -143,14 +142,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Annulla"/>
+                android:text="@string/dismiss"/>
 
             <Button
                 android:id="@+id/edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Modifica"
+                android:text="@string/edit"
                 android:textColor="@color/textWhite"
                 android:backgroundTint="@color/colorChipSelected"/>
 

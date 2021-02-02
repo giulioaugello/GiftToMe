@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Riepilogo"
+            android:text="@string/summ"
             android:textColor="@color/colorChipSelected"
             android:textSize="28sp"
             android:gravity="center"

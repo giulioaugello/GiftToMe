@@ -24,7 +24,7 @@
             android:id="@+id/error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Qualcosa è andato storto, Riprova!!!"
+            android:text="@string/wrong"
             android:textSize="23sp"
             android:textColor="@color/colorChipSelected"
             android:gravity="center"
