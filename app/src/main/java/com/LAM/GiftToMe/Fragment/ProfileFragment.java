@@ -140,7 +140,7 @@ public class ProfileFragment extends Fragment {
                 DBFirestore.removeToken(MainActivity.userName, fcmToken);
 
                 TwitterCore.getInstance().getSessionManager().clearActiveSession();
-                Toast.makeText(mContext, "Logged out!", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, mContext.getResources().getString(R.string.log_out), Toast.LENGTH_LONG).show();
                 MainActivity.isLogged = false;
                 MainActivity.session = null;
                 MainActivity.userName = null;

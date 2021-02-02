@@ -130,7 +130,7 @@ public class NewGiftFragment extends Fragment {
         //Controllo se tutti i campi stono stati inseriti correttamente
         Log.i("formform", "Nome: " + nameForm.getText().toString());
         if (nameForm.getText().toString().equals("") || descriptionForm.getText().toString().equals("") || addressForm.getText().toString().equals("")){
-            Toast.makeText(mContext, "Inserisci tutti i campi", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.all_fields), Toast.LENGTH_SHORT).show();
             isReturn = true;
             return isReturn;
         }
@@ -138,21 +138,21 @@ public class NewGiftFragment extends Fragment {
         //Poichè la lunghezza massima di tutto il tweet è di 280 caratteri
         Log.i("formform", "Lunghezza descrizione: " + descriptionForm.getText().length());
         if(descriptionForm.getText().length() > 90){
-            Toast.makeText(mContext, "Inserisci una descrizione di al massimo 90 caratteri", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.long_descr), Toast.LENGTH_SHORT).show();
             isReturn = true;
             return isReturn;
         }
 
         Log.i("formform", "Indirizzo: " + AddressPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext));
         if(AddressPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext) == null) {
-            Toast.makeText(mContext, "Inserisci un indirizzo valido", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.valid_address), Toast.LENGTH_SHORT).show();
             isReturn = true;
             return isReturn;
         }
 
         Log.i("formform", "Categoria: " + activeCategory);
         if (activeCategory.equals("")){
-            Toast.makeText(mContext, "Spunta una categoria", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.check_categ), Toast.LENGTH_SHORT).show();
             isReturn = true;
             return isReturn;
         }

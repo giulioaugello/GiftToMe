@@ -90,7 +90,7 @@ public class ReplyChatFragment extends Fragment {
                 final String yourReply = text.getText().toString();
 
                 if (yourReply.isEmpty()){
-                    Toast.makeText(mContext, "Inserisci un messaggio", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.write), Toast.LENGTH_SHORT).show();
                     return;
                 }
 

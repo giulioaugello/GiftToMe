@@ -253,11 +253,11 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
                 ArrayList<Double> addressCoords = AddressPermissionUtils.getCoordsFromAddress(addressString, mContext);
 
                 if(nameString.isEmpty() || descriptionString.isEmpty() || addressString.isEmpty()){
-                    Toast.makeText(mContext, "Inserisci tutti i campi", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.all_fields), Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(AddressPermissionUtils.getCoordsFromAddress(addressString, mContext) == null) {
-                    Toast.makeText(mContext, "Inserisci un indirizzo valido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.valid_address), Toast.LENGTH_SHORT).show();
                     return;
                 }
 

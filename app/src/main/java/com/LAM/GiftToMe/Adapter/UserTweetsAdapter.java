@@ -116,12 +116,12 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         addressUserGift.setText(usersGifts.get(position).getAddress());
         MyGiftTweetsAdapter.changeCategoryImage(categoryString, categoryUserGift);
 
-        contactUser.setText("Contatta " + usersGifts.get(position).getIssuer());
+        contactUser.setText(mContext.getResources().getString(R.string.contact, usersGifts.get(position).getIssuer()));
         contactUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!MainActivity.isLogged){
-                    Toast.makeText(mContext, "Per contattare un utente devi prima fare l'accesso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.login_first), Toast.LENGTH_SHORT).show();
                 }else{
                     PopupAdapter.showReplyDialog(position, activity, mContext, usersGifts);
                 }

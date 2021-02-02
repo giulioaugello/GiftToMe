@@ -473,10 +473,10 @@ public class HomeFragment extends Fragment implements LocationListener {
                 addPosition.setText("");
 
             }else{
-                Toast.makeText(mContext, "Inserisci una posizione valida",Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, mContext.getResources().getString(R.string.correct_position),Toast.LENGTH_LONG).show();
             }
         }else {
-            Toast.makeText(mContext, "Non hai attivato il gps, inserisci una posizione",Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.no_gps_location),Toast.LENGTH_LONG).show();
         }
 
     }

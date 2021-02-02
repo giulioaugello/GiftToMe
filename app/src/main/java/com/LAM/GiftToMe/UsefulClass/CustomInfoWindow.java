@@ -103,13 +103,14 @@ public class CustomInfoWindow extends MarkerInfoWindow {
         titleText.setText(usersGift.getName());
         descriptionText.setText(usersGift.getDescription());
         addressText.setText(usersGift.getAddress());
-        contactButton.setText("Contatta " + usersGift.getIssuer());
+        //contactButton.setText("Contatta " + usersGift.getIssuer());
+        contactButton.setText(mContext.getResources().getString(R.string.contact, usersGift.getIssuer()));
 
         contactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!MainActivity.isLogged){
-                    Toast.makeText(mContext, "Per contattare un utente devi prima fare l'accesso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.login_first), Toast.LENGTH_SHORT).show();
                 }else{
                     showReplyDialog();
                 }
@@ -253,7 +254,8 @@ public class CustomInfoWindow extends MarkerInfoWindow {
 
         final EditText replyGiftText = view.findViewById(R.id.get_text_reply);
         TextView topText = view.findViewById(R.id.top_text);
-        topText.setText("Contatta " + usersGift.getIssuer() + " per il regalo: " + usersGift.getName());
+        //topText.setText(mContext.getResources().getString(R.string.contact) + usersGift.getIssuer() + mContext.getResources().getString(R.string.forg) + usersGift.getName());
+        topText.setText(mContext.getResources().getString(R.string.contact_for, usersGift.getIssuer(), usersGift.getName()));
         Button sendReply = view.findViewById(R.id.send_button);
 
         sendReply.setOnClickListener(new View.OnClickListener() {
@@ -262,7 +264,7 @@ public class CustomInfoWindow extends MarkerInfoWindow {
                 final String yourReply = replyGiftText.getText().toString();
 
                 if (yourReply.isEmpty()){
-                    Toast.makeText(mContext, "Inserisci una risposta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.empty_answer), Toast.LENGTH_SHORT).show();
                     return;
                 }
 

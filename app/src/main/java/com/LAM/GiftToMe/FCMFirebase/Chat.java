@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -512,7 +513,7 @@ public class Chat {
                         for (int i = 0; i < chatMyGift.size(); i++){
                             if (chatMyGift.get(i).get("myGiftName").equals(giftName)){
 
-                                Toast.makeText(mContext, "Hai già un regalo con questo nome, cambialo", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, mContext.getResources().getString(R.string.same_name), Toast.LENGTH_SHORT).show();
                                 exist = true;
 
                             }
@@ -675,7 +676,7 @@ public class Chat {
 
                             firestoreListener.onChatRetrieve(myList);
                         }else{
-                            Toast.makeText(mContext, "Non hai nessuna chat", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, mContext.getResources().getString(R.string.no_chat), Toast.LENGTH_LONG).show();
                         }
 
 
@@ -974,7 +975,7 @@ public class Chat {
 
                             firestoreListener.onChatRetrieve(myList);
                         }else{
-                            Toast.makeText(mContext, "Non hai nessuna chat", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, mContext.getResources().getString(R.string.no_chat), Toast.LENGTH_LONG).show();
                         }
 
 
@@ -1020,7 +1021,7 @@ public class Chat {
 
                         firestoreListener.onChatRetrieve(myList);
                     }else{
-                        Toast.makeText(mContext, "Non hai nessuna chat", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, mContext.getResources().getString(R.string.no_chat), Toast.LENGTH_LONG).show();
                     }
                 }
 

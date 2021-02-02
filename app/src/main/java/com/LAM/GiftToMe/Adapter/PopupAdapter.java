@@ -58,7 +58,8 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
         holder.address.setText(usersGifts.get(position).getAddress());
         //holder.address.setVisibility(View.GONE);
         holder.subDesc.setVisibility(View.GONE);
-        holder.contactButton.setText("Contatta " + usersGifts.get(position).getIssuer());
+        //holder.contactButton.setText("Contatta " + usersGifts.get(position).getIssuer());
+        holder.contactButton.setText(mContext.getResources().getString(R.string.contact, usersGifts.get(position).getIssuer()));
         String category = usersGifts.get(position).getCategory();
         MyGiftTweetsAdapter.changeCategoryImage(category, holder.imageCategory);
 
@@ -66,7 +67,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 if (!MainActivity.isLogged){
-                    Toast.makeText(mContext, "Per contattare un utente devi prima fare l'accesso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.login_first), Toast.LENGTH_SHORT).show();
                 }else{
                     showReplyDialog(position, activity, mContext, usersGifts);
                 }
@@ -108,7 +109,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
 
         final EditText replyGiftText = view.findViewById(R.id.get_text_reply);
         TextView topText = view.findViewById(R.id.top_text);
-        topText.setText("Contatta " + usersGifts.get(position).getIssuer() + " per il regalo: " + usersGifts.get(position).getName());
+        topText.setText(mContext.getResources().getString(R.string.contact_for, usersGifts.get(position).getIssuer(), usersGifts.get(position).getName()));
         Button sendReply = view.findViewById(R.id.send_button);
 
         sendReply.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +118,7 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
                 final String yourReply = replyGiftText.getText().toString();
 
                 if (yourReply.isEmpty()){
-                    Toast.makeText(mContext, "Inserisci una risposta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.empty_answer), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
