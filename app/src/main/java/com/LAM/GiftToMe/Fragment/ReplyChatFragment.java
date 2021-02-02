@@ -94,6 +94,7 @@ public class ReplyChatFragment extends Fragment {
                     return;
                 }
 
+                //se non è un mio regalo uso sendMessage altrimenti sendMessageMyGift (servono per inviare il messaggio nella chat e aggiungerli nel posto giusto nel DB)
                 if (!ChatFragment.isMyGift){
                     Chat.sendMessage(MainActivity.userName, receiverName, yourReply, giftName);
                 }else {

@@ -18,6 +18,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.LAM.GiftToMe.FCMFirebase.Chat;
+import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.Twitter.TwitterRequests;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
@@ -137,6 +139,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
        confirmDelete.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               //Chat.deleteGiftFromDB(MainActivity.userName, myGift.get(position).getName());
                removeGift(id, position);
                myGift.remove(position);
                notifyItemRemoved(position);

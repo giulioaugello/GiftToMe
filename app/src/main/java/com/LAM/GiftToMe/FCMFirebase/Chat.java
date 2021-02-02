@@ -2,14 +2,11 @@ package com.LAM.GiftToMe.FCMFirebase;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import com.LAM.GiftToMe.Fragment.ChatFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -36,8 +33,9 @@ public class Chat {
     private static int indexName = 0;
     public static List<String> listString;
     public static List<String> listNameMyGift;
+    private static List<String> senderDeleteGift;
 
-
+    //uso questo quando sono io ad inviare il messaggio
     public static void sendMessageMyGift(final String username, final String sender, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
@@ -94,7 +92,7 @@ public class Chat {
 
     }
 
-
+    //quando qualcuno mi invia un messaggio
     public static void sendMessage(final String username, final String receiver, final String reply, final String giftName){ //voglio inviare un messaggio da username a receiver con testo reply
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
@@ -250,6 +248,7 @@ public class Chat {
 
     }
 
+    //creazione slot per arrayGift
     public static void updateChat(List<Map<String, Object>> chat, Map<String, Object> model, final String receiver, String reply, String giftName, QueryDocumentSnapshot queryDocumentSnapshot){
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
@@ -257,7 +256,7 @@ public class Chat {
 
         if (chat != null) {
 
-            if (!checkReceiverExist(chat, receiver)) { //se il receiver non c'è: creo una nuova hashmap e la aggiungo a chat
+            if (!checkReceiverExist(chat, receiver)) { //se il receiver non c'è: creo una nuova hashmap e la aggiungo a chat (creo uno slot per arrayGift)
 
                 Log.i("chatchat", "Nuova Chat");
 
@@ -523,6 +522,69 @@ public class Chat {
                 }
             }
         });
+    }
+
+    public static void deleteGiftFromDB(final String username, final String giftName){
+
+        senderDeleteGift = new ArrayList<>();
+
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+
+                        List<Map<String, Object>> chatMyGift = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+
+                        for (int i = 0; i < chatMyGift.size(); i++) {
+                            if (chatMyGift.get(i).get("myGiftName").equals(giftName)) {
+
+                                List<Map<String, Object>> elementArraySenders = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(i).get("arrayMyGift");
+
+                                for (Map<String, Object> list: elementArraySenders){
+                                    senderDeleteGift.add((String) list.get("sender"));
+                                }
+                                Log.i("sendersender", senderDeleteGift + "");
+
+                                //chatMyGift.remove(i);
+                                chatMyGift.get(i).remove("myGiftName");
+                                chatMyGift.get(i).remove("arrayMyGift");
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        for (String string: senderDeleteGift){
+            collectionReference.whereEqualTo("username", string).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+
+                            List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+
+                            for (int i = 0; i < chat.size(); i++) {
+                                if (chat.get(i).get("receiver").equals(username)) {
+
+                                    List<Map<String, Object>> arrayElement = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("arrayGift");
+                                    for (int j = 0; j < arrayElement.size(); j++){
+                                        if (arrayElement.get(j).get("giftName").equals(giftName)){
+                                            arrayElement.remove(j);
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            });
+        }
+
     }
 
 

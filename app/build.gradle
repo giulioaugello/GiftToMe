@@ -27,7 +27,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.2.1'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
@@ -60,12 +60,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     //Add Firebase Core//
-    implementation 'com.google.firebase:firebase-core:18.0.0'
+    implementation 'com.google.firebase:firebase-core:18.0.2'
 
     // Firebase Firestore
-    implementation 'com.google.firebase:firebase-firestore:22.0.0'
+    implementation 'com.google.firebase:firebase-firestore:22.0.2'
 
     //Add FCM//
-    implementation 'com.google.firebase:firebase-messaging:21.0.0'
+    implementation 'com.google.firebase:firebase-messaging:21.0.1'
 
 }

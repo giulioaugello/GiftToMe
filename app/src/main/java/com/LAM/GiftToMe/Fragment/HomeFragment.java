@@ -202,7 +202,12 @@ public class HomeFragment extends Fragment implements LocationListener {
         userPos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) { //se non ho i permessi li attivo
+//                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) { //se non ho i permessi li attivo
+//                    enablePermissionsAndGPS();
+//                }else{
+//                    myLocationNewOverlay.enableFollowLocation(); //altrimenti mette il focus sulla posizione dell'utente
+//                }
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { //se non ho i permessi li attivo
                     enablePermissionsAndGPS();
                 }else{
                     myLocationNewOverlay.enableFollowLocation(); //altrimenti mette il focus sulla posizione dell'utente
@@ -312,10 +317,11 @@ public class HomeFragment extends Fragment implements LocationListener {
         Log.i("gpsgps", "Dentro");
         String message = "";
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) message = "Devi attivare la posizione";
-        else if(checkIsHighAccuracy() != 3) message = "La posizione deve essere in modalità alta";
-        else message = "altro";
+//        else if(checkIsHighAccuracy() != 3) message = "La posizione deve essere in modalità alta";
+//        else message = "altro";
         //qui il gps non è attivo quindi mostro dialog
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) {
+//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             // Build the alert dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Attiva la posizione");
@@ -391,14 +397,14 @@ public class HomeFragment extends Fragment implements LocationListener {
         }
     }
 
-    private int checkIsHighAccuracy(){
-        try {
-            return (Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.LOCATION_MODE));
-        } catch (Exception exception) {
-            Log.i("gpsgps", "check " + exception.getMessage());
-        }
-        return 0;
-    }
+//    private int checkIsHighAccuracy(){
+//        try {
+//            return (Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.LOCATION_MODE));
+//        } catch (Exception exception) {
+//            Log.i("gpsgps", "check " + exception.getMessage());
+//        }
+//        return 0;
+//    }
 
     //mette il marker nella posizione cercata se il gps non è attivo
     private void setSearchPosition(){
@@ -447,7 +453,8 @@ public class HomeFragment extends Fragment implements LocationListener {
                     @Override
                     public void onClick(View v) {
 
-                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3) {
+//                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3) {
+                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                             myLocationNewOverlay.enableFollowLocation();
                             mapController.setZoom(17.50);
                         }else{
@@ -482,7 +489,10 @@ public class HomeFragment extends Fragment implements LocationListener {
         Log.i("permperm", String.valueOf(requestCode));
 
         if (requestCode == GPS_SETTING_CODE) {
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3) {
+//            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3) {
+//                checkUserLocation();
+//            }
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 checkUserLocation();
             }
         }

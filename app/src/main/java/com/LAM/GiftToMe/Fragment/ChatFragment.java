@@ -59,7 +59,7 @@ public class ChatFragment extends Fragment {
         recyclerViewMyGift = v.findViewById(R.id.recyclerview_mychat);
 
         searchGiftReply = v.findViewById(R.id.gift_search_edit);
-        //searchMyGift = v.findViewById(R.id.gift_search_edit_mygift);
+        searchMyGift = v.findViewById(R.id.gift_search_edit_mygift);
 
         isMyGift = false;
         Log.i("MYGIFTMYGIFT", "isMyGift1: " +  isMyGift);
@@ -209,8 +209,8 @@ public class ChatFragment extends Fragment {
                 replyArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
                 recyclerViewReply.setVisibility(View.VISIBLE);
 
-//                searchGiftReply.setVisibility(View.VISIBLE);
-//                searchMyGift.setVisibility(View.GONE);
+                searchGiftReply.setVisibility(View.VISIBLE);
+                searchMyGift.setVisibility(View.GONE);
                 Log.i("MYGIFTMYGIFT", "isMyGift2: " +  isMyGift);
             }
         });
@@ -227,8 +227,8 @@ public class ChatFragment extends Fragment {
                 myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
                 recyclerViewMyGift.setVisibility(View.VISIBLE);
 
-//                searchGiftReply.setVisibility(View.GONE);
-//                searchMyGift.setVisibility(View.VISIBLE);
+                searchGiftReply.setVisibility(View.GONE);
+                searchMyGift.setVisibility(View.VISIBLE);
                 Log.i("MYGIFTMYGIFT", "isMyGift3: " +  isMyGift);
             }
         });
@@ -278,6 +278,43 @@ public class ChatFragment extends Fragment {
 //        }
 
 
+//        searchGiftReply.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//                // filter your list from your input
+//                Log.i("MYGIFTMYGIFT", "isMyGift4: " +  isMyGift);
+//                //filter(s.toString(), chatModel, chatListAdapterReply);
+//                if (filter(s.toString(), chatModel, chatListAdapterReply).size() == 0 && !s.toString().isEmpty()){
+//                    isMyGift = true;
+//                    recyclerViewReply.setVisibility(View.GONE);
+//                    recyclerViewMyGift.setVisibility(View.VISIBLE);
+//                    myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
+//                    replyArrayButton.setTextColor(getResources().getColor(R.color.primaryAndWhite, null));
+//                    filter(s.toString(), chatModelMyGift, chatListAdapterMyGift);
+//                    Log.i("MYGIFTMYGIFT", "isMyGift5: " +  isMyGift);
+//                }else {
+//                    isMyGift = false;
+//                    recyclerViewReply.setVisibility(View.VISIBLE);
+//                    recyclerViewMyGift.setVisibility(View.GONE);
+//                    myGiftArrayButton.setTextColor(getResources().getColor(R.color.primaryAndWhite, null));
+//                    replyArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
+//                    Log.i("MYGIFTMYGIFT", "isMyGift6: " +  isMyGift);
+//                }
+//                Log.i("MYGIFTMYGIFT", "isMyGift7: " +  isMyGift);
+//            }
+//        });
+
         searchGiftReply.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -295,23 +332,29 @@ public class ChatFragment extends Fragment {
                 // filter your list from your input
                 Log.i("MYGIFTMYGIFT", "isMyGift4: " +  isMyGift);
                 //filter(s.toString(), chatModel, chatListAdapterReply);
-                if (filter(s.toString(), chatModel, chatListAdapterReply).size() == 0 && !s.toString().isEmpty()){
-                    isMyGift = true;
-                    recyclerViewReply.setVisibility(View.GONE);
-                    recyclerViewMyGift.setVisibility(View.VISIBLE);
-                    myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
-                    replyArrayButton.setTextColor(getResources().getColor(R.color.primaryAndWhite, null));
-                    filter(s.toString(), chatModelMyGift, chatListAdapterMyGift);
-                    Log.i("MYGIFTMYGIFT", "isMyGift5: " +  isMyGift);
-                }else {
-                    isMyGift = false;
-                    recyclerViewReply.setVisibility(View.VISIBLE);
-                    recyclerViewMyGift.setVisibility(View.GONE);
-                    myGiftArrayButton.setTextColor(getResources().getColor(R.color.primaryAndWhite, null));
-                    replyArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
-                    Log.i("MYGIFTMYGIFT", "isMyGift6: " +  isMyGift);
-                }
-                Log.i("MYGIFTMYGIFT", "isMyGift7: " +  isMyGift);
+                filter(s.toString(), chatModel, chatListAdapterReply);
+            }
+        });
+
+        searchMyGift.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                // filter your list from your input
+                Log.i("MYGIFTMYGIFT", "isMyGift4: " +  isMyGift);
+                //filter(s.toString(), chatModel, chatListAdapterReply);
+                filter(s.toString(), chatModelMyGift, chatListAdapterMyGift);
+
             }
         });
 
@@ -382,9 +425,7 @@ public class ChatFragment extends Fragment {
 //        }
 //    }
 
-
-    //filtra sul nome dei regali
-    private ArrayList<ReceiverModel> filter(String text, ArrayList<ReceiverModel> model, ChatListAdapter chatListAdapter){
+    private void filter(String text, ArrayList<ReceiverModel> model, ChatListAdapter chatListAdapter){
         ArrayList<ReceiverModel> temp = new ArrayList();
 
         for(ReceiverModel receiverModel: model){
@@ -400,9 +441,29 @@ public class ChatFragment extends Fragment {
         //update recyclerview
         chatListAdapter.updateList(temp);
 
-        return temp;
 
     }
+
+    //filtra sul nome dei regali
+//    private ArrayList<ReceiverModel> filter(String text, ArrayList<ReceiverModel> model, ChatListAdapter chatListAdapter){
+//        ArrayList<ReceiverModel> temp = new ArrayList();
+//
+//        for(ReceiverModel receiverModel: model){
+//
+//            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
+//            if(receiverModel.getGiftName().toLowerCase().contains(text) || receiverModel.getGiftName().contains(text) || receiverModel.getGiftName().toUpperCase().contains(text)){
+//                temp.add(receiverModel);
+//                Log.i("temptemp", "MYMY: " +  temp + " " + receiverModel.getGiftName());
+//            }
+//
+//        }
+//
+//        //update recyclerview
+//        chatListAdapter.updateList(temp);
+//
+//        return temp;
+//
+//    }
 
     //filtra sul nome dei regali
 //    private void filter(String text){
