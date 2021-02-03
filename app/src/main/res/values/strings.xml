@@ -116,6 +116,7 @@
 
     <string name="correct_position">Please enter a valid location</string>
     <string name="no_gps_location">You have not activated the GPS, enter a location</string>
+    <string name="chat_exist">A chat for this gift already exists, check the chat section</string>
 
     <!--  new_gift_fragment  -->
     <string name="new_gift_title">New Gift</string>

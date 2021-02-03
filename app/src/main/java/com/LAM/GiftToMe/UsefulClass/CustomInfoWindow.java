@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
+import com.LAM.GiftToMe.FCMFirebase.FirestoreCheckName;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 
@@ -258,6 +260,18 @@ public class CustomInfoWindow extends MarkerInfoWindow {
         topText.setText(mContext.getResources().getString(R.string.contact_for, usersGift.getIssuer(), usersGift.getName()));
         Button sendReply = view.findViewById(R.id.send_button);
 
+        Chat.checkIfChatExist(MainActivity.userName, usersGift.getIssuer(), usersGift.getName(), new FirestoreCheckName() {
+            @Override
+            public void onReceiverRetrieve(boolean exist) {
+                if (exist){
+                    Log.i("existexist", "eccomi");
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.chat_exist), Toast.LENGTH_LONG).show();
+                }else {
+                    replyGiftDialog.show();
+                }
+            }
+        });
+
         sendReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -368,6 +382,5 @@ public class CustomInfoWindow extends MarkerInfoWindow {
             }
         });
 
-        replyGiftDialog.show();
     }
 }

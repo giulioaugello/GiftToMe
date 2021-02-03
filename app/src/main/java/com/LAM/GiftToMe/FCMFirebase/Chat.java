@@ -588,6 +588,39 @@ public class Chat {
 
     }
 
+    public static void checkIfChatExist(final String username, final String receiver, final String giftName, final FirestoreCheckName firestoreCheckName){
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+
+                        List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+
+                        boolean exist = false;
+
+                        for (int i = 0; i < chat.size(); i++) {
+                            if (chat.get(i).get("receiver").equals(receiver)) {
+
+                                List<Map<String, Object>> arrayElement = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(i).get("arrayGift");
+
+                                for (int j = 0; j < arrayElement.size(); j++){
+                                    if (arrayElement.get(j).get("giftName").equals(giftName)){
+                                        exist = true;
+                                        break;
+                                    }
+                                }
+
+                            }
+                        }
+                        firestoreCheckName.onReceiverRetrieve(exist);
+                    }
+                }
+            }
+        });
+    }
 
     //controllo se il mio regalo già esiste
     private static boolean checkMyGiftExist(List<Map<String, Object>> chatmyGift, String myGiftName){

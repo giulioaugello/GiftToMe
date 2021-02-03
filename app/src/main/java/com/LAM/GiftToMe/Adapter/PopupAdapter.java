@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
+import com.LAM.GiftToMe.FCMFirebase.FirestoreCheckName;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
@@ -112,6 +114,18 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
         topText.setText(mContext.getResources().getString(R.string.contact_for, usersGifts.get(position).getIssuer(), usersGifts.get(position).getName()));
         Button sendReply = view.findViewById(R.id.send_button);
 
+        Chat.checkIfChatExist(MainActivity.userName, usersGifts.get(position).getIssuer(), usersGifts.get(position).getName(), new FirestoreCheckName() {
+            @Override
+            public void onReceiverRetrieve(boolean exist) {
+                if (exist){
+                    Log.i("existexist", "eccomi");
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.chat_exist), Toast.LENGTH_LONG).show();
+                }else {
+                    replyGiftDialog.show();
+                }
+            }
+        });
+
         sendReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +135,8 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
                     Toast.makeText(mContext, mContext.getResources().getString(R.string.empty_answer), Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+
 
                 final ArrayList<String> message = new ArrayList<>();
                 String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
@@ -244,7 +260,6 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
             }
         });
 
-        replyGiftDialog.show();
     }
 
 //    public void showReplyDialog(final int position){
