@@ -1,16 +1,19 @@
 package com.LAM.GiftToMe.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.LAM.GiftToMe.Adapter.ChatListAdapter;
 import com.LAM.GiftToMe.FCMFirebase.Chat;
@@ -19,6 +22,7 @@ import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
 
+import com.LAM.GiftToMe.UsefulClass.OnSwipeTouchListener;
 import com.google.firebase.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +49,7 @@ public class ChatFragment extends Fragment {
     public static boolean isMyGift;
     private Button replyArrayButton, myGiftArrayButton;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -195,8 +200,6 @@ public class ChatFragment extends Fragment {
             }
         });
 
-
-
         replyArrayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,6 +234,38 @@ public class ChatFragment extends Fragment {
                 searchMyGift.setVisibility(View.VISIBLE);
                 Log.i("MYGIFTMYGIFT", "isMyGift3: " +  isMyGift);
             }
+        });
+
+        recyclerViewReply.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+            public void onSwipeLeft() {
+                isMyGift = true;
+
+                replyArrayButton.setTextColor(getResources().getColor(R.color.primaryAndWhite, null));
+                recyclerViewReply.setVisibility(View.GONE);
+
+                myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
+                recyclerViewMyGift.setVisibility(View.VISIBLE);
+
+                searchGiftReply.setVisibility(View.GONE);
+                searchMyGift.setVisibility(View.VISIBLE);
+            }
+
+        });
+
+        recyclerViewMyGift.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+            public void onSwipeRight() {
+                isMyGift = false;
+
+                myGiftArrayButton.setTextColor(getResources().getColor(R.color.primaryAndWhite, null));
+                recyclerViewMyGift.setVisibility(View.GONE);
+
+                replyArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
+                recyclerViewReply.setVisibility(View.VISIBLE);
+
+                searchGiftReply.setVisibility(View.VISIBLE);
+                searchMyGift.setVisibility(View.GONE);
+            }
+
         });
 
         //per la ricerca dei regali
