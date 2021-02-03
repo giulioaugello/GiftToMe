@@ -104,8 +104,8 @@
     <string name="clothing" translatable="false">Clothing</string>
     <string name="music" translatable="false">Music&amp;Books</string>
     <string name="other" translatable="false">Other</string>
-    <string name="dismiss" translatable="false">Cancel</string>
-    <string name="edit" translatable="false">Edit</string>
+    <string name="dismiss">Cancel</string>
+    <string name="edit">Edit</string>
 
     <!--  gift_error_animation, gift_upload_animation  -->
     <string name="wrong">Something went wrong, Try Again!!!</string>
@@ -116,7 +116,7 @@
 
     <string name="correct_position">Please enter a valid location</string>
     <string name="no_gps_location">You have not activated the GPS, enter a location</string>
-    <string name="chat_exist">A chat for this gift already exists, check the chat section</string>
+    <string name="chat_exist">A chat for this gift already exists, check the Chat section</string>
 
     <!--  new_gift_fragment  -->
     <string name="new_gift_title">New Gift</string>
@@ -167,7 +167,14 @@
     <string name="all_fields">Enter all fields</string>
     <string name="valid_address">Enter valid address</string>
 
+    <!--  MainActivity  -->
+    <string name="need_login_newg">You must log in to add a gift, go to the Account section!</string>
+    <string name="need_login_chat">You must log in to enter this section, go to the Account section!</string>
 
-
+    <!--  menu  -->
+    <string name="home_menu">Home</string>
+    <string name="new_gift_menu">New Gift</string>
+    <string name="chat_menu">Chat</string>
+    <string name="account_menu">Account</string>
 
 </resources>
