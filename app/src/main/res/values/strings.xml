@@ -94,7 +94,7 @@
     <string name="yes">Yes</string>
 
     <!--  edit_mygift_dialog  -->
-    <string name="edit_title">Edit The Gift</string>
+    <string name="edit_title">Edit the Gift</string>
     <string name="edit_name">Name</string>
     <string name="edit_description">Description</string>
     <string name="edit_address">Address (Street, House Number, City)</string>
