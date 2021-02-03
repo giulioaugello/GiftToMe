@@ -17,14 +17,14 @@
     <string name="fcm_pref_name" translatable="false">FCMTokenPref</string>
     <string name="fcm_token" translatable="false">FCMToken</string>
 
-    <!--    UserGift Parsing-->
+    <!--  UserGift Parsing  -->
     <string name="user_gift_parsing_name" translatable="false">name</string>
     <string name="user_gift_parsing_category" translatable="false">category</string>
     <string name="user_gift_parsing_description" translatable="false">description</string>
     <string name="user_gift_parsing_lat" translatable="false">lat</string>
     <string name="user_gift_parsing_lon" translatable="false">lon</string>
 
-    <!--    Strings to parse JSON-->
+    <!--  Strings to parse JSON  -->
     <string name="json_id" translatable="false">id</string>
     <string name="json_text" translatable="false">text</string>
     <string name="json_full_text" translatable="false">full_text</string>
@@ -43,7 +43,7 @@
     <string name="json_profile_image_normal" translatable="false">_normal</string>
     <string name="json_profile_banner_url" translatable="false">profile_banner_url</string>
 
-    <!--    Fragment tags-->
+    <!--  Fragment tags  -->
     <string name="home_fragment_tag" translatable="false">HomeFragment</string>
     <string name="users_tweets_fragment_tag" translatable="false">UserTweetsFragment</string>
     <string name="newgift_fragment_tag" translatable="false">NewGiftFragment</string>
@@ -55,19 +55,22 @@
 
     <string name="double_tap_to_exit_message">Press back button again to exit</string>
 
-    <!--    Notifications String-->
+    <!--  Notifications String  -->
     <string name="notification_title" translatable="false">title</string>
     <string name="notification_body" translatable="false">body</string>
     <string name="notification_data" translatable="false">data</string>
     <string name="notification_to" translatable="false">to</string>
     <string name="notification_priority" translatable="false">priority</string>
     <string name="notification_priority_value" translatable="false">high</string>
-    <!--    Reply notification title-->
+    <!--  Reply notification title  -->
     <string name="reply_notification_title">Reply received</string>
-    <!--    Reply notification text-->
+    <!--  Reply notification text  -->
     <string name="reply_notification_text">You have received an answer from %1$s for the article %2$s</string>
+    <!--  Geofence notification  -->
+    <string name="gift_nearby">Gift in the area</string>
+    <string name="descr_gift_nearby">There is a gift in your area</string>
 
-    <!--    Raggio (in metri)-->
+    <!--  Raggio (in metri)  -->
     <string-array name="radius_search">
         <item>100</item>
         <item>300</item>
@@ -85,7 +88,6 @@
 
     <string name="same_name">You already have a gift with this name, change it</string>
     <string name="no_chat">You have no chat</string>
-
 
     <!--  delete_mygift_dialog  -->
     <string name="sure">Are you sure you want to delete the gift?</string>

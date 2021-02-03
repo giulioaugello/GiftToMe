@@ -59,9 +59,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         holder.userName.setText(arrayChat.get(position).getUsername());
         holder.nameGift.setText(arrayChat.get(position).getGiftName());
 
-//        String category = usersGifts.get(position).getCategory();
-//        MyGiftTweetsAdapter.changeCategoryImage(category, holder.imageCategory);
-
         getTwitterProfileImage(position, arrayChat, holder.imageTwitterUser);
 
         holder.card.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +151,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                 try {
                     JSONObject userObject = new JSONObject(response);
 
-                    //replace serve per prendere l'immagine con le dimensioni (width e height) originali
+                    //replace serve per prendere l'immagine con le dimensioni originali
                     Uri profileImgUri = Uri.parse((userObject.getString(mContext.getResources().getString(R.string.json_profile_image_url_https))).replace(mContext.getResources().getString(R.string.json_profile_image_normal),""));
                     Picasso.with(mContext).load(profileImgUri).transform(new CircleTransformation()).into(profileImage);
 
@@ -171,7 +168,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     }
 
-    //aggiorna la lista
+    //aggiorna la recyclerview
     public void updateList(ArrayList<ReceiverModel> list){
         arrayChat = list;
         notifyDataSetChanged();

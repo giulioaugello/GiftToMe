@@ -57,4 +57,6 @@
     <string name="home_menu">Mapa</string>
     <string name="need_login_newg">Debes iniciar sesión para agregar un regalo, ¡ve a la sección Cuenta!</string>
     <string name="need_login_chat">Debes iniciar sesión para ingresar a esta sección, ¡ve a la sección Cuenta!</string>
+    <string name="gift_nearby">Regalo en la zona</string>
+    <string name="descr_gift_nearby">Hay un regalo en tu zona</string>
 </resources>

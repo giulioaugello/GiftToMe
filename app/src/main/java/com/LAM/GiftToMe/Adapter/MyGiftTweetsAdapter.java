@@ -114,7 +114,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
         }
     }
 
-
+    //dialog per rimozione
     private void showRemoveDialog(final String id, final int position){
         final Dialog dialog = new Dialog(activity);
         dialog.setCancelable(false);
@@ -149,6 +149,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
         dialog.show();
     }
 
+    //cancella regalo
     private void removeGift(final String id, final int position){
 
         TwitterRequests.deleteGift(id, mContext, new VolleyListener() {
@@ -166,6 +167,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
 
     }
 
+    //dialog per modifica
     public void editGift(final int position) {
 
         final Dialog dialog = new Dialog(activity);
@@ -217,14 +219,12 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
         }
         RadioButton radioButtonActive = v.findViewById(selectedId);
         radioButtonActive.setChecked(true);
-        //Toast.makeText(mContext, radioButtonActive.getText(), Toast.LENGTH_SHORT).show();
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 RadioButton radioChecked = v.findViewById(checkedId);
-                //Log.i("chk", "id " + radioChecked.getText());
 
                 switch (checkedId){
                     case R.id.sportRadio:
@@ -240,7 +240,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
             }
         });
 
-
+        //cancello tweet e lo rimetto con le modifiche
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

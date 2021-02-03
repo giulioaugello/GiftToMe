@@ -57,4 +57,6 @@
     <string name="new_gift_menu">新しいギフト</string>
     <string name="chat_menu">チャット</string>
     <string name="account_menu">アカウント</string>
+    <string name="gift_nearby">地域の贈り物</string>
+    <string name="descr_gift_nearby">お住まいの地域にギフトがあります</string>
 </resources>

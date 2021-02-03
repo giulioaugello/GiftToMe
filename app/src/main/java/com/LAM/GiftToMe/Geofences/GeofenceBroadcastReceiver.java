@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.LAM.GiftToMe.FCMFirebase.FCMNotification;
+import com.LAM.GiftToMe.R;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingEvent;
@@ -33,7 +34,8 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
 
-            fcmNotification.highPriorityNotification("Regalo in zona", "C'è un regalo nella tua zona");
+            //invio notifica quando sono vicino ad un regalo
+            fcmNotification.highPriorityNotification(context.getResources().getString(R.string.gift_nearby), context.getResources().getString(R.string.descr_gift_nearby));
 
         } else {
             // Log the error.

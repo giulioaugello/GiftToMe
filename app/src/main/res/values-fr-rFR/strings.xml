@@ -57,4 +57,6 @@
     <string name="home_menu">Carte</string>
     <string name="need_login_chat">Vous devez vous connecter pour accéder à cette section, allez dans la section Compte!</string>
     <string name="need_login_newg">Vous devez vous connecter pour ajouter un cadeau, rendez-vous dans la section Compte!</string>
+    <string name="descr_gift_nearby">Il y a un cadeau dans votre région</string>
+    <string name="gift_nearby">Cadeau dans la région</string>
 </resources>

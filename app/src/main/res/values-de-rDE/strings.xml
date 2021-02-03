@@ -57,4 +57,6 @@
     <string name="new_gift_menu">Neues Geschenk</string>
     <string name="chat_menu">Chat</string>
     <string name="account_menu">Konto</string>
+    <string name="descr_gift_nearby">In Ihrer Nähe gibt es ein Geschenk</string>
+    <string name="gift_nearby">Geschenk in der Umgebung</string>
 </resources>

@@ -95,6 +95,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         }
     }
 
+    //crea bottomSheetDialog
     private void showDetailsGift(final int position){
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.BottomSheetDialogTheme);
@@ -117,6 +118,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
         MyGiftTweetsAdapter.changeCategoryImage(categoryString, categoryUserGift);
 
         contactUser.setText(mContext.getResources().getString(R.string.contact, usersGifts.get(position).getIssuer()));
+
         contactUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +135,7 @@ public class UserTweetsAdapter extends RecyclerView.Adapter<UserTweetsAdapter.Vi
     }
 
 
-    //aggiorna la lista
+    //aggiorna la recyclerview
     public void updateList(ArrayList<UsersGift> list){
         usersGifts = list;
         notifyDataSetChanged();

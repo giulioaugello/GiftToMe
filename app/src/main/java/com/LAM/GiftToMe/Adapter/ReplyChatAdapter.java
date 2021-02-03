@@ -45,17 +45,18 @@ public class ReplyChatAdapter extends RecyclerView.Adapter<ReplyChatAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ReplyChatAdapter.ViewHolder holder, int position) {
 
-        GradientDrawable shapeBackground;
+        GradientDrawable gradientDrawable;
 
+        //in base a chi è il sender cambio il colore del gradient e setto l'allineamento
         if (arrayMessage.get(position).getSender().equals(MainActivity.userName)){
-            shapeBackground = (GradientDrawable)mContext.getDrawable(R.drawable.user_message_item_background);
+            gradientDrawable = (GradientDrawable)mContext.getDrawable(R.drawable.user_message_item_background);
             holder.linearLayout.setGravity(Gravity.END);
         }else{
-            shapeBackground = (GradientDrawable)mContext.getDrawable(R.drawable.interlocutor_message_item_background);
+            gradientDrawable = (GradientDrawable)mContext.getDrawable(R.drawable.interlocutor_message_item_background);
             holder.linearLayout.setGravity(Gravity.START);
         }
 
-        holder.message.setBackground(shapeBackground);
+        holder.message.setBackground(gradientDrawable);
 
         holder.message.setText(arrayMessage.get(position).getMessage());
 
@@ -80,6 +81,7 @@ public class ReplyChatAdapter extends RecyclerView.Adapter<ReplyChatAdapter.View
         }
     }
 
+    //aggiorna la recyclerview
     public void updateList(ArrayList<ModelUserMessage> list){
         arrayMessage = list;
         notifyDataSetChanged();

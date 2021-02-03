@@ -510,7 +510,7 @@ public class ReplyChatFragment extends Fragment {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    //replace serve per prendere l'immagine con le dimensioni (width e height) originali
+                    //replace serve per prendere l'immagine con le dimensioni originali
                     Uri profileImgUri = Uri.parse((jsonObject.getString(mContext.getResources().getString(R.string.json_profile_image_url_https))).replace(mContext.getResources().getString(R.string.json_profile_image_normal),""));
                     Picasso.with(mContext).load(profileImgUri).transform(new CircleTransformation()).into(profileImage);
 
