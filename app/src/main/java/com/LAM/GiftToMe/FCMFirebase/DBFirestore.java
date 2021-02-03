@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -13,8 +12,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +84,7 @@ public class DBFirestore {
 
     }
 
+    //prende il token e invia la notifica
     public static void getToken(String username, final ArrayList<String> message, final Context context){
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
@@ -100,7 +98,7 @@ public class DBFirestore {
                         //document.get("token").toString();
                         ArrayList<String> tokens = (ArrayList<String>) document.getData().get("token");
                         for(String token: tokens){
-                            FCMNotification.sendFCMNotification(message, token, context);
+                            FCMNotification.sendNotification(message, token, context);
                         }
                     }
                     //Log.i("FCMTAG", "eccomi " + token);
@@ -111,6 +109,7 @@ public class DBFirestore {
         });
     }
 
+    //controlla se l'utente già esiste, se non esiste updateTokens
     public static void checkIfExist(final String username, final String token){
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
@@ -133,6 +132,7 @@ public class DBFirestore {
         });
     }
 
+    //aggiunge un token quando faccio un nuovo accesso
     public static void updateTokens(String id, Map<String, Object> data, String token){
 
         if (data.containsKey("token")){
@@ -151,6 +151,7 @@ public class DBFirestore {
         }
     }
 
+    //rimuove il token quando faccio logout
     public static void removeToken(final String username, final String token){
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();

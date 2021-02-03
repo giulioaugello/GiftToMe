@@ -71,7 +71,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        initializeTwitter();
+        initializeTwitter(); //inizializza le cose di twitter
 
         v = inflater.inflate(R.layout.profile_fragment2, container, false);
 
@@ -96,7 +96,7 @@ public class ProfileFragment extends Fragment {
         constraintBeginning = v.findViewById(R.id.constraint_beginning);
 
         prefs = mContext.getSharedPreferences(getResources().getString(R.string.fcm_pref_name), Context.MODE_PRIVATE);
-        fcmToken = prefs.getString(getResources().getString(R.string.fcm_token),null);
+        fcmToken = prefs.getString(getResources().getString(R.string.fcm_token),null); //token FCM e DB
 
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
@@ -111,7 +111,7 @@ public class ProfileFragment extends Fragment {
                 MainActivity.isLogged = true;
 
                 if(fcmToken != null) {
-                    //Il token viene salvato nel db se non esiste già l'utente con questo token
+                    //Il token viene salvato nel db se l'utente con questo token non esiste già
                     DBFirestore.checkIfExist(MainActivity.userName, fcmToken);
                 }
 
@@ -137,6 +137,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                //rimuove il token se esco
                 DBFirestore.removeToken(MainActivity.userName, fcmToken);
 
                 TwitterCore.getInstance().getSessionManager().clearActiveSession();
@@ -210,6 +211,7 @@ public class ProfileFragment extends Fragment {
         loginButton.onActivityResult(requestCode, resultCode, data);
     }
 
+    //ritorna e imposta nome, immagine del profilo e banner di twitter
     private void setPageWithUserInfo(){
         TwitterRequests.getUserInfo(mContext, MainActivity.userName, new VolleyListener() {
 
@@ -217,16 +219,16 @@ public class ProfileFragment extends Fragment {
             public void onResponse(String response) {
 
                 try {
-                    JSONObject userObject = new JSONObject(response);
+                    JSONObject jsonObject = new JSONObject(response);
 
                     //replace serve per prendere l'immagine con le dimensioni (width e height) originali
-                    Uri profileImgUri = Uri.parse((userObject.getString(getResources().getString(R.string.json_profile_image_url_https))).replace(getResources().getString(R.string.json_profile_image_normal),""));
+                    Uri profileImgUri = Uri.parse((jsonObject.getString(getResources().getString(R.string.json_profile_image_url_https))).replace(getResources().getString(R.string.json_profile_image_normal),""));
                     Picasso.with(mContext).load(profileImgUri).transform(new CircleTransformation()).into(twitterPhoto);
 
-                    Uri profileBannerUri = Uri.parse((userObject.getString(getResources().getString(R.string.json_profile_banner_url))));
+                    Uri profileBannerUri = Uri.parse((jsonObject.getString(getResources().getString(R.string.json_profile_banner_url))));
                     Picasso.with(mContext).load(profileBannerUri).into(twitterBanner);
 
-                    userName = String.valueOf(userObject.get(getResources().getString(R.string.user_gift_parsing_name)));
+                    userName = String.valueOf(jsonObject.get(getResources().getString(R.string.user_gift_parsing_name)));
                     twitterUsername.setText(userName);
 
                 } catch (JSONException e) {

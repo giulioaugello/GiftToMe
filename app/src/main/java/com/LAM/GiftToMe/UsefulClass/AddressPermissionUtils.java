@@ -20,6 +20,7 @@ import static com.LAM.GiftToMe.Fragment.HomeFragment.REQUEST_PERMISSIONS_REQUEST
 
 public class AddressPermissionUtils {
 
+    //ritorna un indirizzo (stringa) tramite coordinate
     public static String addressString(Context mContext, double LATITUDE, double LONGITUDE) {
         String strAdd = "";
         Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
@@ -44,6 +45,7 @@ public class AddressPermissionUtils {
         return strAdd;
     }
 
+    //ritorna le coordinate tramite l'indirizzo
     public static ArrayList<Double> getCoordsFromAddress(String strAddress, Context mContext){
 
         //fare vari controlli quando l'indirizzo è sbagliato
@@ -74,6 +76,7 @@ public class AddressPermissionUtils {
         return coords;
     }
 
+    //funzione per chiedere i permessi
     public static void requestPermissionsIfNecessary(String[] permissions, Context context, View view) {
         ArrayList<String> permissionsToRequest = new ArrayList<>();
         for (String permission : permissions) {
@@ -88,7 +91,7 @@ public class AddressPermissionUtils {
             ActivityCompat.requestPermissions(
                     (Activity) view.getContext(),
                     permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE); //mette in REQUEST_PERMISSIONS_REQUEST_CODE i permessi da richiedere
+                    REQUEST_PERMISSIONS_REQUEST_CODE); //mette in REQUEST_PERMISSIONS_REQUEST_CODE (chiamato in MainActivity dall'onRequest) i permessi da richiedere
         }
     }
 

@@ -144,6 +144,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 //        Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
 //        poiMarkers.setIcon(clusterIcon);
 
+        //sceglie quale icona usare in base alla build
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             Drawable clusterIconD = getResources().getDrawable(R.mipmap.cluster_pie, null);
             Bitmap bitmap = ((BitmapDrawable) clusterIconD).getBitmap();
@@ -231,6 +232,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         floatingActionButton = v.findViewById(R.id.go_to_list);
 
+        //setto l'altezza per il FAB (dava problemi in landscape)
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) floatingActionButton.getLayoutParams();
@@ -260,7 +262,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         removeGeofences();
 
-
         return v;
     }
 
@@ -276,6 +277,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 //        arrayUsersGifts.clear();
     }
 
+    //crea il necessario per la mappa
     private void setupMap(){
 
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -380,6 +382,7 @@ public class HomeFragment extends Fragment implements LocationListener {
             }, mContext, v);
         }
 
+        //Per geofences mi servono i permessi in background
         if (Build.VERSION.SDK_INT >= 29) {
 
             if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -408,11 +411,11 @@ public class HomeFragment extends Fragment implements LocationListener {
 
     //mette il marker nella posizione cercata se il gps non è attivo
     private void setSearchPosition(){
-        //Toast.makeText(mContext, "Inserisci una posizione che ti interessa",Toast.LENGTH_LONG).show();
 
         //controllo se ho attivato i permessi
         checkUserLocation();
 
+        //se la barra di ricerca non è vuota, controllo che l'indirizzo scritto esista e aggiungo marker
         if (!addPosition.getText().toString().equals("")){
             if (AddressPermissionUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext) != null) {
                 ArrayList<Double> coord = AddressPermissionUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext);
@@ -532,7 +535,7 @@ public class HomeFragment extends Fragment implements LocationListener {
                 selectedMarker = new ArrayList<>();
                 selectedGift = new ArrayList<>();
 
-                String id, text, hashtag = "";
+                String id, text;
                 try {
                     JSONObject jObj = new JSONObject(response);
                     JSONArray jsonArray = (JSONArray) jObj.get(getResources().getString(R.string.json_statuses));
@@ -547,28 +550,28 @@ public class HomeFragment extends Fragment implements LocationListener {
                         UsersGift userGift = new UsersGift();
                         userGift.setTweetId(id);
 
-                        String tweetWithoutHashtag = text.replace(TWEET_ARTICLE_HASHTAG, "");
                         String lat = getResources().getString(R.string.user_gift_parsing_lat);
                         String lon = getResources().getString(R.string.user_gift_parsing_lon);
 
-                        JSONObject tweetWithoutHashtagJSON  = null;
+                        JSONObject tweetNoHashtagJSON  = null;
+                        String tweetNoHashtag = text.replace(TWEET_ARTICLE_HASHTAG, "");
 
                         try{
-                            tweetWithoutHashtagJSON = new JSONObject(tweetWithoutHashtag);
+                            tweetNoHashtagJSON = new JSONObject(tweetNoHashtag);
                         }
                         catch (JSONException e){
-//                            e.printStackTrace();
                             continue;
                         }
 
-                        userGift.setGiftId(tweetWithoutHashtagJSON.getString(idString));
-                        userGift.setName(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
-                        userGift.setCategory(String.valueOf(Html.fromHtml(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
-                        userGift.setDescription(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
-                        userGift.setLat(tweetWithoutHashtagJSON.getString(lat));
-                        userGift.setLon(tweetWithoutHashtagJSON.getString(lon));
-                        userGift.setAddress(AddressPermissionUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
-                        userGift.setIssuer(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
+                        //creo il regalo con tutte le informazioni e lo aggiungo all'array
+                        userGift.setGiftId(tweetNoHashtagJSON.getString(idString));
+                        userGift.setName(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
+                        userGift.setCategory(String.valueOf(Html.fromHtml(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
+                        userGift.setDescription(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
+                        userGift.setLat(tweetNoHashtagJSON.getString(lat));
+                        userGift.setLon(tweetNoHashtagJSON.getString(lon));
+                        userGift.setAddress(AddressPermissionUtils.addressString(mContext, Double.parseDouble(tweetNoHashtagJSON.getString(lat)), Double.parseDouble(tweetNoHashtagJSON.getString(lon))));
+                        userGift.setIssuer(tweetNoHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
 
                         if (!userGift.getIssuer().equals(MainActivity.userName)) {
                             arrayUsersGifts.add(userGift);
@@ -649,32 +652,6 @@ public class HomeFragment extends Fragment implements LocationListener {
                     }
                 }
 
-//                bCallback.onLoadComplete();
-//
-//
-//                viewPagerAdapter = new PageViewAdapter(mContext, usersGifts,activity);
-//                viewPager.setAdapter(viewPagerAdapter);
-//                viewPager.setPadding(0, 0, 300, 0);
-//                viewPager.setClipToPadding(false);
-//
-//
-//                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//                    @Override
-//                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onPageSelected(int position) {
-//                        LatLng latLng = new LatLng(Double.parseDouble(usersGifts.get(position).getLat()), Double.parseDouble(usersGifts.get(position).getLon()));
-//                        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.5f), 1000, null); //1000 is animation time
-//                    }
-//
-//                    @Override
-//                    public void onPageScrollStateChanged(int state) {
-//
-//                    }
-//                });
             }
 
             @Override
@@ -683,7 +660,6 @@ public class HomeFragment extends Fragment implements LocationListener {
             }
         });
 
-        //moveCameraToUserLocation();
     }
 
     //dialog per mostrare la recyclerView per i regali con lo stesso indirizzo

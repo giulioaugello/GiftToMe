@@ -8,8 +8,6 @@ import com.LAM.GiftToMe.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import androidx.annotation.NonNull;
-
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private final String TAG = "FCMTAG";
@@ -20,6 +18,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         Log.i(TAG, "Refreshed token: " + token);
 
+        //se sono loggato controlla se ci sono nel DB
         if(MainActivity.isLogged) {
             DBFirestore.saveUserDB(MainActivity.userName, token);
         }
@@ -37,7 +36,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.i(TAG, "Message data payload: " + remoteMessage.getData());
             FCMNotification fcmNotification = new FCMNotification(this);
-            fcmNotification.displayFCMNotification(remoteMessage);
+            fcmNotification.displayNotification(remoteMessage);
 
         }
 

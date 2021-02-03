@@ -34,16 +34,14 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class FCMNotification extends ContextWrapper {
 
-    private static final String TAG = "NotificationHelper";
-
     public static String CHANNEL_NAME = "High priority channel";
-    //    public static String CHANNEL_ID = getPackageName() + CHANNEL_NAME;
     public static String CHANNEL_ID = "com.LAM.GiftToMe" + CHANNEL_NAME;
 
     public static String FCM_SEND_ENDPOINT = "https://fcm.googleapis.com/fcm/send";
 
     public FCMNotification(Context base) {
         super(base);
+        //con android >= O si richiedono i canali
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.enableLights(true);
@@ -57,10 +55,10 @@ public class FCMNotification extends ContextWrapper {
         }
     }
 
-    public void sendHighPriorityNotification(String title, String body){
+    public void highPriorityNotification(String title, String body){
         Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,267,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,267, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(R.drawable.ic_baseline_card_giftcard_24)
@@ -77,21 +75,21 @@ public class FCMNotification extends ContextWrapper {
     }
 
 
-    public static void sendFCMNotification(ArrayList<String> message , String token, final Context mContext){
-        RequestQueue mRequest = Volley.newRequestQueue(mContext);
+    public static void sendNotification(ArrayList<String> message , String token, final Context mContext){
+        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         Log.i("FCMTAG", "eccomi in sendFCM " + token + ", message: " + message);
         JSONObject json = new JSONObject();
         try {
-            JSONObject userData = new JSONObject();
-            userData.put(mContext.getResources().getString(R.string.notification_title),message.get(0));
-            userData.put(mContext.getResources().getString(R.string.notification_body),message.get(1));
-            userData.put("forceStart","1");
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(mContext.getResources().getString(R.string.notification_title), message.get(0));
+            jsonObject.put(mContext.getResources().getString(R.string.notification_body), message.get(1));
+            jsonObject.put("forceStart","1");
 
 
-            json.put(mContext.getResources().getString(R.string.notification_priority),mContext.getResources().getString(R.string.notification_priority_value));
+            json.put(mContext.getResources().getString(R.string.notification_priority), mContext.getResources().getString(R.string.notification_priority_value));
 
-            json.put(mContext.getResources().getString(R.string.notification_data),userData);
+            json.put(mContext.getResources().getString(R.string.notification_data), jsonObject);
             json.put(mContext.getResources().getString(R.string.notification_to), token);
 
         }
@@ -118,12 +116,12 @@ public class FCMNotification extends ContextWrapper {
                 return params;
             }
         };
-        mRequest.add(jsonObjectRequest);
+        requestQueue.add(jsonObjectRequest);
 
     }
 
 
-    public void displayFCMNotification(RemoteMessage remoteMessage){
+    public void displayNotification(RemoteMessage remoteMessage){
 
         Intent activityIntent = new Intent(this, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this,

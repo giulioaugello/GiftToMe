@@ -200,6 +200,8 @@ public class ChatFragment extends Fragment {
             }
         });
 
+        //cambio tramite buttons
+
         replyArrayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -236,6 +238,8 @@ public class ChatFragment extends Fragment {
             }
         });
 
+        //per lo swipe
+
         recyclerViewReply.setOnTouchListener(new OnSwipeTouchListener(mContext) {
             public void onSwipeLeft() {
                 isMyGift = true;
@@ -269,86 +273,6 @@ public class ChatFragment extends Fragment {
         });
 
         //per la ricerca dei regali
-
-//        if (!isMyGift){
-//            searchGiftReply.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                }
-//
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//
-//                    // filter your list from your input
-//                    filter(s.toString(), chatModel);
-//                    //you can use runnable postDelayed like 500 ms to delay search text
-//                }
-//            });
-//        }else {
-//            searchMyGift.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                }
-//
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//
-//                    // filter your list from your input
-//                    filter(s.toString(), chatModelMyGift);
-//                    //you can use runnable postDelayed like 500 ms to delay search text
-//                }
-//            });
-//        }
-
-
-//        searchGiftReply.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//                // filter your list from your input
-//                Log.i("MYGIFTMYGIFT", "isMyGift4: " +  isMyGift);
-//                //filter(s.toString(), chatModel, chatListAdapterReply);
-//                if (filter(s.toString(), chatModel, chatListAdapterReply).size() == 0 && !s.toString().isEmpty()){
-//                    isMyGift = true;
-//                    recyclerViewReply.setVisibility(View.GONE);
-//                    recyclerViewMyGift.setVisibility(View.VISIBLE);
-//                    myGiftArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
-//                    replyArrayButton.setTextColor(getResources().getColor(R.color.primaryAndWhite, null));
-//                    filter(s.toString(), chatModelMyGift, chatListAdapterMyGift);
-//                    Log.i("MYGIFTMYGIFT", "isMyGift5: " +  isMyGift);
-//                }else {
-//                    isMyGift = false;
-//                    recyclerViewReply.setVisibility(View.VISIBLE);
-//                    recyclerViewMyGift.setVisibility(View.GONE);
-//                    myGiftArrayButton.setTextColor(getResources().getColor(R.color.primaryAndWhite, null));
-//                    replyArrayButton.setTextColor(getResources().getColor(R.color.colorChipSelected, null));
-//                    Log.i("MYGIFTMYGIFT", "isMyGift6: " +  isMyGift);
-//                }
-//                Log.i("MYGIFTMYGIFT", "isMyGift7: " +  isMyGift);
-//            }
-//        });
 
         searchGiftReply.addTextChangedListener(new TextWatcher() {
             @Override

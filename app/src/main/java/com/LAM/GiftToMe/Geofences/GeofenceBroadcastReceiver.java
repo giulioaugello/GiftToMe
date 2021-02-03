@@ -33,7 +33,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
 
-            fcmNotification.sendHighPriorityNotification("Regalo in zona", "C'è un regalo nella tua zona");
+            fcmNotification.highPriorityNotification("Regalo in zona", "C'è un regalo nella tua zona");
 
         } else {
             // Log the error.

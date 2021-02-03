@@ -1,7 +1,6 @@
 package com.LAM.GiftToMe.Twitter;
 
 import android.util.Base64;
-import android.util.Log;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -35,8 +34,6 @@ public class TwitterOAuth {
     private static final String oauth_signature = "oauth_signature";
     private static final String HMAC_SHA1 = "HmacSHA1";
 
-    public static final String between = "=\"";
-    public static final String last = "\",";
 
 
     public TwitterOAuth(String consumerKey, String consumerSecret, String token, String tokenSecret){
@@ -51,10 +48,10 @@ public class TwitterOAuth {
 
     public String generateHeader(String httpMethod, String url, Map<String, String> requestParams) {
 
-        String nonce = getNonce();
-        String timestamp = getTimestamp();
+        String nonce = nonceGenerator();
+        String timestamp = timestampGenerator();
         String baseSignatureString = generateSignatureBaseString(httpMethod, url, requestParams, nonce, timestamp);
-        String signature = encryptUsingHmacSHA1(baseSignatureString);
+        String signature = signingKeyGenerator(baseSignatureString);
 
 
         StringBuilder headerString = new StringBuilder();
@@ -68,19 +65,29 @@ public class TwitterOAuth {
         append(headerString, oauth_token, token);
         append(headerString, oauth_version, version);
 
-        //elimino l'ultimo carattere cioè la virgola dovuta alla funzione append
+        //elimino la virgola
         headerString.deleteCharAt(headerString.length() - 1);
 
         return headerString.toString();
     }
 
+    private String nonceGenerator() {
+        return UUID.randomUUID().toString();
+    }
+
+    private String timestampGenerator() {
+        return Math.round((new Date()).getTime() / 1000.0) + "";
+    }
+
     private String generateSignatureBaseString(String httpMethod, String url, Map<String, String> requestParams, String nonce, String timestamp) {
         Map<String, String> params = new HashMap<>();
 
+        //metto in params le coppie prese in input
         for(Map.Entry<String,String> entry : requestParams.entrySet()){
             put(params, entry.getKey(), entry.getValue());
         }
 
+        //inserisco in params i valori richiesti per la signatureBaseString
         put(params, oauth_consumer_key, consumerKey);
         put(params, oauth_nonce, nonce);
         put(params, oauth_signature_method, signatureMethod);
@@ -89,19 +96,20 @@ public class TwitterOAuth {
         put(params, oauth_version, version);
         TreeMap<String, String> sortedParams = new TreeMap<String, String>(params);
 
-        StringBuilder base = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         for(Map.Entry<String,String> entry : sortedParams.entrySet()){
-            base.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+            stringBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
         }
 
-        base.deleteCharAt(base.length() - 1);
+        //tolgo l'ultimo &
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
 
-        String baseString = httpMethod.toUpperCase() + "&" + encode(url) + "&" + encode(base.toString());
+        String baseString = httpMethod.toUpperCase() + "&" + encode(url) + "&" + encode(stringBuilder.toString());
 
         return baseString;
     }
 
-    private String encryptUsingHmacSHA1(String input) {
+    private String signingKeyGenerator(String input) {
         String secret = new StringBuilder().append(encode(consumerSecret)).append("&").append(encode(tokenSecret)).toString();
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         SecretKey key = new SecretKeySpec(keyBytes, HMAC_SHA1);
@@ -149,130 +157,6 @@ public class TwitterOAuth {
     private void append(StringBuilder builder, String key, String value) {
         builder.append(encode(key)).append("=\"").append(encode(value)).append("\",");
     }
-
-    private String getNonce() {
-        return UUID.randomUUID().toString();
-    }
-
-    private String getTimestamp() {
-        return Math.round((new Date()).getTime() / 1000.0) + "";
-    }
-
-//    public String generateHeader(String httpMethod, String url, Map<String, String> requestParams) {
-//
-//        String timestamp = timestampGenerator();
-//        String nonce = nonceGenerator();
-//        String baseSignatureString = signatureBaseStringGenerator(httpMethod, url, requestParams, nonce, timestamp);
-//        String signature = signingKeyGenerator(baseSignatureString);
-//
-//
-//        String header = "OAuth " +
-//                oauth_consumer_key + between + consumerKey + last +
-//
-//                oauth_nonce + between + nonce + last +
-//
-//                oauth_signature + between + signature + last +
-//
-//                oauth_signature_method + between + signatureMethod + last +
-//
-//                oauth_timestamp + between + timestamp + last +
-//
-//                oauth_token + between + token + last +
-//
-//                oauth_version + between + version + "\"";
-//
-//        Log.i("ciaociao", header + "");
-//
-//        return header;
-//    }
-//
-//    private String timestampGenerator(){
-//        return String.valueOf(Math.round((new Date()).getTime() / 1000.0));
-//    }
-//
-//    private String nonceGenerator(){ //vuole 32 bytes = 256 bit
-//        String firstUUID = String.valueOf(UUID.randomUUID()); //ognugno crea 128 bit
-//        //String secondUUID = String.valueOf(UUID.randomUUID());
-//        //return firstUUID + secondUUID;
-//        return firstUUID;
-////        Random random = ThreadLocalRandom.current();
-////        byte[] r = new byte[32]; //256 bit
-////        random.nextBytes(r);
-////        return Base64.encodeToString(r, Base64.DEFAULT);
-//    }
-//
-//
-//    private String signatureBaseStringGenerator(String httpMethod, String url, Map<String, String> requestParams, String nonce, String timestamp){
-//        StringBuilder templateString = new StringBuilder();
-//        Map<String, String> params = new HashMap<>();
-//
-//        //metto in params le coppie prese in input
-//        for(Map.Entry<String,String> entry : requestParams.entrySet()){
-//            params.put(entry.getKey(), entry.getValue());
-//        }
-//
-//        //inserisco in params i valori richiesti per la signatureBaseString
-//        params.put(oauth_consumer_key, consumerKey);
-//        params.put(oauth_nonce, nonce);
-//        params.put(oauth_signature_method, signatureMethod);
-//        params.put(oauth_timestamp, timestamp);
-//        params.put(oauth_token, token);
-//        params.put(oauth_version, version);
-//
-//        TreeMap<String, String> sortedMapParams = new TreeMap<>(params);
-//
-//        //ogni template è formato da: chiave = valore &
-//        for(Map.Entry<String,String> entry : sortedMapParams.entrySet()){
-//            templateString.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
-//        }
-//        //tolgo l'ultimo &
-//        templateString.deleteCharAt(templateString.length() - 1);
-//
-//        return httpMethod.toUpperCase() + "&" + encodeString(url) + "&" + encodeString(templateString.toString());
-//    }
-//
-//    private String signingKeyGenerator(String input){
-//        String signingKey = new StringBuilder().append(encodeString(consumerSecret)).append("&").append(encodeString(tokenSecret)).toString();
-//        SecretKey key = new SecretKeySpec(signingKey.getBytes(StandardCharsets.UTF_8), HMAC_SHA1);
-//        Mac mac; //A MAC provides a way to check the integrity of information transmitted over or stored in an unreliable medium, based on a secret key.
-//
-//        try {
-//            mac = Mac.getInstance("HmacSHA1");
-//            mac.init(key);
-//            byte[] signatureBytes = mac.doFinal(input.getBytes(StandardCharsets.UTF_8));
-//
-//            return new String(Base64.encode(signatureBytes, Base64.NO_WRAP));
-//
-//        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//
-//    private String encodeString(String value) {
-//        String encoded = "";
-//        try {
-//            encoded = URLEncoder.encode(value, "UTF-8");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        String updateString = "";
-//        char current;
-//        for (int i = 0; i < encoded.length(); i++) {
-//            current = encoded.charAt(i);
-//            if (current == '*') {
-//                updateString += "%2A";
-//            } else if (current == '+') {
-//                updateString += "%20";
-//            } else if (current == '%' && i + 1 < encoded.length() && encoded.charAt(i + 1) == '7' && encoded.charAt(i + 2) == 'E') {
-//                updateString += '~';
-//                i += 2;
-//            } else {
-//                updateString += current;
-//            }
-//        }
-//        return updateString;
-//    }
 
 
 }

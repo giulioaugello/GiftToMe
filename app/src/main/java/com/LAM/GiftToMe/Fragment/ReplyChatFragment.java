@@ -101,7 +101,7 @@ public class ReplyChatFragment extends Fragment {
                     Chat.sendMessageMyGift(MainActivity.userName, receiverName, yourReply, giftName);
                 }
 
-
+                //creo la notifica
                 final ArrayList<String> message = new ArrayList<>();
                 String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
                 String notificationText = mContext.getResources().getString(R.string.reply_notification_text, MainActivity.userName, giftName);
@@ -109,24 +109,22 @@ public class ReplyChatFragment extends Fragment {
                 message.add(notificationTitle);
                 message.add(notificationText);
 
-                DBFirestore.getToken(receiverName, message, mContext); //invia la notifica
+                DBFirestore.getToken(receiverName, message, mContext); //prende i token e invia la notifica
 
+                //crea l'utente il nuovo messaggio e lo aggiunge nel posto giusto
                 ModelUserMessage newMessage = new ModelUserMessage(MainActivity.userName, receiverName, yourReply);
                 arrayMessages.add(newMessage);
                 replyChatAdapter.updateList(arrayMessages); //aggiorna la recyclerview
                 Log.i("chatchat", "COUNT: " + replyChatAdapter.getItemCount() + " ... " + arrayMessages.size());
                 text.setText("");
 
-
-
                 recyclerView.scrollToPosition(replyChatAdapter.getItemCount() - 1); //mi serve per tenere il focus sull'ultimo messaggio inviato
 
             }
         });
 
-
+        //confronta i timestamp dei messaggi e inserisce i messaggi nell'ordine giusto
         if (!ChatFragment.isMyGift){
-
 
             Chat.getTimestamps2(MainActivity.userName, receiverName, giftName, new FirestoreListener() {
                 @Override
@@ -472,7 +470,6 @@ public class ReplyChatFragment extends Fragment {
 
         }
 
-
         ImageView goBackButton = v.findViewById(R.id.go_back_chat);
 
         goBackButton.setOnClickListener(new View.OnClickListener() {
@@ -487,9 +484,6 @@ public class ReplyChatFragment extends Fragment {
                 MainActivity.activeFragment = chatFragment;
             }
         });
-
-
-
 
         return v;
     }
@@ -506,6 +500,7 @@ public class ReplyChatFragment extends Fragment {
         recyclerView.setAdapter(replyChatAdapter);
     }
 
+    //ritorna immagine del profilo
     private void getTwitterProfileImage(String username, final ImageView profileImage){
         TwitterRequests.getUserInfo(mContext, username, new VolleyListener() {
 
@@ -513,10 +508,10 @@ public class ReplyChatFragment extends Fragment {
             public void onResponse(String response) {
 
                 try {
-                    JSONObject userObject = new JSONObject(response);
+                    JSONObject jsonObject = new JSONObject(response);
 
                     //replace serve per prendere l'immagine con le dimensioni (width e height) originali
-                    Uri profileImgUri = Uri.parse((userObject.getString(mContext.getResources().getString(R.string.json_profile_image_url_https))).replace(mContext.getResources().getString(R.string.json_profile_image_normal),""));
+                    Uri profileImgUri = Uri.parse((jsonObject.getString(mContext.getResources().getString(R.string.json_profile_image_url_https))).replace(mContext.getResources().getString(R.string.json_profile_image_normal),""));
                     Picasso.with(mContext).load(profileImgUri).transform(new CircleTransformation()).into(profileImage);
 
                 } catch (JSONException e) {
@@ -532,6 +527,7 @@ public class ReplyChatFragment extends Fragment {
 
     }
 
+    //mi serve per prendere nome del mittente e nome del regalo da ChatListAdapter (sostituisce il costruttore)
     public static ReplyChatFragment newInstance(String receiverName, String giftName){
         Bundle args = new Bundle();
         args.putString("receiverName", receiverName);

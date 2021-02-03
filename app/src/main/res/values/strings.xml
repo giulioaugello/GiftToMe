@@ -49,10 +49,9 @@
     <string name="newgift_fragment_tag" translatable="false">NewGiftFragment</string>
     <string name="chat_fragment_tag" translatable="false">ChatFragment</string>
     <string name="profile_fragment_tag" translatable="false">ProfileFragment</string>
-    <string name="conversation_fragment_tag" translatable="false">ConversationFragment</string>
     <string name="mygift_fragment_tag" translatable="false">MyGiftFragment</string>
     <string name="settings_fragment_tag" translatable="false">SettingsFragment</string>
-    <string name="receiverchat_fragment_tag" translatable="false">ReceiverChatFragment</string>
+    <string name="reply_chat_fragment_tag" translatable="false">ReplyChatFragment</string>
 
     <string name="double_tap_to_exit_message">Press back button again to exit</string>
 

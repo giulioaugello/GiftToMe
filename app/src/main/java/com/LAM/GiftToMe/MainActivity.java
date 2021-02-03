@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public static float radiusSearch;
     public static Boolean darkModeOn, darkMapOn;
 
-    public static String homeFragmentTag, usersGiftListFragmentTag, chatFragmentTag, newGiftFragmentTag, profileFragmentTag, conversationFragmentTag, settingsFragmentTag, myGiftFragmentTag, receiverChatFragmentTag;
+    public static String homeFragmentTag, usersGiftListFragmentTag, chatFragmentTag, newGiftFragmentTag, profileFragmentTag, settingsFragmentTag, myGiftFragmentTag, replyChatFragmentTag;
 
     private static final int TIME_INTERVAL = 2000; // tempo che intercorre tra due back (millisecondi)
     private long mBackPressed;
@@ -95,10 +95,9 @@ public class MainActivity extends AppCompatActivity {
         newGiftFragmentTag = getResources().getString(R.string.newgift_fragment_tag);
         chatFragmentTag = getResources().getString(R.string.chat_fragment_tag);
         profileFragmentTag = getResources().getString(R.string.profile_fragment_tag);
-        conversationFragmentTag = getResources().getString(R.string.conversation_fragment_tag);
         settingsFragmentTag = getResources().getString(R.string.settings_fragment_tag);
         myGiftFragmentTag = getResources().getString(R.string.mygift_fragment_tag);
-        receiverChatFragmentTag = getResources().getString(R.string.receiverchat_fragment_tag);
+        replyChatFragmentTag = getResources().getString(R.string.reply_chat_fragment_tag);
 
         sharedUsername = getResources().getString(R.string.shared_preferences_user_name);
         sharedUserId = getResources().getString(R.string.shared_preferences_user_id);
@@ -155,28 +154,28 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTag = homeFragmentTag;
                     break;
                 case R.id.nav_newGift:
-//                    if (isLogged){
+                    if (isLogged){
                         if(newGiftFragment == null) {
                             newGiftFragment = new NewGiftFragment();
                         }
                         selectedFragment = newGiftFragment;
                         fragmentTag = newGiftFragmentTag;
-//                    }else{
-//                        Toast.makeText(getApplicationContext(), "Devi accedere per poter aggiungere un regalo",Toast.LENGTH_LONG).show();
-//                        return false;
-//                    }
+                    }else{
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.need_login_newg), Toast.LENGTH_LONG).show();
+                        return false;
+                    }
                     break;
                 case R.id.nav_chat:
-//                    if (isLogged){
+                    if (isLogged){
                         if(chatFragment == null) {
                             chatFragment = new ChatFragment(); //rimettere ChatFragment()
                         }
                         selectedFragment = chatFragment;
                         fragmentTag = chatFragmentTag; //rimettere il tag della chat
-//                    }else{
-//                        Toast.makeText(getApplicationContext(), "Devi accedere per poter entrare in questa sezione",Toast.LENGTH_LONG).show();
-//                        return false;
-//                    }
+                    }else{
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.need_login_chat), Toast.LENGTH_LONG).show();
+                        return false;
+                    }
                     break;
                 case R.id.nav_profile:
                     if(profileFragment == null) {
@@ -205,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if(activeFragment.equals(fragmentManager.findFragmentByTag(homeFragmentTag)) || activeFragment.equals(fragmentManager.findFragmentByTag(usersGiftListFragmentTag))) {
+
             if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
                 finishAndRemoveTask();
                 return;
@@ -214,28 +214,30 @@ public class MainActivity extends AppCompatActivity {
             }
 
             mBackPressed = System.currentTimeMillis();
-        }
 
-        else if(activeFragment.equals(fragmentManager.findFragmentByTag(receiverChatFragmentTag))){
+        } else if(activeFragment.equals(fragmentManager.findFragmentByTag(replyChatFragmentTag))){
+
+            fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.toptobottom);
             fragmentTransaction.replace(R.id.fragment_container, chatFragment, chatFragmentTag).commit();
             fragmentTransaction.addToBackStack(chatFragmentTag);
             activeFragment = chatFragment;
             bottomNavigationView.setSelectedItemId(R.id.nav_chat);
-        }
 
-        else if(activeFragment.equals(getSupportFragmentManager().findFragmentByTag(settingsFragmentTag)) || activeFragment.equals(getSupportFragmentManager().findFragmentByTag(myGiftFragmentTag))){
+        } else if(activeFragment.equals(getSupportFragmentManager().findFragmentByTag(settingsFragmentTag)) || activeFragment.equals(getSupportFragmentManager().findFragmentByTag(myGiftFragmentTag))){
+
             fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.toptobottom);
             fragmentTransaction.replace(R.id.fragment_container, profileFragment, profileFragmentTag).commit();
             fragmentTransaction.addToBackStack(profileFragmentTag);
             activeFragment = profileFragment;
             bottomNavigationView.setSelectedItemId(R.id.nav_profile);
-        }
 
-        else {
+        } else {
+
             fragmentTransaction.replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
             fragmentTransaction.addToBackStack(homeFragmentTag);
             activeFragment = homeFragment;
             bottomNavigationView.setSelectedItemId(R.id.nav_home);
+
         }
     }
 

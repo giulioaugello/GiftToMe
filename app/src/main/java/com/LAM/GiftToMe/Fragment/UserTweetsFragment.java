@@ -204,30 +204,31 @@ public class UserTweetsFragment extends Fragment {
                         UsersGift userGift = new UsersGift();
                         userGift.setTweetId(id);
 
-                        String tweetWithoutHashtag = text.replace(TWEET_ARTICLE_HASHTAG, "");
                         String lat = getResources().getString(R.string.user_gift_parsing_lat);
                         String lon = getResources().getString(R.string.user_gift_parsing_lon);
 
-                        JSONObject tweetWithoutHashtagJSON  = null;
+                        JSONObject tweetNoHashtagJSON  = null;
+                        String tweetNoHashtag = text.replace(TWEET_ARTICLE_HASHTAG, "");
 
                         try{
-                            tweetWithoutHashtagJSON = new JSONObject(tweetWithoutHashtag);
+                            tweetNoHashtagJSON = new JSONObject(tweetNoHashtag);
                         }
                         catch (JSONException e){
-//                            e.printStackTrace();
                             continue;
                         }
 
-                        userGift.setGiftId(tweetWithoutHashtagJSON.getString(idString));
-                        userGift.setName(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
-                        userGift.setCategory(String.valueOf(Html.fromHtml(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
-                        userGift.setDescription(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
-                        userGift.setLat(tweetWithoutHashtagJSON.getString(lat));
-                        userGift.setLon(tweetWithoutHashtagJSON.getString(lon));
-                        userGift.setAddress(AddressPermissionUtils.addressString(mContext, Double.parseDouble(tweetWithoutHashtagJSON.getString(lat)), Double.parseDouble(tweetWithoutHashtagJSON.getString(lon))));
-                        userGift.setIssuer(tweetWithoutHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
+                        //costruisco il regalo
+                        userGift.setGiftId(tweetNoHashtagJSON.getString(idString));
+                        userGift.setName(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
+                        userGift.setCategory(String.valueOf(Html.fromHtml(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
+                        userGift.setDescription(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
+                        userGift.setLat(tweetNoHashtagJSON.getString(lat));
+                        userGift.setLon(tweetNoHashtagJSON.getString(lon));
+                        userGift.setAddress(AddressPermissionUtils.addressString(mContext, Double.parseDouble(tweetNoHashtagJSON.getString(lat)), Double.parseDouble(tweetNoHashtagJSON.getString(lon))));
+                        userGift.setIssuer(tweetNoHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
 
                         if (!userGift.getIssuer().equals(MainActivity.userName)) {
+                            //in base alla categoria li aggiungo ad array diversi
                             switch (userGift.getCategory()){
                                 case "Sport":
                                     sportA.add(userGift);
@@ -262,6 +263,8 @@ public class UserTweetsFragment extends Fragment {
 //                    setupRecyclerView(clothingA, recyclerViewClothing);
 //                    setupRecyclerView(musicA, recyclerViewMusic);
 //                    setupRecyclerView(otherA, recyclerViewOther);
+
+                    //controlla se c'è almeno un regalo per ogni categoria
                     checkIsEmpty(sportA, recyclerViewSport, noGift1);
                     checkIsEmpty(electronicsA, recyclerViewElectronics, noGift2);
                     checkIsEmpty(clothingA, recyclerViewClothing, noGift3);
@@ -273,39 +276,10 @@ public class UserTweetsFragment extends Fragment {
                 }
 
                 for (UsersGift userGift : arrayUsersGifts) {
-//                    LatLng latLng = new LatLng(Double.parseDouble(userGift.getLat()), Double.parseDouble(userGift.getLon()));
-//                    addMarker(latLng, userGift.getCategory());
                     coordMarker[0] = Double.parseDouble(userGift.getLat());
                     coordMarker[1] = Double.parseDouble(userGift.getLon());
-                    //addMarker(coordMarker, userGift.getCategory());
                 }
 
-//                bCallback.onLoadComplete();
-//
-//
-//                viewPagerAdapter = new PageViewAdapter(mContext, usersGifts,activity);
-//                viewPager.setAdapter(viewPagerAdapter);
-//                viewPager.setPadding(0, 0, 300, 0);
-//                viewPager.setClipToPadding(false);
-//
-//
-//                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//                    @Override
-//                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onPageSelected(int position) {
-//                        LatLng latLng = new LatLng(Double.parseDouble(usersGifts.get(position).getLat()), Double.parseDouble(usersGifts.get(position).getLon()));
-//                        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.5f), 1000, null); //1000 is animation time
-//                    }
-//
-//                    @Override
-//                    public void onPageScrollStateChanged(int state) {
-//
-//                    }
-//                });
             }
 
             @Override
@@ -406,6 +380,7 @@ public class UserTweetsFragment extends Fragment {
         if (arrayList.isEmpty()){
             textView.setVisibility(View.VISIBLE);
         }else{
+            //se non è vuoto setup
             setupRecyclerView(arrayList, recyclerView);
             textView.setVisibility(View.GONE);
         }
@@ -413,13 +388,12 @@ public class UserTweetsFragment extends Fragment {
 
     private void enableGPS(){
 
-        // Build the alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Attiva la posizione");
         builder.setMessage("Devi attivare la posizione");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                // Show location settings when the user acknowledges the alert dialog
+
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivityForResult(intent, 1003);
             }
@@ -441,7 +415,6 @@ public class UserTweetsFragment extends Fragment {
                 MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
             }
         }
-
 
     }
 

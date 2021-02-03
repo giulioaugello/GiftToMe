@@ -127,7 +127,7 @@ public class NewGiftFragment extends Fragment {
 
     private boolean checkFormAndChip(){
         boolean isReturn = false;
-        //Controllo se tutti i campi stono stati inseriti correttamente
+        //Controllo se tutti i campi stono stati inseriti
         Log.i("formform", "Nome: " + nameForm.getText().toString());
         if (nameForm.getText().toString().equals("") || descriptionForm.getText().toString().equals("") || addressForm.getText().toString().equals("")){
             Toast.makeText(mContext, mContext.getResources().getString(R.string.all_fields), Toast.LENGTH_SHORT).show();
@@ -135,7 +135,7 @@ public class NewGiftFragment extends Fragment {
             return isReturn;
         }
 
-        //Poichè la lunghezza massima di tutto il tweet è di 280 caratteri
+        //la lunghezza massima di TUTTO il tweet è di 280 caratteri
         Log.i("formform", "Lunghezza descrizione: " + descriptionForm.getText().length());
         if(descriptionForm.getText().length() > 90){
             Toast.makeText(mContext, mContext.getResources().getString(R.string.long_descr), Toast.LENGTH_SHORT).show();
@@ -143,6 +143,7 @@ public class NewGiftFragment extends Fragment {
             return isReturn;
         }
 
+        //controllo se l'indirizzo è valido
         Log.i("formform", "Indirizzo: " + AddressPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext));
         if(AddressPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext) == null) {
             Toast.makeText(mContext, mContext.getResources().getString(R.string.valid_address), Toast.LENGTH_SHORT).show();
@@ -150,6 +151,7 @@ public class NewGiftFragment extends Fragment {
             return isReturn;
         }
 
+        //controllo se è stata selezionata una categoria
         Log.i("formform", "Categoria: " + activeCategory);
         if (activeCategory.equals("")){
             Toast.makeText(mContext, mContext.getResources().getString(R.string.check_categ), Toast.LENGTH_SHORT).show();
@@ -160,6 +162,7 @@ public class NewGiftFragment extends Fragment {
         return isReturn;
     }
 
+    //dialog riassuntivo
     private void showDialogRecap(final String giftName){
 
         final Dialog dialog = new Dialog(getActivity());
@@ -220,7 +223,7 @@ public class NewGiftFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.i(TAG,response);
                         dialog.dismiss();
-                        Chat.newGiftUpload(MainActivity.userName, giftName);
+                        Chat.newGiftUpload(MainActivity.userName, giftName); //controllo se esiste un regalo con quel nome
                         onSuccessDialog();
 
                     }
@@ -230,6 +233,7 @@ public class NewGiftFragment extends Fragment {
         });
     }
 
+    //animazione per aggiunta regalo
     private void onSuccessDialog(){
         final Dialog dialog = new Dialog(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.gift_upload_animation,null);
@@ -326,6 +330,7 @@ public class NewGiftFragment extends Fragment {
 
     }
 
+    //cancella tutto ciò che c'è negli editText
     private void clearForm(ViewGroup group) {
         for (int i = 0, count = group.getChildCount(); i < count; ++i) {
             View view = group.getChildAt(i);
@@ -339,6 +344,7 @@ public class NewGiftFragment extends Fragment {
         activeCategory = "";
     }
 
+    //seleziona la categoria in base al chip selezionato e cambia colore
     private void onClickChip(Chip chip, final List<Chip> list, final String category){
         chip.setOnClickListener(new View.OnClickListener() {
             @Override

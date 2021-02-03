@@ -95,8 +95,8 @@ public class SettingsFragment extends Fragment {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext, R.array.radius_search, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setSelected(false);  // otherwise listener will be called on initialization
-        spinner.setSelection(index,true);  // otherwise listener will be called on initialization
+        spinner.setSelected(false);
+        spinner.setSelection(index,true);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

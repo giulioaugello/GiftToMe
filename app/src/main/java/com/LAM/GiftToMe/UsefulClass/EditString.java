@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public class EditString {
 
+    //mi serve per postare i tweet (mette i parametri nella forma corretta)
     public static String normalizeTask(Double lat, Double lon, String name, String description, String category, String username){
 
         final String hashtag = "#LAM_giftToMe_2020-article";
