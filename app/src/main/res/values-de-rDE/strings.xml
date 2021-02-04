@@ -59,4 +59,5 @@
     <string name="account_menu">Konto</string>
     <string name="descr_gift_nearby">In Ihrer Nähe gibt es ein Geschenk</string>
     <string name="gift_nearby">Geschenk in der Umgebung</string>
+    <string name="close_popup">Berühren Sie, um oder zu schließen</string>
 </resources>

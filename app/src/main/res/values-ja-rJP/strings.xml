@@ -59,4 +59,5 @@
     <string name="account_menu">アカウント</string>
     <string name="gift_nearby">地域の贈り物</string>
     <string name="descr_gift_nearby">お住まいの地域にギフトがあります</string>
+    <string name="close_popup">タッチして閉じるまたは</string>
 </resources>

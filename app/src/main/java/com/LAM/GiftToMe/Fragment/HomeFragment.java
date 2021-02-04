@@ -553,25 +553,25 @@ public class HomeFragment extends Fragment implements LocationListener {
                         String lat = getResources().getString(R.string.user_gift_parsing_lat);
                         String lon = getResources().getString(R.string.user_gift_parsing_lon);
 
-                        JSONObject tweetNoHashtagJSON  = null;
-                        String tweetNoHashtag = text.replace(TWEET_ARTICLE_HASHTAG, "");
+                        JSONObject tweetJSON;
+                        String jsonParameter = text.replace(TWEET_ARTICLE_HASHTAG, "");
 
                         try{
-                            tweetNoHashtagJSON = new JSONObject(tweetNoHashtag);
+                            tweetJSON = new JSONObject(jsonParameter);
                         }
                         catch (JSONException e){
                             continue;
                         }
 
                         //creo il regalo con tutte le informazioni e lo aggiungo all'array
-                        userGift.setGiftId(tweetNoHashtagJSON.getString(idString));
-                        userGift.setName(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
-                        userGift.setCategory(String.valueOf(Html.fromHtml(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
-                        userGift.setDescription(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
-                        userGift.setLat(tweetNoHashtagJSON.getString(lat));
-                        userGift.setLon(tweetNoHashtagJSON.getString(lon));
-                        userGift.setAddress(AddressPermissionUtils.addressString(mContext, Double.parseDouble(tweetNoHashtagJSON.getString(lat)), Double.parseDouble(tweetNoHashtagJSON.getString(lon))));
-                        userGift.setIssuer(tweetNoHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
+                        userGift.setGiftId(tweetJSON.getString(idString));
+                        userGift.setName(tweetJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
+                        userGift.setDescription(tweetJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
+                        userGift.setCategory(String.valueOf(Html.fromHtml(tweetJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
+                        userGift.setLat(tweetJSON.getString(lat));
+                        userGift.setLon(tweetJSON.getString(lon));
+                        userGift.setAddress(AddressPermissionUtils.addressString(mContext, Double.parseDouble(tweetJSON.getString(lat)), Double.parseDouble(tweetJSON.getString(lon))));
+                        userGift.setIssuer(tweetJSON.getString(getResources().getString(R.string.json_issuer)));
 
                         if (!userGift.getIssuer().equals(MainActivity.userName)) {
                             arrayUsersGifts.add(userGift);
@@ -800,7 +800,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         marker.setTitle(usersGift.getGiftId());
 
         marker.setInfoWindow(customInfoWindow); //setta il popup
-        marker.setSubDescription("Tocca per chiudere oppure"); //sottodescrizione
+        marker.setSubDescription(mContext.getResources().getString(R.string.close_popup)); //sottodescrizione
         marker.setImage(drawableImagePopup); //setta l'immagine nel popup
         marker.setInfoWindowAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
 
@@ -809,8 +809,6 @@ public class HomeFragment extends Fragment implements LocationListener {
         poiMarkers.add(marker);
 
         map.getOverlays().add(poiMarkers);
-
-        //se sono vicino al marker apre da solo il popup?
 
         //aggiungo geofence
         addGeofences(usersGift.getLat(), usersGift.getLon(), MainActivity.radiusSearch);

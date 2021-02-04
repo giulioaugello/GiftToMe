@@ -256,7 +256,6 @@ public class CustomInfoWindow extends MarkerInfoWindow {
 
         final EditText replyGiftText = view.findViewById(R.id.get_text_reply);
         TextView topText = view.findViewById(R.id.top_text);
-        //topText.setText(mContext.getResources().getString(R.string.contact) + usersGift.getIssuer() + mContext.getResources().getString(R.string.forg) + usersGift.getName());
         topText.setText(mContext.getResources().getString(R.string.contact_for, usersGift.getIssuer(), usersGift.getName()));
         Button sendReply = view.findViewById(R.id.send_button);
 

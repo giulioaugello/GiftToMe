@@ -59,4 +59,5 @@
     <string name="account_menu">Profilo</string>
     <string name="descr_gift_nearby">C\'è un regalo nella tua zona</string>
     <string name="gift_nearby">Regalo in zona</string>
+    <string name="close_popup">Tocca per chiudere oppure</string>
 </resources>

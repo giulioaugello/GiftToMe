@@ -189,7 +189,7 @@ public class UserTweetsFragment extends Fragment {
             public void onResponse(String response) {
                 arrayUsersGifts = new ArrayList<>();
 
-                String id, text, hashtag = "";
+                String id, text;
                 try {
                     JSONObject jObj = new JSONObject(response);
                     JSONArray jsonArray = (JSONArray) jObj.get(getResources().getString(R.string.json_statuses));
@@ -207,25 +207,25 @@ public class UserTweetsFragment extends Fragment {
                         String lat = getResources().getString(R.string.user_gift_parsing_lat);
                         String lon = getResources().getString(R.string.user_gift_parsing_lon);
 
-                        JSONObject tweetNoHashtagJSON  = null;
-                        String tweetNoHashtag = text.replace(TWEET_ARTICLE_HASHTAG, "");
+                        JSONObject tweetJSON;
+                        String jsonParameter = text.replace(TWEET_ARTICLE_HASHTAG, "");
 
                         try{
-                            tweetNoHashtagJSON = new JSONObject(tweetNoHashtag);
+                            tweetJSON = new JSONObject(jsonParameter);
                         }
                         catch (JSONException e){
                             continue;
                         }
 
                         //costruisco il regalo
-                        userGift.setGiftId(tweetNoHashtagJSON.getString(idString));
-                        userGift.setName(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
-                        userGift.setCategory(String.valueOf(Html.fromHtml(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
-                        userGift.setDescription(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
-                        userGift.setLat(tweetNoHashtagJSON.getString(lat));
-                        userGift.setLon(tweetNoHashtagJSON.getString(lon));
-                        userGift.setAddress(AddressPermissionUtils.addressString(mContext, Double.parseDouble(tweetNoHashtagJSON.getString(lat)), Double.parseDouble(tweetNoHashtagJSON.getString(lon))));
-                        userGift.setIssuer(tweetNoHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
+                        userGift.setGiftId(tweetJSON.getString(idString));
+                        userGift.setName(tweetJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
+                        userGift.setDescription(tweetJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
+                        userGift.setCategory(String.valueOf(Html.fromHtml(tweetJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
+                        userGift.setLat(tweetJSON.getString(lat));
+                        userGift.setLon(tweetJSON.getString(lon));
+                        userGift.setAddress(AddressPermissionUtils.addressString(mContext, Double.parseDouble(tweetJSON.getString(lat)), Double.parseDouble(tweetJSON.getString(lon))));
+                        userGift.setIssuer(tweetJSON.getString(getResources().getString(R.string.json_issuer)));
 
                         if (!userGift.getIssuer().equals(MainActivity.userName)) {
                             //in base alla categoria li aggiungo ad array diversi

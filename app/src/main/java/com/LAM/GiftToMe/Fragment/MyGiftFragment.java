@@ -68,13 +68,13 @@ public class MyGiftFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        JSONObject entities = new JSONObject(jsonObject.getString(getResources().getString(R.string.json_entities)));
-                        JSONArray jsonArrayHashtags = entities.getJSONArray(getResources().getString(R.string.json_hashtags));
-
-                        for (int j = 0 ;j < jsonArrayHashtags.length(); j++) {
-                            JSONObject jsonObjectDates = jsonArrayHashtags.getJSONObject(j);
-                            //hashtag = jsonObjectDates.getString(getResources().getString(R.string.json_text));
-                        }
+//                        JSONObject entities = new JSONObject(jsonObject.getString(getResources().getString(R.string.json_entities)));
+//                        JSONArray jsonArrayHashtags = entities.getJSONArray(getResources().getString(R.string.json_hashtags));
+//
+//                        for (int j = 0 ;j < jsonArrayHashtags.length(); j++) {
+//                            JSONObject jsonObjectDates = jsonArrayHashtags.getJSONObject(j);
+//                            //hashtag = jsonObjectDates.getString(getResources().getString(R.string.json_text));
+//                        }
 
                         text = jsonObject.getString(getResources().getString(R.string.json_full_text));
                         id = jsonObject.getString(getResources().getString(R.string.json_id));
@@ -84,19 +84,19 @@ public class MyGiftFragment extends Fragment {
                             //creo i vari regali
                             MyGift myGift = new MyGift();
 
-                            String tweetNoHashtag = text.replace(TWEET_ARTICLE_HASHTAG,"");
-                            JSONObject tweetNoHashtagJSON = new JSONObject(tweetNoHashtag);
+                            String jsonParameter = text.replace(TWEET_ARTICLE_HASHTAG,"");
+                            JSONObject tweetJSON = new JSONObject(jsonParameter);
                             String lat = getResources().getString(R.string.user_gift_parsing_lat);
                             String lon = getResources().getString(R.string.user_gift_parsing_lon);
 
                             myGift.setTweetId(id);
-                            myGift.setName(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
-                            myGift.setCategory(String.valueOf(Html.fromHtml(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
-                            myGift.setDescription(tweetNoHashtagJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
-                            myGift.setLat(tweetNoHashtagJSON.getString(lat));
-                            myGift.setLon(tweetNoHashtagJSON.getString(lon));
-                            myGift.setAddress(AddressPermissionUtils.addressString(mContext, (Double)tweetNoHashtagJSON.get(lat), (Double)tweetNoHashtagJSON.get(lon)));
-                            myGift.setIssuer(tweetNoHashtagJSON.getString(getResources().getString(R.string.json_issuer)));
+                            myGift.setName(tweetJSON.getString(getResources().getString(R.string.user_gift_parsing_name)));
+                            myGift.setDescription(tweetJSON.getString(getResources().getString(R.string.user_gift_parsing_description)));
+                            myGift.setCategory(String.valueOf(Html.fromHtml(tweetJSON.getString(getResources().getString(R.string.user_gift_parsing_category)))));
+                            myGift.setLat(tweetJSON.getString(lat));
+                            myGift.setLon(tweetJSON.getString(lon));
+                            myGift.setAddress(AddressPermissionUtils.addressString(mContext, (Double)tweetJSON.get(lat), (Double)tweetJSON.get(lon)));
+                            myGift.setIssuer(tweetJSON.getString(getResources().getString(R.string.json_issuer)));
 
                             userGifts.add(myGift);
 

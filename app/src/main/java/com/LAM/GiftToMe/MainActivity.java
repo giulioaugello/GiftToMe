@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         activeFragment = homeFragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
 
-        //get FragmentTags
+        //tag per fragment
         homeFragmentTag = getResources().getString(R.string.home_fragment_tag);
         usersGiftListFragmentTag = getResources().getString(R.string.users_tweets_fragment_tag);
         newGiftFragmentTag = getResources().getString(R.string.newgift_fragment_tag);
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         myGiftFragmentTag = getResources().getString(R.string.mygift_fragment_tag);
         replyChatFragmentTag = getResources().getString(R.string.reply_chat_fragment_tag);
 
+        //stringhe shared preferences per login utente
         sharedUsername = getResources().getString(R.string.shared_preferences_user_name);
         sharedUserId = getResources().getString(R.string.shared_preferences_user_id);
         sharedToken = getResources().getString(R.string.shared_preferences_token);
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("loginPref", MODE_PRIVATE);
         isLogged = sharedPreferences.getBoolean("isLogged", false); //ritorna false se nn esiste quella chiave
 
-        //recupero variabili salvate
+        //se sono loggato recupero shared preference
         if(isLogged){
             userName = sharedPreferences.getString(sharedUsername,null);
             userId = sharedPreferences.getLong(sharedUserId, 0);
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
+    //listener per bottomNavigation
     private final BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -241,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //per permessi
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -292,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
+    //la richiamo per aggiustare il floating action button
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -359,7 +363,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //Viene salvata la sessione utente per essere ancora loggato quando riapre l'app
+
+        //salvo le variabili nelle sharedPreferences per essere loggato quando riapro l'app
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putBoolean("isLogged", isLogged).apply();
@@ -387,6 +392,8 @@ public class MainActivity extends AppCompatActivity {
             fragment.findFragmentByTag(profileFragmentTag).onActivityResult(requestCode, resultCode, data);
         }else if (activeFragment == fragment.findFragmentByTag(usersGiftListFragmentTag)){
             fragment.findFragmentByTag(usersGiftListFragmentTag).onActivityResult(requestCode, resultCode, data);
+        }else if (activeFragment == fragment.findFragmentByTag(homeFragmentTag)){
+            fragment.findFragmentByTag(homeFragmentTag).onActivityResult(requestCode, resultCode, data);
         }
     }
 }

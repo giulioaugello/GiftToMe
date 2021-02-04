@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -82,15 +81,15 @@ public class FCMNotification extends ContextWrapper {
         JSONObject json = new JSONObject();
         try {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(mContext.getResources().getString(R.string.notification_title), message.get(0));
-            jsonObject.put(mContext.getResources().getString(R.string.notification_body), message.get(1));
+            jsonObject.put(mContext.getResources().getString(R.string.not_title), message.get(0));
+            jsonObject.put(mContext.getResources().getString(R.string.not_body), message.get(1));
             jsonObject.put("forceStart","1");
 
 
-            json.put(mContext.getResources().getString(R.string.notification_priority), mContext.getResources().getString(R.string.notification_priority_value));
+            json.put(mContext.getResources().getString(R.string.not_priority), mContext.getResources().getString(R.string.not_priority_value));
 
-            json.put(mContext.getResources().getString(R.string.notification_data), jsonObject);
-            json.put(mContext.getResources().getString(R.string.notification_to), token);
+            json.put(mContext.getResources().getString(R.string.not_data), jsonObject);
+            json.put(mContext.getResources().getString(R.string.not_to), token);
 
         }
         catch (JSONException e) {
@@ -128,8 +127,8 @@ public class FCMNotification extends ContextWrapper {
                 0, activityIntent, 0);
 
 
-        String titleString = getResources().getString(R.string.notification_title);
-        String bodyString = getResources().getString(R.string.notification_body);
+        String titleString = getResources().getString(R.string.not_title);
+        String bodyString = getResources().getString(R.string.not_body);
 
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
         bigTextStyle.setBigContentTitle((remoteMessage.getData().get(titleString)));

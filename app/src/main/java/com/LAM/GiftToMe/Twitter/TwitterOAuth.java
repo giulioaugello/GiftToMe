@@ -57,13 +57,13 @@ public class TwitterOAuth {
         StringBuilder headerString = new StringBuilder();
 
         headerString.append("OAuth ");
-        append(headerString, oauth_consumer_key, consumerKey);
-        append(headerString, oauth_nonce, nonce);
-        append(headerString, oauth_signature, signature);
-        append(headerString, oauth_signature_method, signatureMethod);
-        append(headerString, oauth_timestamp, timestamp);
-        append(headerString, oauth_token, token);
-        append(headerString, oauth_version, version);
+        appendString(headerString, oauth_consumer_key, consumerKey);
+        appendString(headerString, oauth_nonce, nonce);
+        appendString(headerString, oauth_signature, signature);
+        appendString(headerString, oauth_signature_method, signatureMethod);
+        appendString(headerString, oauth_timestamp, timestamp);
+        appendString(headerString, oauth_token, token);
+        appendString(headerString, oauth_version, version);
 
         //elimino la virgola
         headerString.deleteCharAt(headerString.length() - 1);
@@ -84,16 +84,16 @@ public class TwitterOAuth {
 
         //metto in params le coppie prese in input
         for(Map.Entry<String,String> entry : requestParams.entrySet()){
-            put(params, entry.getKey(), entry.getValue());
+            putInMap(params, entry.getKey(), entry.getValue());
         }
 
         //inserisco in params i valori richiesti per la signatureBaseString
-        put(params, oauth_consumer_key, consumerKey);
-        put(params, oauth_nonce, nonce);
-        put(params, oauth_signature_method, signatureMethod);
-        put(params, oauth_timestamp, timestamp);
-        put(params, oauth_token, token);
-        put(params, oauth_version, version);
+        putInMap(params, oauth_consumer_key, consumerKey);
+        putInMap(params, oauth_nonce, nonce);
+        putInMap(params, oauth_signature_method, signatureMethod);
+        putInMap(params, oauth_timestamp, timestamp);
+        putInMap(params, oauth_token, token);
+        putInMap(params, oauth_version, version);
         TreeMap<String, String> sortedParams = new TreeMap<String, String>(params);
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -150,11 +150,11 @@ public class TwitterOAuth {
         return sb;
     }
 
-    private void put(Map<String, String> map, String key, String value) {
+    private void putInMap(Map<String, String> map, String key, String value) {
         map.put(encode(key), encode(value));
     }
 
-    private void append(StringBuilder builder, String key, String value) {
+    private void appendString(StringBuilder builder, String key, String value) {
         builder.append(encode(key)).append("=\"").append(encode(value)).append("\",");
     }
 
