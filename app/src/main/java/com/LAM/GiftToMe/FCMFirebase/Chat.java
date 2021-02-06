@@ -549,9 +549,18 @@ public class Chat {
                                 }
                                 Log.i("sendersender", senderDeleteGift + "");
 
-                                //chatMyGift.remove(i);
-                                chatMyGift.get(i).remove("myGiftName");
-                                chatMyGift.get(i).remove("arrayMyGift");
+                                chatMyGift.remove(i);
+                                Map<String, Object> model = new HashMap<>();
+                                model.put("username", queryDocumentSnapshot.getData().get("username"));
+                                model.put("token", queryDocumentSnapshot.getData().get("token"));
+                                model.put("chat", queryDocumentSnapshot.getData().get("chat"));
+                                model.put("chatMyGift", chatMyGift);
+                                collectionReference.document(queryDocumentSnapshot.getId()).set(model);
+
+                                //toglie il regalo dall' array dei sender e elimina la chat
+                                deleteFromArrayChat(senderDeleteGift, username, giftName);
+
+                                break;
                             }
                         }
                     }
@@ -559,7 +568,12 @@ public class Chat {
             }
         });
 
-        for (String string: senderDeleteGift){
+    }
+
+    public static void deleteFromArrayChat(List<String> list, final String username, final String giftName){
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        for (String string: list){
             collectionReference.whereEqualTo("username", string).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -575,6 +589,20 @@ public class Chat {
                                     for (int j = 0; j < arrayElement.size(); j++){
                                         if (arrayElement.get(j).get("giftName").equals(giftName)){
                                             arrayElement.remove(j);
+
+                                            Log.i("sendersender", arrayElement + "");
+
+                                            chat.get(i).remove("arrayGift");
+                                            chat.get(i).put("arrayGift", arrayElement);
+
+                                            Map<String, Object> model = new HashMap<>();
+                                            model.put("username", queryDocumentSnapshot.getData().get("username"));
+                                            model.put("token", queryDocumentSnapshot.getData().get("token"));
+                                            model.put("chat", chat);
+                                            model.put("chatMyGift", queryDocumentSnapshot.getData().get("chatMyGift"));
+                                            collectionReference.document(queryDocumentSnapshot.getId()).set(model);
+
+                                            break;
                                         }
                                     }
                                 }
@@ -585,7 +613,6 @@ public class Chat {
                 }
             });
         }
-
     }
 
     public static void checkIfChatExist(final String username, final String receiver, final String giftName, final FirestoreCheckName firestoreCheckName){

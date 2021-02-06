@@ -711,7 +711,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         return set;
     }
 
-    //cerca i duplicati nell'array dei marker da aggiungere
+    //cerca i duplicati nell'array dei regali da aggiungere
     private ArrayList<UsersGift> dupGift(ArrayList<UsersGift> arrayList){
         Set<UsersGift> set = new HashSet<>();
         ArrayList<UsersGift> ret = new ArrayList<>();
@@ -796,7 +796,6 @@ public class HomeFragment extends Fragment implements LocationListener {
         }
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        //marker.setTitle(giftId);
         marker.setTitle(usersGift.getGiftId());
 
         marker.setInfoWindow(customInfoWindow); //setta il popup

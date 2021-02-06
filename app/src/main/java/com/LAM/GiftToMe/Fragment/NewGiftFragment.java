@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -255,16 +256,25 @@ public class NewGiftFragment extends Fragment {
             @Override
             public void onAnimationEnd(Animator animation) {
 
-                Handler handler = new Handler(); //serve per ritardare la chiusura del dialog
-                handler.postDelayed(new Runnable() {
+//                Handler handler = new Handler(); //serve per ritardare la chiusura del dialog
+//                handler.postDelayed(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        dialog.dismiss();
+//                        MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
+//                        clearForm(linearLayout);
+//                    }
+//
+//                }, 1600);
 
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         dialog.dismiss();
                         MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
                         clearForm(linearLayout);
                     }
-
                 }, 1600);
 
             }
