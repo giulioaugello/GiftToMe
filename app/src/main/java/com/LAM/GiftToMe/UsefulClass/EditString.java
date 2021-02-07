@@ -23,4 +23,10 @@ public class EditString {
                 "\"description\":" + "\"" + description + "\"}";
     }
 
+    public static String normalizeReply(String id, String sender,String receiver,String message,String target){
+        String hashtag = "#LAM_giftToMe_2020-reply";
+        if(id.isEmpty()) id = UUID.randomUUID().toString();
+        return hashtag + "{" + "\"id\":" + "\"" + id +"\"," + "\"sender\":"+"\"" + sender+ "\"," + "\"target\":" + "\"" + target + "\"," + "\"receiver\":" + "\"" + receiver + "\"," + "\"message\":" + "\"" + message + "\"}";
+    }
+
 }

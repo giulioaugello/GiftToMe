@@ -17,6 +17,9 @@ import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
 import com.LAM.GiftToMe.FCMFirebase.FirestoreCheckName;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
+import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.VolleyListener;
+import com.android.volley.VolleyError;
 
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
@@ -281,47 +284,36 @@ public class CustomInfoWindow extends MarkerInfoWindow {
                     return;
                 }
 
-                final ArrayList<String> message = new ArrayList<>();
-                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
-                String notificationText = mContext.getResources().getString(R.string.reply_notification_text, MainActivity.userName, usersGift.getName());
+                final String id = "";
+                final String reply = "@" + usersGift.getIssuer() + " " + EditString.normalizeReply(id, MainActivity.userName, usersGift.getIssuer(), yourReply, usersGift.getGiftId());
 
-                message.add(notificationTitle);
-                message.add(notificationText);
+                TwitterRequests.postTweet(reply, usersGift.getTweetId(), mContext, new VolleyListener() {
+                    @Override
+                    public void onError(VolleyError message) {
 
-                String receiverUserName = usersGift.getIssuer();
+                    }
 
-                DBFirestore.getToken(receiverUserName, message, mContext);
+                    @Override
+                    public void onResponse(String response) {
 
-                //Chat.sendMessage(MainActivity.userName, issuer, yourReply);
-                Chat.sendMessageFromGift(MainActivity.userName, usersGift.getIssuer(), yourReply, usersGift.getName());
+                        final ArrayList<String> message = new ArrayList<>();
+                        String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
+                        String notificationText = mContext.getResources().getString(R.string.reply_notification_text, MainActivity.userName, usersGift.getName());
+
+                        message.add(notificationTitle);
+                        message.add(notificationText);
+
+                        String receiverUserName = usersGift.getIssuer();
+
+                        DBFirestore.getToken(receiverUserName, message, mContext);
+
+                        //Chat.sendMessage(MainActivity.userName, issuer, yourReply);
+                        Chat.sendMessageFromGift(MainActivity.userName, usersGift.getIssuer(), yourReply, usersGift.getName());
+
+                    }
+                });
 
                 replyGiftDialog.dismiss();
-
-
-//                final String id = "";
-//                final String reply = "@" + issuer + " " + EditString.normalizeReply(id, MainActivity.userName, issuer, yourReply, giftId);
-//
-//                TwitterRequests.postTweet(reply, tweetId, mContext, new VolleyListener() {
-//                    @Override
-//                    public void onError(VolleyError message) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onResponse(String response) {
-//
-//                        final ArrayList<String> message = new ArrayList<>();
-//                        String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
-//                        String notificationText = mContext.getResources().getString(R.string.reply_notification_text, MainActivity.userName, title);
-//
-//                        message.add(notificationTitle);
-//                        message.add(notificationText);
-//
-//                        String receiverUserName = issuer;
-//
-//                        DBFirestore.getToken(receiverUserName, message, mContext);
-//                    }
-//                });
 
 //                String chatTweet = EditString.normalizeChatTweet(tweetId, issuer, MainActivity.userName);
 //

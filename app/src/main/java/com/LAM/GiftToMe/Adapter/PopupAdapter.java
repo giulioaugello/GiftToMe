@@ -20,7 +20,11 @@ import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
 import com.LAM.GiftToMe.FCMFirebase.FirestoreCheckName;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
+import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.VolleyListener;
+import com.LAM.GiftToMe.UsefulClass.EditString;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
+import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 
@@ -134,21 +138,36 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
                     return;
                 }
 
-                //creo la notifica
-                final ArrayList<String> message = new ArrayList<>();
-                String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
-                String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
+                final String id = "";
+                final String reply = "@" + usersGifts.get(position).getIssuer() + " " + EditString.normalizeReply(id, MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getGiftId());
 
-                message.add(notificationTitle);
-                message.add(notificationText);
+                TwitterRequests.postTweet(reply, usersGifts.get(position).getTweetId(), mContext, new VolleyListener() {
+                    @Override
+                    public void onError(VolleyError message) {
 
-                String receiverUserName = usersGifts.get(position).getIssuer();
+                    }
 
-                //prendo token e invio notifica
-                DBFirestore.getToken(receiverUserName, message, mContext);
+                    @Override
+                    public void onResponse(String response) {
 
-                //invio messaggio
-                Chat.sendMessageFromGift(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getName());
+                        //creo la notifica
+                        final ArrayList<String> message = new ArrayList<>();
+                        String notificationTitle = mContext.getResources().getString(R.string.reply_notification_title);
+                        String notificationText = mContext.getResources().getString(R.string.reply_notification_text,MainActivity.userName,usersGifts.get(position).getName());
+
+                        message.add(notificationTitle);
+                        message.add(notificationText);
+
+                        String receiverUserName = usersGifts.get(position).getIssuer();
+
+                        //prendo token e invio notifica
+                        DBFirestore.getToken(receiverUserName, message, mContext);
+
+                        //invio messaggio
+                        Chat.sendMessageFromGift(MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getName());
+
+                    }
+                });
 
                 replyGiftDialog.dismiss();
 

@@ -134,15 +134,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public void onAttachFragment(@NonNull Fragment fragment) {
-//        super.onAttachFragment(fragment);
-//        Context context = getApplicationContext();
-//        if (context == null){
-//            throw new IllegalStateException("Context not attached");
-//        }
-//    }
-
     //listener per bottomNavigation
     private final BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
