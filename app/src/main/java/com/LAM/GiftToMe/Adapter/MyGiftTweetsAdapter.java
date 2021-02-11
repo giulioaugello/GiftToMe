@@ -128,6 +128,8 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
         cancelDelete = v.findViewById(R.id.cancel_delete);
         confirmDelete = v.findViewById(R.id.delete_button);
 
+        String name = myGift.get(position).getName();
+
         cancelDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +140,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
        confirmDelete.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               //Chat.deleteGiftFromDB(MainActivity.userName, myGift.get(position).getName());
+               //Chat.deleteGiftFromDB(MainActivity.userName, name);
                removeGift(id, position);
                myGift.remove(position);
                notifyItemRemoved(position);
@@ -181,6 +183,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
         nameLong = v.findViewById(R.id.name_edit);
         descriptionLong = v.findViewById(R.id.descr_edit);
         addressLong = v.findViewById(R.id.addr_edit);
+        final String name = myGift.get(position).getName();
 
         nameLong.setText(myGift.get(position).getName());
         descriptionLong.setText(myGift.get(position).getDescription());
@@ -289,7 +292,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
                         public void onReceiverRetrieve(boolean exist) {
                             if (!exist){
                                 //Chat.newGiftUpload(MainActivity.userName, nameString);
-                                Chat.modifyGiftName(MainActivity.userName, myGift.get(position).getName(), nameString);
+                                Chat.modifyGiftName(MainActivity.userName, name, nameString);
                                 String task = "";
                                 task = EditString.correctTask(addressCoords.get(0), addressCoords.get(1), nameString, descriptionString, categoryString, issuer);
 

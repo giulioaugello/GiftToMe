@@ -2,12 +2,12 @@ package com.LAM.GiftToMe.UsefulClass;
 
 public class MyReply {
 
-    private String tweetId,tweetReplyId,replyId,sender,targetId,receiverName,message;
+    private String tweetId, tweetReplyId, replyId, sender, targetId, receiverName, message;
 
     public MyReply() {
     }
 
-    public MyReply(String tweetId, String tweetReplyId,String replyId, String sender, String targetId, String receiverName, String message) {
+    public MyReply(String tweetId, String tweetReplyId, String replyId, String sender, String targetId, String receiverName, String message) {
         this.tweetId = tweetId;
         this.tweetReplyId = tweetReplyId;
         this.replyId = replyId;

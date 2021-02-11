@@ -51,7 +51,7 @@ public class MyReplyFragment extends Fragment {
 
             @Override
             public void onResponse(String response) {
-                String id,replyId,text,hashtag = "";
+                String id, replyId, text, hashtag = "";
                 String idString = getResources().getString(R.string.json_id);
                 try {
                     JSONArray jsonArray = new JSONArray(response);

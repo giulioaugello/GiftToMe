@@ -129,6 +129,8 @@ public class MyReplyAdapter extends RecyclerView.Adapter<MyReplyAdapter.ViewHold
         cancelDelete = v.findViewById(R.id.cancel_delete_reply);
         confirmDelete = v.findViewById(R.id.delete_button_reply);
 
+        final String receiver = myReplies.get(position).getReceiverName();
+
         cancelDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,8 +145,8 @@ public class MyReplyAdapter extends RecyclerView.Adapter<MyReplyAdapter.ViewHold
                 TwitterFunctions.getGiftName(mContext, myReplies.get(position).getTweetReplyId(), new VolleyListener() {
                     @Override
                     public void onResponse(String response) {
-                        Log.i("receiverreceiver", "ci sono1");
-                        Chat.deleteFirstMessage(MainActivity.userName, myReplies.get(position).getReceiverName(), response);
+
+                        Chat.deleteFirstMessage(MainActivity.userName, receiver, response);
 
                     }
 
@@ -182,6 +184,9 @@ public class MyReplyAdapter extends RecyclerView.Adapter<MyReplyAdapter.ViewHold
 
         Button editButton = view.findViewById(R.id.edit_edit);
         Button cancelButton = view.findViewById(R.id.cancel_edit);
+
+        final String receiver = myReplies.get(position).getReceiverName();
+        final String message = myReplies.get(position).getMessage();
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,8 +231,8 @@ public class MyReplyAdapter extends RecyclerView.Adapter<MyReplyAdapter.ViewHold
                 TwitterFunctions.getGiftName(mContext, myReplies.get(position).getTweetReplyId(), new VolleyListener() {
                     @Override
                     public void onResponse(String response) {
-                        Log.i("receiverreceiver", "ci sono");
-                        Chat.changeFirstMessage(MainActivity.userName, myReplies.get(position).getReceiverName(), response, myReplies.get(position).getMessage(), yourReply);
+
+                        Chat.changeFirstMessage(MainActivity.userName, receiver, response, message, yourReply);
 
                     }
 

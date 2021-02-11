@@ -712,52 +712,10 @@ public class Chat {
 //    }
 
     //ritorna timestamps da miei regali
-//    public static void getMyTimestamps2(final String username, final String sender, final String giftName, final FirestoreListener listener){
-//        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-//        final CollectionReference collectionReference = firestoreDB.collection("users");
-//        collectionReference.whereEqualTo("username", username).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//                if (error != null) {
-//                    Log.w(TAG, "Listen failed.", error);
-//                    return;
-//                }
-//
-//                for (QueryDocumentSnapshot queryDocumentSnapshot : value) {
-//                    List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
-//
-//                    int indexR = 0; //indice del regalo
-//                    for (int i = 0; i < chat.size(); i++){
-//
-//                        if (chat.get(i).get("myGiftName").equals(giftName)){
-//                            indexR = i;
-//                            break;
-//                        }
-//                    }
-//
-//                    //lista dei regali del destinatario
-//                    List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(indexR).get("arrayMyGift");
-//
-//                    int indexG = 0; //indice del sender
-//                    for (int j = 0; j < giftList.size(); j++){
-//
-//                        if (giftList.get(j).get("sender").equals(sender)){
-//                            indexG = j;
-//                            break;
-//                        }
-//                    }
-//
-//                    final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
-//                    List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
-//                    listener.onDateRetrieve(myTimestamps, myMessages);
-//                }
-//            }
-//        });
-//    }
-    public static void getMyTimestamps2(final String username, final String sender, final String giftName, Activity activity, final FirestoreListener listener){
+    public static void getMyTimestamps2(final String username, final String sender, final String giftName, final FirestoreListener listener){
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-        Query collectionReference = firestoreDB.collection("users").whereEqualTo("username", username).limit(1);
-        ListenerRegistration listenerRegistration = collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -795,17 +753,11 @@ public class Chat {
                 }
             }
         });
-
-        if (!MainActivity.activeFragment.equals(((AppCompatActivity)activity).getSupportFragmentManager().findFragmentByTag(replyChatFragmentTag))){
-            listenerRegistration.remove();
-        }
     }
-
-    //ritorna timestamps da risposte
-//    public static void getTimestamps2(final String username, final String receiver, final String giftName, final FirestoreListener listener){
+//    public static void getMyTimestamps2(final String username, final String sender, final String giftName, Activity activity, final FirestoreListener listener){
 //        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-//        final CollectionReference collectionReference = firestoreDB.collection("users");
-//        collectionReference.whereEqualTo("username", username).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
+//        Query collectionReference = firestoreDB.collection("users").whereEqualTo("username", username).limit(1);
+//        ListenerRegistration listenerRegistration = collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
 //            @Override
 //            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 //                if (error != null) {
@@ -814,25 +766,24 @@ public class Chat {
 //                }
 //
 //                for (QueryDocumentSnapshot queryDocumentSnapshot : value) {
+//                    List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
 //
-//                    List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
-//
-//                    int indexR = 0; //indice del destinatario
+//                    int indexR = 0; //indice del regalo
 //                    for (int i = 0; i < chat.size(); i++){
 //
-//                        if (chat.get(i).get("receiver").equals(receiver)){
+//                        if (chat.get(i).get("myGiftName").equals(giftName)){
 //                            indexR = i;
 //                            break;
 //                        }
 //                    }
 //
 //                    //lista dei regali del destinatario
-//                    List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(indexR).get("arrayGift");
+//                    List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(indexR).get("arrayMyGift");
 //
-//                    int indexG = 0; //indice del regalo
+//                    int indexG = 0; //indice del sender
 //                    for (int j = 0; j < giftList.size(); j++){
 //
-//                        if (giftList.get(j).get("giftName").equals(giftName)){
+//                        if (giftList.get(j).get("sender").equals(sender)){
 //                            indexG = j;
 //                            break;
 //                        }
@@ -840,17 +791,21 @@ public class Chat {
 //
 //                    final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
 //                    List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
-//
 //                    listener.onDateRetrieve(myTimestamps, myMessages);
 //                }
 //            }
 //        });
+//
+//        if (!MainActivity.activeFragment.equals(((AppCompatActivity)activity).getSupportFragmentManager().findFragmentByTag(replyChatFragmentTag))){
+//            listenerRegistration.remove();
+//        }
 //    }
 
-    public static void getTimestamps2(final String username, final String receiver, final String giftName, Activity activity, final FirestoreListener listener){
+    //ritorna timestamps da risposte
+    public static void getTimestamps2(final String username, final String receiver, final String giftName, final FirestoreListener listener){
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-        Query collectionReference = firestoreDB.collection("users").whereEqualTo("username", username).limit(1);
-        ListenerRegistration listenerRegistration = collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -890,11 +845,56 @@ public class Chat {
                 }
             }
         });
-
-        if (!MainActivity.activeFragment.equals(((AppCompatActivity)activity).getSupportFragmentManager().findFragmentByTag(replyChatFragmentTag))){
-            listenerRegistration.remove();
-        }
     }
+
+//    public static void getTimestamps2(final String username, final String receiver, final String giftName, Activity activity, final FirestoreListener listener){
+//        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+//        Query collectionReference = firestoreDB.collection("users").whereEqualTo("username", username).limit(1);
+//        ListenerRegistration listenerRegistration = collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                if (error != null) {
+//                    Log.w(TAG, "Listen failed.", error);
+//                    return;
+//                }
+//
+//                for (QueryDocumentSnapshot queryDocumentSnapshot : value) {
+//
+//                    List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
+//
+//                    int indexR = 0; //indice del destinatario
+//                    for (int i = 0; i < chat.size(); i++){
+//
+//                        if (chat.get(i).get("receiver").equals(receiver)){
+//                            indexR = i;
+//                            break;
+//                        }
+//                    }
+//
+//                    //lista dei regali del destinatario
+//                    List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(indexR).get("arrayGift");
+//
+//                    int indexG = 0; //indice del regalo
+//                    for (int j = 0; j < giftList.size(); j++){
+//
+//                        if (giftList.get(j).get("giftName").equals(giftName)){
+//                            indexG = j;
+//                            break;
+//                        }
+//                    }
+//
+//                    final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
+//                    List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
+//
+//                    listener.onDateRetrieve(myTimestamps, myMessages);
+//                }
+//            }
+//        });
+//
+//        if (!MainActivity.activeFragment.equals(((AppCompatActivity)activity).getSupportFragmentManager().findFragmentByTag(replyChatFragmentTag))){
+//            listenerRegistration.remove();
+//        }
+//    }
 
     //ritorna le chat delle risposte usato in ChatFragment
     public static void getArrayGift2(final String username, final Context mContext, final FirestoreListener firestoreListener){

@@ -254,7 +254,6 @@ public class TwitterFunctions {
 
         String urlWithParams = url + id + extendedModeString;
 
-        //ottengo l'header per l'autenticazione OAuth
         TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY) , mContext.getResources().getString(R.string.CONSUMER_SECRET) , MainActivity.token, MainActivity.tokenSecret);
         Map<String, String> requestParams = new HashMap<>();
 
@@ -287,7 +286,6 @@ public class TwitterFunctions {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
 
                     }
                 },
