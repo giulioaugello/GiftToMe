@@ -15,25 +15,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
-import com.LAM.GiftToMe.FCMFirebase.MyFirebaseMessagingService;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.TwitterFunctions;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.core.Callback;
 
@@ -50,6 +46,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class ProfileFragment extends Fragment {
 
+    private static final String TAG = "ProfileFragmentTAG";
     private Context mContext;
     private View v;
 
@@ -59,7 +56,7 @@ public class ProfileFragment extends Fragment {
     private ImageView logo;
     private TextView twitterUsername;
     private ConstraintLayout constraintLayout, secondConstraint, constraintBeginning;
-    private CardView myGift, settings;
+    private CardView myGift, settings, myReply;
     private LinearLayout linearSettings;
     private ImageView twitterBanner, twitterPhoto;
 
@@ -89,6 +86,7 @@ public class ProfileFragment extends Fragment {
         linearSettings = v.findViewById(R.id.linearSettings);
         myGift = v.findViewById(R.id.myGift);
         settings = v.findViewById(R.id.settings);
+        myReply = v.findViewById(R.id.myReply);
 
         twitterPhoto = v.findViewById(R.id.twitterPhoto);
         twitterBanner = v.findViewById(R.id.twitterBanner);
@@ -108,6 +106,8 @@ public class ProfileFragment extends Fragment {
                 MainActivity.token = MainActivity.session.getAuthToken().token;
                 MainActivity.tokenSecret = MainActivity.session.getAuthToken().secret;
 
+                Log.i(TAG,"Utente: " + MainActivity.session + ", " + MainActivity.userName + ", " + MainActivity.userId + ", " + MainActivity.token + ", " + MainActivity.tokenSecret);
+
                 MainActivity.isLogged = true;
 
                 if(fcmToken != null) {
@@ -115,16 +115,11 @@ public class ProfileFragment extends Fragment {
                     DBFirestore.checkIfExist(MainActivity.userName, fcmToken);
                 }
 
-//                Log.i("LOGLOGLO","Username: " + MainActivity.userName);
-//                Log.i("LOGLOGLO","Userid: " + MainActivity.userId);
-//                Log.i("LOGLOGLO","token: " + MainActivity.token);
-//                Log.i("LOGLOGLO","tokenSecret: " + MainActivity.tokenSecret);
-
                 updateUI(true);
             }
             @Override
             public void failure(TwitterException exception) {
-                Log.i("LOGLOGLO","exexex" + exception);
+                Log.i(TAG,"ex: " + exception);
 
                 updateUI(false);
                 Toast.makeText(mContext, exception.getMessage(), Toast.LENGTH_LONG).show();
@@ -162,6 +157,19 @@ public class ProfileFragment extends Fragment {
                 fragmentTransaction.replace(R.id.fragment_container, myGiftFragment, myGiftFragmentTag).commit();
                 fragmentTransaction.addToBackStack(myGiftFragmentTag);
                 MainActivity.activeFragment = myGiftFragment;
+            }
+        });
+
+        myReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String myreplyFragmentTag = getResources().getString(R.string.myreply_fragment_tag);
+                MyReplyFragment myReplyFragment = new MyReplyFragment();
+                FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.none);
+                fragmentTransaction.replace(R.id.fragment_container, myReplyFragment, myreplyFragmentTag).commit();
+                fragmentTransaction.addToBackStack(myreplyFragmentTag);
+                MainActivity.activeFragment = myReplyFragment;
             }
         });
 
@@ -213,7 +221,7 @@ public class ProfileFragment extends Fragment {
 
     //ritorna e imposta nome, immagine del profilo e banner di twitter
     private void setPageWithUserInfo(){
-        TwitterRequests.getUserInfo(mContext, MainActivity.userName, new VolleyListener() {
+        TwitterFunctions.userInfo(mContext, MainActivity.userName, new VolleyListener() {
 
             @Override
             public void onResponse(String response) {

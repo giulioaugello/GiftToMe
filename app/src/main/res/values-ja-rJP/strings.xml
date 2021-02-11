@@ -60,4 +60,11 @@
     <string name="gift_nearby">地域の贈り物</string>
     <string name="descr_gift_nearby">お住まいの地域にギフトがあります</string>
     <string name="close_popup">タッチして閉じるまたは</string>
+    <string name="ook">OK</string>
+    <string name="title_gps">ポジションをアクティブにする</string>
+    <string name="descr_gps">場所をアクティブ化する必要があります</string>
+    <string name="descr_high">位置はハイモードである必要があります</string>
+    <string name="other2">その他</string>
+    <string name="my_reply">私の返信</string>
+    <string name="my_reply_title">返信を編集</string>
 </resources>

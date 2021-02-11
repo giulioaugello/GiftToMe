@@ -1,7 +1,6 @@
 package com.LAM.GiftToMe.Fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -9,19 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.Editable;
 import android.text.Html;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -29,22 +23,18 @@ import android.widget.TextView;
 
 import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.Adapter.UserTweetsAdapter;
-import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.TwitterFunctions;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.AddressPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
 import com.android.volley.VolleyError;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mapsforge.map.rendertheme.renderinstruction.Line;
 
 import java.util.ArrayList;
 
@@ -60,6 +50,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class UserTweetsFragment extends Fragment {
 
+    private static final String TAG = "UserTweetsFragmentTAG";
     public RecyclerView recyclerViewSport, recyclerViewElectronics, recyclerViewClothing, recyclerViewMusic, recyclerViewOther;
     private Context mContext;
     private ScrollView scrollView;
@@ -183,7 +174,7 @@ public class UserTweetsFragment extends Fragment {
         });
 
 
-        TwitterRequests.searchTweets(mContext, TWEET_ARTICLE_HASHTAG, new VolleyListener() {
+        TwitterFunctions.usersTweets(mContext, TWEET_ARTICLE_HASHTAG, new VolleyListener() {
 
             @Override
             public void onResponse(String response) {
@@ -247,22 +238,16 @@ public class UserTweetsFragment extends Fragment {
                                     break;
                             }
                             arrayUsersGifts.add(userGift);
-                            Log.i("giftgift", "array " + userGift.getName());
                         }
 
+                        Log.i(TAG, "arrayUsersGifts " + userGift.getName() + " " + userGift.getIssuer());
 
                     }
-                    Log.i("giftgift", "sport " + sportA);
-                    Log.i("giftgift", "elec " + electronicsA);
-                    Log.i("giftgift", "clo " + clothingA);
-                    Log.i("giftgift", "mus " + musicA);
-                    Log.i("giftgift", "oth " + otherA);
-
-//                    setupRecyclerView(sportA, recyclerViewSport);
-//                    setupRecyclerView(electronicsA, recyclerViewElectronics);
-//                    setupRecyclerView(clothingA, recyclerViewClothing);
-//                    setupRecyclerView(musicA, recyclerViewMusic);
-//                    setupRecyclerView(otherA, recyclerViewOther);
+                    Log.i(TAG, "sport " + sportA);
+                    Log.i(TAG, "elec " + electronicsA);
+                    Log.i(TAG, "clo " + clothingA);
+                    Log.i(TAG, "mus " + musicA);
+                    Log.i(TAG, "oth " + otherA);
 
                     //controlla se c'è almeno un regalo per ogni categoria
                     checkIsEmpty(sportA, recyclerViewSport, noGift1);
@@ -288,93 +273,8 @@ public class UserTweetsFragment extends Fragment {
             }
         });
 
-        //setUpBottomSheetDialog();
-
-        //per la ricerca dei regali
-//        searchLocation.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//                // filter your list from your input
-//                filter(s.toString());
-//                //you can use runnable postDelayed like 500 ms to delay search text
-//            }
-//        });
-
         return v;
     }
-
-//    //filtra sul nome dei regali
-//    private void filter(String text){
-//        ArrayList<UsersGift> tempSport = new ArrayList();
-//        ArrayList<UsersGift> tempEle = new ArrayList();
-//        ArrayList<UsersGift> tempClo = new ArrayList();
-//        ArrayList<UsersGift> tempMus = new ArrayList();
-//        ArrayList<UsersGift> tempOth = new ArrayList();
-//
-//
-////        for(UsersGift usersGift: sportA){
-////
-////            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
-////            if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
-////                tempSport.add(usersGift);
-////                Log.i("giftgift", "addressSport " + usersGift.getAddress());
-////            }
-////
-////        }
-////        arrayAdapter.get(0).updateList(tempSport);
-////
-////        for(UsersGift usersGift: electronicsA){
-////
-////            //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
-////            if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
-////                tempEle.add(usersGift);
-////                Log.i("giftgift", "addressEle " + usersGift.getAddress());
-////            }
-////
-////        }
-////        arrayAdapter.get(1).updateList(tempEle);
-//
-//        updateSearch(sportA, text, 0);
-//        updateSearch(electronicsA, text, 1);
-//        updateSearch(clothingA, text, 2);
-//        updateSearch(musicA, text, 3);
-//        updateSearch(otherA, text, 4);
-//
-//
-//    }
-//
-//    private void updateSearch(ArrayList<UsersGift> category, String text, int i){
-//
-//        if (category.size() != 0){
-//
-//            ArrayList<UsersGift> temp = new ArrayList();
-//
-//            for(UsersGift usersGift: category){
-//
-//                //controllo se il text che scrivo (tutto minuscolo, tutto maiuscolo o con la prima maiuscola) si trova nel giftName del receiverModel
-//                if(usersGift.getAddress().toLowerCase().contains(text) || usersGift.getAddress().contains(text) || usersGift.getAddress().toUpperCase().contains(text)){
-//                    temp.add(usersGift);
-//                    Log.i("giftgift", "temp: " + temp);
-//                    Log.i("giftgift", "addressSport " + usersGift.getAddress());
-//                }
-//
-//            }
-//            arrayAdapter.get(i).updateList(temp);
-//        }
-//
-//    }
-
 
     private void checkIsEmpty(ArrayList<UsersGift> arrayList, RecyclerView recyclerView, TextView textView){
         if (arrayList.isEmpty()){
@@ -389,9 +289,9 @@ public class UserTweetsFragment extends Fragment {
     private void enableGPS(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Attiva la posizione");
-        builder.setMessage("Devi attivare la posizione");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setTitle(mContext.getResources().getString(R.string.title_gps));
+        builder.setMessage(mContext.getResources().getString(R.string.descr_gps));
+        builder.setPositiveButton(mContext.getResources().getString(R.string.ook), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -408,7 +308,7 @@ public class UserTweetsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("permperm", String.valueOf(requestCode));
+        Log.i(TAG, String.valueOf(requestCode));
 
         if (requestCode == HomeFragment.GPS_SETTING_CODE) {
             if (HomeFragment.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -422,7 +322,6 @@ public class UserTweetsFragment extends Fragment {
 
         userTweetsAdapter = new UserTweetsAdapter(mContext, usersGiftsList, getActivity(),this);
         arrayAdapter.add(userTweetsAdapter);
-        Log.i("giftgift", "ArrayAdapter: " + arrayAdapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(userTweetsAdapter);

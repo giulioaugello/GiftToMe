@@ -60,4 +60,11 @@
     <string name="descr_gift_nearby">Il y a un cadeau dans votre région</string>
     <string name="gift_nearby">Cadeau dans la région</string>
     <string name="close_popup">ouchez pour fermer ou</string>
+    <string name="ook">OK</string>
+    <string name="descr_gps">Vous devez activer l\'emplacement</string>
+    <string name="title_gps">Activer la position</string>
+    <string name="descr_high">La position doit être en mode haut</string>
+    <string name="other2">autre</string>
+    <string name="my_reply">Ma Réponse</string>
+    <string name="my_reply_title">Modifier la Réponse</string>
 </resources>

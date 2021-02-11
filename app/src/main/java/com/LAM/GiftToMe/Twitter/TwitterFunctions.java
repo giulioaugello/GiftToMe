@@ -22,77 +22,48 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TwitterRequests {
+public class TwitterFunctions {
 
-    private static final String TWEET_ARTICLE_HASHTAG = "#LAM_giftToMe_2020-article";
+    //ritorna le informazioni dell'utente
+    public static void userInfo(final Context mContext, String screenName, final VolleyListener volleyListener) {
+        String url = "https://api.twitter.com/1.1/users/show.json";
+        String screenNameString = "?screen_name=" + screenName;
+        String urlWithParams = url + screenNameString;
 
+        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY), mContext.getResources().getString(R.string.CONSUMER_SECRET), MainActivity.token, MainActivity.tokenSecret);
+        Map<String, String> requestParams = new HashMap<>();
+        requestParams.put("screen_name", screenName);
+        final String header = generator.generateHeader("GET", url, requestParams);
 
-//    public static void getGiftName(final Context mContext, String tweetId, final VolleyListener volleyListener) {
-//
-//        String url = "https://api.twitter.com/1.1/statuses/show.json";
-//
-//        String id = "?id=" + tweetId;
-//        String extendedModeString = "&tweet_mode=extended";
-//
-//        String urlWithParams = url + id + extendedModeString;
-//
-//        //ottengo l'header per l'autenticazione OAuth
-//        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY), mContext.getResources().getString(R.string.CONSUMER_SECRET), MainActivity.token, MainActivity.tokenSecret);
-//        Map<String, String> requestParams = new HashMap<>();
-//
-//        requestParams.put("id", tweetId);
-//        requestParams.put("tweet_mode", "extended");
-//
-//        final String header = generator.generateHeader("GET", url, requestParams);
-//
-//        RequestQueue queue = Volley.newRequestQueue(mContext);
-//        StringRequest getUserObjectRequest = new StringRequest(Request.Method.GET, urlWithParams,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//
-//                        try {
-//                            JSONObject jsonObject = new JSONObject(response);
-//                            String text = jsonObject.getString("full_text");
-//
-//                            if (text.contains(TWEET_ARTICLE_HASHTAG)) {
-//
-//                                String tweetWithoutHashtag = text.replace(TWEET_ARTICLE_HASHTAG, "");
-//
-//                                JSONObject tweetWithoutHashtagJSON = new JSONObject(tweetWithoutHashtag);
-//
-//                                String giftName = tweetWithoutHashtagJSON.getString("name");
-//                                volleyListener.onResponse(giftName);
-//
-//                            }
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        volleyListener.onError(error);
-//                    }
-//                }
-//        ) {
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", header);
-//                headers.put("Content-Type", "application/json");
-//                return headers;
-//            }
-//        };
-//        queue.add(getUserObjectRequest);
-//    }
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        StringRequest getUserObjectRequest = new StringRequest(Request.Method.GET, urlWithParams,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        volleyListener.onResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        volleyListener.onError(error);
+                        error.printStackTrace();
+                    }
+                }
+        ) {
 
-    public static void getUsersTweets(Integer count, final Context mContext, final VolleyListener volleyListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", header);
+                return headers;
+            }
+        };
+        queue.add(getUserObjectRequest);
+    }
+
+    //ritorna i regali dell'utente loggato
+    public static void userLoggedTweets(final Context mContext, Integer count, final VolleyListener volleyListener) {
 
         String url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
 
@@ -139,7 +110,53 @@ public class TwitterRequests {
 
     }
 
+    //ritorna i regali degli altri utenti con l'hashtag giusto
+    public static void usersTweets(final Context mContext, String q, final VolleyListener volleyListener) {
 
+        String url = "https://api.twitter.com/1.1/search/tweets.json";
+
+        String screenNameString = "?q=" + Uri.encode(q);
+        String extendedModeString = "&tweet_mode=extended";
+        String countString = "&count=100"; //il massimo numero di tweets ottenibili per ogni chiamata è 100
+
+        String urlWithParams = url + screenNameString + extendedModeString + countString;
+
+        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY), mContext.getResources().getString(R.string.CONSUMER_SECRET), MainActivity.token, MainActivity.tokenSecret);
+        Map<String, String> requestParams = new HashMap<>();
+        requestParams.put("q", q);
+        requestParams.put("tweet_mode", "extended");
+        requestParams.put("count", "100");
+
+        final String header = generator.generateHeader("GET", url, requestParams);
+
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        StringRequest getUserObjectRequest = new StringRequest(Request.Method.GET, urlWithParams,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        volleyListener.onResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        volleyListener.onError(error);
+                    }
+                }
+        ) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", header);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        queue.add(getUserObjectRequest);
+    }
+
+    //posta un tweet
     public static void postTweet(String message, String replyId, final Context mContext, final VolleyListener volleyListener) {
 
         String url = "https://api.twitter.com/1.1/statuses/update.json";
@@ -193,91 +210,7 @@ public class TwitterRequests {
         queue.add(getUserObjectRequest);
     }
 
-
-    public static void searchTweets(final Context mContext, String q, final VolleyListener volleyListener) {
-
-        Log.i("contextcontext",mContext + "");
-        String url = "https://api.twitter.com/1.1/search/tweets.json";
-
-        String screenNameString = "?q=" + Uri.encode(q);
-        String extendedModeString = "&tweet_mode=extended";
-        String countString = "&count=100"; //il massimo numero di tweets ottenibili per ogni chiamata è 100
-
-        String urlWithParams = url + screenNameString + extendedModeString + countString;
-
-        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY), mContext.getResources().getString(R.string.CONSUMER_SECRET), MainActivity.token, MainActivity.tokenSecret);
-        Map<String, String> requestParams = new HashMap<>();
-        requestParams.put("q", q);
-        requestParams.put("tweet_mode", "extended");
-        requestParams.put("count", "100");
-
-        final String header = generator.generateHeader("GET", url, requestParams);
-
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        StringRequest getUserObjectRequest = new StringRequest(Request.Method.GET, urlWithParams,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        volleyListener.onResponse(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        volleyListener.onError(error);
-                    }
-                }
-        ) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", header);
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
-        queue.add(getUserObjectRequest);
-    }
-
-
-    public static void getUserInfo(final Context mContext, String screenName, final VolleyListener volleyListener) {
-        String url = "https://api.twitter.com/1.1/users/show.json";
-        String screenNameString = "?screen_name=" + screenName;
-        String urlWithParams = url + screenNameString;
-
-        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY), mContext.getResources().getString(R.string.CONSUMER_SECRET), MainActivity.token, MainActivity.tokenSecret);
-        Map<String, String> requestParams = new HashMap<>();
-        requestParams.put("screen_name", screenName);
-        final String header = generator.generateHeader("GET", url, requestParams);
-
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        StringRequest getUserObjectRequest = new StringRequest(Request.Method.GET, urlWithParams,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        volleyListener.onResponse(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        volleyListener.onError(error);
-                        error.printStackTrace();
-                    }
-                }
-        ) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", header);
-                return headers;
-            }
-        };
-        queue.add(getUserObjectRequest);
-    }
-
+    //elimina un tweet
     public static void deleteGift(String id, Context mContext, final VolleyListener volleyListener) {
         String url = "https://api.twitter.com/1.1/statuses/destroy/" + id + ".json";
 
@@ -312,6 +245,70 @@ public class TwitterRequests {
         queue.add(getUserObjectRequest);
     }
 
+    public static void getGiftName(final Context mContext, String tweetId, final VolleyListener volleyResponseListener){
+
+        String url = "https://api.twitter.com/1.1/statuses/show.json";
+
+        String id = "?id=" + tweetId;
+        String extendedModeString = "&tweet_mode=extended";
+
+        String urlWithParams = url + id + extendedModeString;
+
+        //ottengo l'header per l'autenticazione OAuth
+        TwitterOAuth generator = new TwitterOAuth(mContext.getResources().getString(R.string.CONSUMER_KEY) , mContext.getResources().getString(R.string.CONSUMER_SECRET) , MainActivity.token, MainActivity.tokenSecret);
+        Map<String, String> requestParams = new HashMap<>();
+
+        requestParams.put("id", tweetId);
+        requestParams.put("tweet_mode", "extended");
+
+        final String header = generator.generateHeader("GET", url, requestParams);
+
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        StringRequest getUserObjectRequest = new StringRequest(Request.Method.GET, urlWithParams,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String text = jsonObject.getString("full_text");
+
+                            if(text.contains("#LAM_giftToMe_2020-article")){
+
+                                String tweetWithoutHashtag = text.replace("#LAM_giftToMe_2020-article","");
+
+                                JSONObject tweetWithoutHashtagJSON = new JSONObject(tweetWithoutHashtag);
+
+                                String giftName = tweetWithoutHashtagJSON.getString("name");
+                                volleyResponseListener.onResponse(giftName);
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        volleyResponseListener.onError(error);
+                    }
+                }
+        ) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", header);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        queue.add(getUserObjectRequest);
+    }
 
 }
 

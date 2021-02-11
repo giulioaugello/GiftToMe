@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.fragment.app.ListFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.Manifest;
@@ -24,7 +23,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.Fragment.ChatFragment;
 import com.LAM.GiftToMe.Fragment.HomeFragment;
 import com.LAM.GiftToMe.Fragment.MyGiftFragment;
@@ -36,16 +34,12 @@ import com.twitter.sdk.android.core.TwitterSession;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivityTAG";
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private static final int FINE_LOCATION_ACCESS_REQUEST_CODE = 1001;
-    private static final int BACKGROUND_LOCATION_ACCESS_REQUEST_CODE = 1002;
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private HomeFragment homeFragment;
     private NewGiftFragment newGiftFragment;
-    private ChatFragment chatFragment; //rimettere ChatFragment
-    private UserTweetsFragment userTweetsFragment;
+    private ChatFragment chatFragment;
     private ProfileFragment profileFragment;
-    private ListFragment listFragment;
     public static Fragment activeFragment;
     public BottomNavigationView bottomNavigationView;
 
@@ -59,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
     public static float radiusSearch;
     public static Boolean darkModeOn, darkMapOn;
 
-    public static String homeFragmentTag, usersGiftListFragmentTag, chatFragmentTag, newGiftFragmentTag, profileFragmentTag, settingsFragmentTag, myGiftFragmentTag, replyChatFragmentTag;
+    public static String homeFragmentTag, usersGiftListFragmentTag, chatFragmentTag, newGiftFragmentTag, profileFragmentTag, settingsFragmentTag, myGiftFragmentTag, replyChatFragmentTag, myReplyFragmentTag;
 
-    private static final int TIME_INTERVAL = 2000; // tempo che intercorre tra due back (millisecondi)
+    private static final int TIME_INTERVAL = 2000; // tempo tra due "indietro" (millisecondi)
     private long mBackPressed;
 
     @Override
@@ -75,10 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (darkModeOn){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            Log.i("darkdark", AppCompatDelegate.MODE_NIGHT_YES + " pippo"); //2
         }else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            Log.i("darkdark", AppCompatDelegate.MODE_NIGHT_NO + " pluto"); //1
         }
 
         super.onCreate(savedInstanceState);
@@ -86,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        //userTweetsFragment = new UserTweetsFragment();
         //primo fragment
         homeFragment = new HomeFragment();
         activeFragment = homeFragment;
@@ -101,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         settingsFragmentTag = getResources().getString(R.string.settings_fragment_tag);
         myGiftFragmentTag = getResources().getString(R.string.mygift_fragment_tag);
         replyChatFragmentTag = getResources().getString(R.string.reply_chat_fragment_tag);
+        myReplyFragmentTag = getResources().getString(R.string.myreply_fragment_tag);
 
         //stringhe shared preferences per login utente
         sharedUsername = getResources().getString(R.string.shared_preferences_user_name);
@@ -108,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
         sharedToken = getResources().getString(R.string.shared_preferences_token);
         sharedTokenSecret = getResources().getString(R.string.shared_preferences_token_secret);
 
-        Log.i("LOGLOG", "eccolo: " + sharedUsername);
-        Log.i("LOGLOG", "eccolo: " + sharedUserId);
-        Log.i("LOGLOG", "eccolo: " + sharedToken);
-        Log.i("LOGLOG", "eccolo: " + sharedTokenSecret);
+        Log.i(TAG, "username: " + sharedUsername);
+        Log.i(TAG, "userId: " + sharedUserId);
+        Log.i(TAG, "token: " + sharedToken);
+        Log.i(TAG, "tokenSecret: " + sharedTokenSecret);
 
         //sharedPreferences Login
         sharedPreferences = getSharedPreferences("loginPref", MODE_PRIVATE);
@@ -187,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
             activeFragment = selectedFragment;
 
-            Log.i("activeactive", "" + activeFragment);
+            Log.i(TAG, "activeFragment: " + activeFragment);
 
             return true;
         }
@@ -219,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             activeFragment = chatFragment;
             bottomNavigationView.setSelectedItemId(R.id.nav_chat);
 
-        } else if(activeFragment.equals(getSupportFragmentManager().findFragmentByTag(settingsFragmentTag)) || activeFragment.equals(getSupportFragmentManager().findFragmentByTag(myGiftFragmentTag))){
+        } else if(activeFragment.equals(getSupportFragmentManager().findFragmentByTag(settingsFragmentTag)) || activeFragment.equals(getSupportFragmentManager().findFragmentByTag(myGiftFragmentTag)) || activeFragment.equals(getSupportFragmentManager().findFragmentByTag(myReplyFragmentTag))){
 
             fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.toptobottom);
             fragmentTransaction.replace(R.id.fragment_container, profileFragment, profileFragmentTag).commit();
@@ -246,9 +238,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
                 //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE); //continua a chiedere sempre i permessi che non dai
-
 
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
@@ -280,27 +270,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-//        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
-//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-//                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//
-//                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE); //continua a chiedere sempre i permessi che non dai
-//                UserTweetsFragment userTweetsFragment = new UserTweetsFragment();
-//                FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.setCustomAnimations(R.anim.righttoleft, R.anim.none);
-//                fragmentTransaction.replace(R.id.fragment_container, userTweetsFragment, usersGiftListFragmentTag).commit();
-//                fragmentTransaction.addToBackStack(usersGiftListFragmentTag);
-//                activeFragment = userTweetsFragment;
-//
-//            }else{
-//                HomeFragment homeFragment = new HomeFragment();
-//                FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.setCustomAnimations(R.anim.lefttoright, R.anim.none);
-//                fragmentTransaction.replace(R.id.fragment_container, homeFragment, homeFragmentTag).commit();
-//                fragmentTransaction.addToBackStack(homeFragmentTag);
-//                activeFragment = homeFragment;
-//            }
-//        }
     }
 
     //la richiamo per aggiustare il floating action button
@@ -313,18 +282,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-//            if (activeFragment == homeFragment){
-//                ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) HomeFragment.floatingActionButton.getLayoutParams();
-//                params1.verticalBias = 0.8f;
-//                HomeFragment.floatingActionButton.setLayoutParams(params1);
-//            }else if (activeFragment == HomeFragment.userTweetsFragment){
-//                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) UserTweetsFragment.fab.getLayoutParams();
-//                params.verticalBias = 0.8f;
-//                UserTweetsFragment.fab.setLayoutParams(params);
-//            }else if (activeFragment.equals(fragmentManager.findFragmentByTag(myGiftFragmentTag))){
-//                MyGiftFragment.recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-//            }
 
             if (activeFragment == homeFragment){
                 ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) HomeFragment.floatingActionButton.getLayoutParams();
@@ -339,18 +296,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-
-//            if (activeFragment == homeFragment){
-//                ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) HomeFragment.floatingActionButton.getLayoutParams();
-//                params1.verticalBias = 0.88f;
-//                HomeFragment.floatingActionButton.setLayoutParams(params1);
-//            }else if (activeFragment == HomeFragment.userTweetsFragment){
-//                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) UserTweetsFragment.fab.getLayoutParams();
-//                params.verticalBias = 0.88f;
-//                UserTweetsFragment.fab.setLayoutParams(params);
-//            }else if (activeFragment.equals(fragmentManager.findFragmentByTag(myGiftFragmentTag))){
-//                MyGiftFragment.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-//            }
 
             if (activeFragment == homeFragment){
                 ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) HomeFragment.floatingActionButton.getLayoutParams();
@@ -377,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
 
         editor.putBoolean("isLogged", isLogged).apply();
 
-        Log.i("loggedlogged", isLogged + "");
+        Log.i(TAG, "isLogged: " + isLogged);
 
         if(isLogged){
             editor.putString(sharedUsername, userName).apply();
@@ -388,7 +333,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

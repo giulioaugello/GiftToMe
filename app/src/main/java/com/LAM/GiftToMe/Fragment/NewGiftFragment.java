@@ -24,7 +24,7 @@ import com.LAM.GiftToMe.FCMFirebase.Chat;
 import com.LAM.GiftToMe.FCMFirebase.FirestoreCheckName;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.TwitterFunctions;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.AddressPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.EditString;
@@ -42,6 +42,7 @@ import androidx.fragment.app.Fragment;
 
 public class NewGiftFragment extends Fragment {
 
+    private static final String TAG = "NewGiftFragmentTAG";
     private Context mContext;
     private Fragment fragment;
 
@@ -50,12 +51,7 @@ public class NewGiftFragment extends Fragment {
     private String activeCategory = "";
     private TextView nameForm, descriptionForm, addressForm;
 
-//    private TextView recapCategory, recapName, recapDescription, recapAddress;
-//    private ImageView recapImg;
-//    private Button back, uploadGift;
-
     private LinearLayout linearLayout;
-    private static final String TAG = "NewGiftFragmentTAG";
 
 
     @Nullable
@@ -89,20 +85,6 @@ public class NewGiftFragment extends Fragment {
         onClickChip(musicChip, listChip, "Music&Books");
         onClickChip(otherChip, listChip, "Other");
 
-//        sportChip.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(activeCategory.equals("Sport")){
-//                    activeCategory = "";
-//                }
-//                else{
-//                    activeCategory = "Sport";
-//                }
-//                colorChip(listChip);
-//                Log.i("checkedchecked", activeCategory + "");
-//            }
-//        });
-
         recapGift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +111,7 @@ public class NewGiftFragment extends Fragment {
     private boolean checkFormAndChip(){
         boolean isReturn = false;
         //Controllo se tutti i campi stono stati inseriti
-        Log.i("formform", "Nome: " + nameForm.getText().toString());
+        Log.i(TAG, "Nome: " + nameForm.getText().toString());
         if (nameForm.getText().toString().equals("") || descriptionForm.getText().toString().equals("") || addressForm.getText().toString().equals("")){
             Toast.makeText(mContext, mContext.getResources().getString(R.string.all_fields), Toast.LENGTH_SHORT).show();
             isReturn = true;
@@ -137,7 +119,7 @@ public class NewGiftFragment extends Fragment {
         }
 
         //la lunghezza massima di TUTTO il tweet è di 280 caratteri
-        Log.i("formform", "Lunghezza descrizione: " + descriptionForm.getText().length());
+        Log.i(TAG, "Lunghezza descrizione: " + descriptionForm.getText().length());
         if(descriptionForm.getText().length() > 90){
             Toast.makeText(mContext, mContext.getResources().getString(R.string.long_descr), Toast.LENGTH_SHORT).show();
             isReturn = true;
@@ -145,7 +127,7 @@ public class NewGiftFragment extends Fragment {
         }
 
         //controllo se l'indirizzo è valido
-        Log.i("formform", "Indirizzo: " + AddressPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext));
+        Log.i(TAG, "Indirizzo: " + AddressPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext));
         if(AddressPermissionUtils.getCoordsFromAddress(addressForm.getText().toString(), mContext) == null) {
             Toast.makeText(mContext, mContext.getResources().getString(R.string.valid_address), Toast.LENGTH_SHORT).show();
             isReturn = true;
@@ -153,7 +135,7 @@ public class NewGiftFragment extends Fragment {
         }
 
         //controllo se è stata selezionata una categoria
-        Log.i("formform", "Categoria: " + activeCategory);
+        Log.i(TAG, "Categoria: " + activeCategory);
         if (activeCategory.equals("")){
             Toast.makeText(mContext, mContext.getResources().getString(R.string.check_categ), Toast.LENGTH_SHORT).show();
             isReturn = true;
@@ -210,9 +192,9 @@ public class NewGiftFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                String tweet = EditString.normalizeTask(newGiftCoords.get(0), newGiftCoords.get(1), nameForm.getText().toString(), descriptionForm.getText().toString(), activeCategory, MainActivity.userName);
+                String tweet = EditString.correctTask(newGiftCoords.get(0), newGiftCoords.get(1), nameForm.getText().toString(), descriptionForm.getText().toString(), activeCategory, MainActivity.userName);
 
-                TwitterRequests.postTweet(tweet, "", mContext, new VolleyListener() {
+                TwitterFunctions.postTweet(tweet, "", mContext, new VolleyListener() {
                     @Override
                     public void onError(VolleyError error) {
                         error.printStackTrace();
@@ -255,18 +237,6 @@ public class NewGiftFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-
-//                Handler handler = new Handler(); //serve per ritardare la chiusura del dialog
-//                handler.postDelayed(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        dialog.dismiss();
-//                        MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
-//                        clearForm(linearLayout);
-//                    }
-//
-//                }, 1600);
 
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
@@ -312,17 +282,25 @@ public class NewGiftFragment extends Fragment {
             @Override
             public void onAnimationEnd(Animator animation) {
 
-                Handler handler = new Handler(); //serve per ritardare la chiusura del dialog
-                handler.postDelayed(new Runnable() {
+//                Handler handler = new Handler(); //serve per ritardare la chiusura del dialog
+//                handler.postDelayed(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        dialog.dismiss();
+//                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.newGiftFragmentTag);
+//                        MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
+//                    }
+//
+//                }, 1600);
 
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         dialog.dismiss();
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(MainActivity.newGiftFragmentTag);
                         MyGiftTweetsAdapter.reloadFragment(fragment, getActivity());
-                        //clearForm(linearLayout);
                     }
-
                 }, 1600);
 
             }
@@ -366,7 +344,7 @@ public class NewGiftFragment extends Fragment {
                     activeCategory = category;
                 }
                 colorChip(list);
-                Log.i("checkedchecked", activeCategory + "");
+                Log.i(TAG, activeCategory + "");
             }
         });
     }

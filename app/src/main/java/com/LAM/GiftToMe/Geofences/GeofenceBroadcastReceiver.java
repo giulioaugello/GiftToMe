@@ -14,6 +14,9 @@ import com.google.android.gms.location.GeofencingEvent;
 import java.util.List;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
+
+    private static final String TAG = "GeofenceBroadcastRecTAG";
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -24,7 +27,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         if (geofencingEvent.hasError()) {
             String errorMessage = GeofenceStatusCodes
                     .getStatusCodeString(geofencingEvent.getErrorCode());
-            Log.i("geofencegeofence", errorMessage);
+            Log.i(TAG, errorMessage);
             return;
         }
 
@@ -34,18 +37,18 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
 
-            //invio notifica quando sono vicino ad un regalo
+            //invio una notifica quando sono vicino ad un regalo
             fcmNotification.highPriorityNotification(context.getResources().getString(R.string.gift_nearby), context.getResources().getString(R.string.descr_gift_nearby));
 
         } else {
             // Log the error.
-            Log.i("geofencegeofence", "Non ci sono regali nella zona");
+            Log.i(TAG, "Non ci sono regali nella zona");
         }
 
         List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
         for (Geofence geofence: triggeringGeofences){
-            Log.i("geofencegeofence", geofence.getRequestId());
+            Log.i(TAG, geofence.getRequestId());
         }
     }
 }

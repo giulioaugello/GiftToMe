@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ import com.LAM.GiftToMe.FCMFirebase.DBFirestore;
 import com.LAM.GiftToMe.FCMFirebase.FirestoreCheckName;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.TwitterFunctions;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.EditString;
 import com.LAM.GiftToMe.UsefulClass.UsersGift;
@@ -38,9 +37,6 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
     private Activity activity;
     private Fragment fragment;
     private ArrayList<UsersGift> usersGifts;
-
-    private EditText replyGiftText;
-    private Button sendReply;
 
     public PopupAdapter(Context mContext, ArrayList<UsersGift> usersGifts, Activity activity, Fragment fragment) {
         this.mContext = mContext;
@@ -139,9 +135,9 @@ public class PopupAdapter extends RecyclerView.Adapter<PopupAdapter.ViewHolder> 
                 }
 
                 final String id = "";
-                final String reply = "@" + usersGifts.get(position).getIssuer() + " " + EditString.normalizeReply(id, MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getGiftId());
+                final String reply = "@" + usersGifts.get(position).getIssuer() + " " + EditString.correctReply(id, MainActivity.userName, usersGifts.get(position).getIssuer(), yourReply, usersGifts.get(position).getGiftId());
 
-                TwitterRequests.postTweet(reply, usersGifts.get(position).getTweetId(), mContext, new VolleyListener() {
+                TwitterFunctions.postTweet(reply, usersGifts.get(position).getTweetId(), mContext, new VolleyListener() {
                     @Override
                     public void onError(VolleyError message) {
 

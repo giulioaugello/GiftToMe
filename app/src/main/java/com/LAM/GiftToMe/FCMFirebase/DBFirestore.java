@@ -20,57 +20,15 @@ import androidx.annotation.NonNull;
 
 public class DBFirestore {
 
-    private static String TAG = "FCMTAG";
+    private static final String TAG = "DBFirestoreTAG";
 
     public static void saveUserDB(String username, String token){
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = firestoreDB.collection("users");
 
-        /////////////////////////////////////////////////////////////////////////
-        //CHAT MY GIFT
-
-//        String[] messagesMyGift = {};
-//        Date[] timestampsMyGift = {};
-//
-//        List<Map<String, Object>> myGift = new ArrayList<>();
-//
-//        Map<String, Object> myGiftInfo = new HashMap<>();
-//        myGiftInfo.put("sender", "");
-//        myGiftInfo.put("messages", Arrays.asList(messagesMyGift));
-//        myGiftInfo.put("timestamps", Arrays.asList(timestampsMyGift));
-//        myGift.add(myGiftInfo);
-
         List<Map<String, Object>> chatListMyGift = new ArrayList<>();
-
-//        Map<String, Object> chatMapMyGift = new HashMap<>();
-//        chatMapMyGift.put("myGiftName", "");
-//        chatMapMyGift.put("arrayMyGift", myGift);
-//        chatListMyGift.add(chatMapMyGift);
-
-        /////////////////////////////////////////////////////////////
-        //CHAT OTHER GIFT
-
-//        String[] messages = {};
-//        Date[] timestamps = {};
-//
-//        List<Map<String, Object>> gift = new ArrayList<>();
-//
-//        Map<String, Object> giftInfo = new HashMap<>();
-//        giftInfo.put("giftName", "");
-//        giftInfo.put("messages", Arrays.asList(messages));
-//        giftInfo.put("timestamps", Arrays.asList(timestamps));
-//        gift.add(giftInfo);
-
         List<Map<String, Object>> chatList = new ArrayList<>();
-
-//        Map<String, Object> chatMap = new HashMap<>();
-//        chatMap.put("receiver", "");
-//        chatMap.put("arrayGift", gift);
-//        chatList.add(chatMap);
-
-        /////////////////////////////////////////////////////////////
-        //MODEL
 
         Map<String, Object> model = new HashMap<>();
         String[] tokens = {token};
@@ -80,7 +38,8 @@ public class DBFirestore {
         model.put("chatMyGift", chatListMyGift);
 
         collectionReference.add(model);
-        Log.i("tokentoken","token ");
+
+        Log.i(TAG,"token " + token);
 
     }
 
@@ -95,13 +54,14 @@ public class DBFirestore {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Log.i(TAG, document.getId() + " => " + document.getData());
-                        //document.get("token").toString();
+
                         ArrayList<String> tokens = (ArrayList<String>) document.getData().get("token");
                         for(String token: tokens){
+                            //invia la notifica per ogni token dell'utente
                             FCMNotification.sendNotification(message, token, context);
                         }
                     }
-                    //Log.i("FCMTAG", "eccomi " + token);
+
                 } else {
                     Log.i(TAG, "Error getting documents.", task.getException());
                 }
@@ -109,7 +69,7 @@ public class DBFirestore {
         });
     }
 
-    //controlla se l'utente già esiste, se non esiste updateTokens
+    //controlla se l'utente già esiste, se non esiste controllo se token già è nel DB
     public static void checkIfExist(final String username, final String token){
 
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();

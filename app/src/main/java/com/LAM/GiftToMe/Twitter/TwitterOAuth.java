@@ -45,7 +45,7 @@ public class TwitterOAuth {
         this.version = "1.0";
     }
 
-
+    //genero header
     public String generateHeader(String httpMethod, String url, Map<String, String> requestParams) {
 
         String nonce = nonceGenerator();
@@ -53,9 +53,7 @@ public class TwitterOAuth {
         String baseSignatureString = generateSignatureBaseString(httpMethod, url, requestParams, nonce, timestamp);
         String signature = signingKeyGenerator(baseSignatureString);
 
-
         StringBuilder headerString = new StringBuilder();
-
         headerString.append("OAuth ");
         appendString(headerString, oauth_consumer_key, consumerKey);
         appendString(headerString, oauth_nonce, nonce);
@@ -71,14 +69,17 @@ public class TwitterOAuth {
         return headerString.toString();
     }
 
+    //genero nonce
     private String nonceGenerator() {
         return UUID.randomUUID().toString();
     }
 
+    //genero timestamp
     private String timestampGenerator() {
         return Math.round((new Date()).getTime() / 1000.0) + "";
     }
 
+    //genero signatureBaseString
     private String generateSignatureBaseString(String httpMethod, String url, Map<String, String> requestParams, String nonce, String timestamp) {
         Map<String, String> params = new HashMap<>();
 
@@ -109,6 +110,7 @@ public class TwitterOAuth {
         return baseString;
     }
 
+    //genero signingKey con HmaSHA1
     private String signingKeyGenerator(String input) {
         String secret = new StringBuilder().append(encode(consumerSecret)).append("&").append(encode(tokenSecret)).toString();
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);

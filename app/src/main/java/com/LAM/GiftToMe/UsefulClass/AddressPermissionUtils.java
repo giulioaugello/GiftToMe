@@ -20,6 +20,8 @@ import static com.LAM.GiftToMe.Fragment.HomeFragment.REQUEST_PERMISSIONS_REQUEST
 
 public class AddressPermissionUtils {
 
+    private static final String TAG = "AddressPermissionTAG";
+
     //ritorna un indirizzo (stringa) tramite coordinate
     public static String addressString(Context mContext, double LATITUDE, double LONGITUDE) {
         String strAdd = "";
@@ -34,13 +36,13 @@ public class AddressPermissionUtils {
                     strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
                 }
                 strAdd = strReturnedAddress.toString();
-                Log.i("location","My Current loction address " + strReturnedAddress.toString());
+                Log.i(TAG,"My Current loction address " + strReturnedAddress.toString());
             } else {
-                Log.i("location", "No Address returned!");
+                Log.i(TAG, "No Address returned!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.i("location", "Cannot get Address!");
+            Log.i(TAG, "Cannot get Address!");
         }
         return strAdd;
     }
@@ -53,13 +55,13 @@ public class AddressPermissionUtils {
         Geocoder coder = new Geocoder(mContext);
         List<Address> address;
         ArrayList<Double> coords = new ArrayList<Double>();
-        Log.i("coordinates",strAddress);
+        Log.i(TAG,strAddress);
 
         try {
             address = coder.getFromLocationName(strAddress,5);
-            Log.i("coordinates","" +address + "////////");
+            Log.i(TAG,"address " +address + "////////");
             if (address == null || address.size() == 0) {
-                Log.i("coordinates","" +address + "null///");
+                Log.i(TAG,"address " +address + "null///");
                 return null;
             }
 
@@ -70,8 +72,8 @@ public class AddressPermissionUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.i("coordinates","coords: " + coords);
-        Log.i("coordinates","coordsize: " + coords.size());
+        Log.i(TAG,"coords: " + coords);
+        Log.i(TAG,"coordsize: " + coords.size());
 
         return coords;
     }

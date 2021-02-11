@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import com.LAM.GiftToMe.Adapter.MyGiftTweetsAdapter;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.TwitterFunctions;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.AddressPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MyGiftFragment extends Fragment {
 
+    private static final String TAG = "MyGiftFragmentTAG";
     public static RecyclerView recyclerView;
     private Context mContext;
     private ArrayList<MyGift> userGifts;
@@ -43,7 +44,7 @@ public class MyGiftFragment extends Fragment {
 
     private boolean sportBool, electronicsBool, clothingBool, musicBool, otherBool;
 
-    private static final int NUMBER_OF_TWEET = 200;
+    private static final int NUMBER_OF_TWEET = 100;
     private static final String TWEET_ARTICLE_HASHTAG = "#LAM_giftToMe_2020-article";
 
     @Nullable
@@ -56,11 +57,11 @@ public class MyGiftFragment extends Fragment {
         recyclerView = v.findViewById(R.id.userTweets);
         userGifts = new ArrayList<>();
 
-        TwitterRequests.getUsersTweets(NUMBER_OF_TWEET, mContext, new VolleyListener() {
+        TwitterFunctions.userLoggedTweets(mContext, NUMBER_OF_TWEET, new VolleyListener() {
             @Override
             public void onResponse(String response) {
 
-                String id, text, hashtag = "";
+                String id, text;
 
                 try {
                     JSONArray jsonArray = new JSONArray(response);
@@ -68,13 +69,6 @@ public class MyGiftFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                        JSONObject entities = new JSONObject(jsonObject.getString(getResources().getString(R.string.json_entities)));
-//                        JSONArray jsonArrayHashtags = entities.getJSONArray(getResources().getString(R.string.json_hashtags));
-//
-//                        for (int j = 0 ;j < jsonArrayHashtags.length(); j++) {
-//                            JSONObject jsonObjectDates = jsonArrayHashtags.getJSONObject(j);
-//                            //hashtag = jsonObjectDates.getString(getResources().getString(R.string.json_text));
-//                        }
 
                         text = jsonObject.getString(getResources().getString(R.string.json_full_text));
                         id = jsonObject.getString(getResources().getString(R.string.json_id));
@@ -101,9 +95,6 @@ public class MyGiftFragment extends Fragment {
                             userGifts.add(myGift);
 
                         }
-                    }
-                    for(MyGift c: userGifts){
-                        Log.i("ciaociao", c.getDescription() + "");
                     }
 
                     setupRecyclerView(userGifts);
@@ -149,7 +140,7 @@ public class MyGiftFragment extends Fragment {
                     sportChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }
                 myGiftTweetsAdapter.filter(arrayActive);
-                //Log.i("checkedchecked", arrayActive + "");
+                Log.i(TAG, arrayActive + "");
             }
         });
         electronicChip.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +156,7 @@ public class MyGiftFragment extends Fragment {
                     electronicChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }
                 myGiftTweetsAdapter.filter(arrayActive);
-                //Log.i("checkedchecked", arrayActive + "");
+                Log.i(TAG, arrayActive + "");
             }
         });
         clothingChip.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +172,7 @@ public class MyGiftFragment extends Fragment {
                     clothingChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }
                 myGiftTweetsAdapter.filter(arrayActive);
-                //Log.i("checkedchecked", arrayActive + "");
+                Log.i(TAG, arrayActive + "");
             }
         });
         musicChip.setOnClickListener(new View.OnClickListener() {
@@ -197,7 +188,7 @@ public class MyGiftFragment extends Fragment {
                     musicChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }
                 myGiftTweetsAdapter.filter(arrayActive);
-                //Log.i("checkedchecked", arrayActive + "");
+                Log.i(TAG, arrayActive + "");
             }
         });
         otherChip.setOnClickListener(new View.OnClickListener() {
@@ -212,9 +203,8 @@ public class MyGiftFragment extends Fragment {
                     otherBool = false;
                     otherChip.setChipBackgroundColorResource(R.color.ghost_white);
                 }
-//                activeFilter(otherBool, otherChip, "Other");
                 myGiftTweetsAdapter.filter(arrayActive);
-                //Log.i("checkedchecked", arrayActive + "");
+                Log.i(TAG, arrayActive + "");
             }
         });
 

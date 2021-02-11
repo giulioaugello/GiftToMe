@@ -9,20 +9,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.LAM.GiftToMe.FCMFirebase.Chat;
+import com.LAM.GiftToMe.FCMFirebase.FirestoreListener;
 import com.LAM.GiftToMe.FCMFirebase.ReceiverModel;
 import com.LAM.GiftToMe.Fragment.ReplyChatFragment;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.TwitterFunctions;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.android.volley.VolleyError;
+import com.google.firebase.Timestamp;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,6 +71,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             @Override
             public void onClick(View v) {
 
+
                 FragmentManager fragmentManager = ((AppCompatActivity) activity).getSupportFragmentManager();
                 ReplyChatFragment replyChatFragment = ReplyChatFragment.newInstance(arrayChat.get(position).getUsername(), arrayChat.get(position).getGiftName());
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -73,52 +80,11 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                 fragmentTransaction.addToBackStack(MainActivity.replyChatFragmentTag);
                 MainActivity.activeFragment = replyChatFragment;
 
+
             }
         });
 
-//        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                showRemoveChat(position, holder.card);
-//                return false;
-//            }
-//        });
-
     }
-
-
-//    private void showRemoveChat(final int position, final CardView cardView){
-//        final Dialog dialog = new Dialog(activity);
-//        dialog.setCancelable(true);
-//
-//        final View v  = activity.getLayoutInflater().inflate(R.layout.delete_mygift_dialog,null);
-//        dialog.setContentView(v);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//
-//        Button cancelDelete, confirmDelete;
-//        cancelDelete = v.findViewById(R.id.cancel_delete);
-//        confirmDelete = v.findViewById(R.id.delete_button);
-//
-//        cancelDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        confirmDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                cardView.setVisibility(View.GONE);
-//                arrayChat.remove(position);
-//                notifyItemRemoved(position);
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        dialog.show();
-//    }
-
 
     @Override
     public int getItemCount() {
@@ -143,7 +109,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     }
 
     private void getTwitterProfileImage(int position, ArrayList<ReceiverModel> usersGifts, final ImageView profileImage){
-        TwitterRequests.getUserInfo(mContext, usersGifts.get(position).getUsername(), new VolleyListener() {
+        TwitterFunctions.userInfo(mContext, usersGifts.get(position).getUsername(), new VolleyListener() {
 
             @Override
             public void onResponse(String response) {

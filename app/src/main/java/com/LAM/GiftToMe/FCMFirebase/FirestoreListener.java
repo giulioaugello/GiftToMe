@@ -10,8 +10,10 @@ public interface FirestoreListener {
 
     void onMessageRetrieve(List<String> listenerMessages);
 
+    //per recuperare messaggi e timestamps
     void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages);
 
+    //per recuperare le chat
     void onChatRetrieve(List<Map<String, Object>> listenerChat);
 
     void onReceiverRetrieve(String receiver);

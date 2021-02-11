@@ -38,7 +38,7 @@ import com.LAM.GiftToMe.Adapter.PopupAdapter;
 import com.LAM.GiftToMe.Geofences.GeofencesMain;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.TwitterFunctions;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.AddressPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.CustomInfoWindow;
@@ -51,10 +51,12 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.type.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mapsforge.map.android.layers.MyLocationOverlay;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.config.Configuration;
@@ -77,14 +79,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class HomeFragment extends Fragment implements LocationListener {
 
+    private static final String TAG = "HomeFragmentTAG";
     private View v;
     private Context mContext;
     private boolean isDown = false;
@@ -112,19 +115,11 @@ public class HomeFragment extends Fragment implements LocationListener {
     private ArrayList<Marker> removeFirstMarker = new ArrayList<>();
     public static FloatingActionButton floatingActionButton;
 
-    //public static UserTweetsFragment userTweetsFragment;
 
     private RadiusMarkerClusterer poiMarkers;
 
     private GeofencingClient geofencingClient;
     private GeofencesMain geofencesMain;
-
-
-//    @Override
-//    public void onAttach(@NonNull Context context) {
-//        super.onAttach(context);
-//        mContext = context;
-//    }
 
     @Nullable
     @Override
@@ -140,17 +135,11 @@ public class HomeFragment extends Fragment implements LocationListener {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         poiMarkers = new RadiusMarkerClusterer(mContext);
-//        Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
-//        Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
-//        poiMarkers.setIcon(clusterIcon);
 
         //sceglie quale icona usare in base alla build
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             Drawable clusterIconD = getResources().getDrawable(R.mipmap.cluster_pie, null);
             Bitmap bitmap = ((BitmapDrawable) clusterIconD).getBitmap();
-            //Drawable drawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (65.0f * getResources().getDisplayMetrics().density), (int) (65.0f * getResources().getDisplayMetrics().density), true));
-
-            //Bitmap icon = BitmapFactory.decodeResource(mContext.getResources(), );
             poiMarkers.setIcon(bitmap);
         }else{
             Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
@@ -200,15 +189,11 @@ public class HomeFragment extends Fragment implements LocationListener {
             }
         });
 
+        //tasto nel dropdown
         userPos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) { //se non ho i permessi li attivo
-//                    enablePermissionsAndGPS();
-//                }else{
-//                    myLocationNewOverlay.enableFollowLocation(); //altrimenti mette il focus sulla posizione dell'utente
-//                }
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { //se non ho i permessi li attivo
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) { //se non ho i permessi li attivo
                     enablePermissionsAndGPS();
                 }else{
                     myLocationNewOverlay.enableFollowLocation(); //altrimenti mette il focus sulla posizione dell'utente
@@ -220,7 +205,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         enablePermissionsAndGPS(); //richiesta permessi e gps
 
-        Log.i("contextcontext",mContext+ "");
         getUsersGifts(); //prende i regali
 
         searchPosition.setOnClickListener(new View.OnClickListener() {
@@ -232,7 +216,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
         floatingActionButton = v.findViewById(R.id.go_to_list);
 
-        //setto l'altezza per il FAB (dava problemi in landscape)
+        //setto l'altezza per il FAB
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) floatingActionButton.getLayoutParams();
@@ -256,7 +240,7 @@ public class HomeFragment extends Fragment implements LocationListener {
             }
         });
 
-
+        //geofences
         geofencingClient = LocationServices.getGeofencingClient(mContext);
         geofencesMain = new GeofencesMain();
 
@@ -265,16 +249,9 @@ public class HomeFragment extends Fragment implements LocationListener {
         return v;
     }
 
-    //resetto i valori degli array
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        Log.i("giftgift", "Prima: " + selectedGift.size());
-//        selectedGift.clear();
-//        Log.i("giftgift", "Dopo: " + selectedGift.size());
-//        selectedMarker.clear();
-//        allMarkers.clear();
-//        arrayUsersGifts.clear();
     }
 
     //crea il necessario per la mappa
@@ -288,7 +265,6 @@ public class HomeFragment extends Fragment implements LocationListener {
         }
 
         map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER); //per togliere i tasti zoom built in
-        //map.getZoomController().getDisplay().setPositions(false, CustomZoomButtonsDisplay.HorizontalPosition.LEFT, CustomZoomButtonsDisplay.VerticalPosition.TOP);
         RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(map);
         mRotationGestureOverlay.setEnabled(true);
         map.getOverlays().add(mRotationGestureOverlay);
@@ -316,31 +292,41 @@ public class HomeFragment extends Fragment implements LocationListener {
 
     private void enablePermissionsAndGPS(){
 
-        Log.i("gpsgps", "Dentro");
         String message = "";
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) message = "Devi attivare la posizione";
-//        else if(checkIsHighAccuracy() != 3) message = "La posizione deve essere in modalità alta";
-//        else message = "altro";
-        //qui il gps non è attivo quindi mostro dialog
-//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) {
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            message = mContext.getResources().getString(R.string.descr_gps);
+        } else if(checkIsHighAccuracy() != 3) {
+            message = mContext.getResources().getString(R.string.descr_high);
+        } else {
+            message = mContext.getResources().getString(R.string.other2);
+        }
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || checkIsHighAccuracy() != 3) {
             // Build the alert dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Attiva la posizione");
+            builder.setTitle(mContext.getResources().getString(R.string.title_gps));
             builder.setMessage(message);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(mContext.getResources().getString(R.string.ook), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     // Show location settings when the user acknowledges the alert dialog
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivityForResult(intent, 1003);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    if (MainActivity.activeFragment.equals(fragmentManager.findFragmentByTag(MainActivity.homeFragmentTag)) && (checkIsHighAccuracy() != 3 || !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))){
+                        enablePermissionsAndGPS();
+                    }
                 }
             });
 
-            builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(mContext.getResources().getString(R.string.dismiss), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    //setto i marker nella posizione cercata
                     setSearchPosition();
-                    //se faccio annulla controllo se ho dato i permessi
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    if (MainActivity.activeFragment.equals(fragmentManager.findFragmentByTag(MainActivity.homeFragmentTag)) && checkIsHighAccuracy() != 3 && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                        enablePermissionsAndGPS();
+                    }
                 }
             });
 
@@ -351,20 +337,17 @@ public class HomeFragment extends Fragment implements LocationListener {
         }else {
             checkUserLocation();
         }
-//
-//        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() != 3){
-//            //se nn ho dato i permessi e il gps è spento: ho solo la lista in base alla posizione scritta
-//            Log.i("permperm", "Eccomi");
-//        }else if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3){
-//            //se non ho dato i permessi e il gps è attivo: ho solo la lista con i regali vicini alla posizione dell'utente
-//            Log.i("permperm", "Eccomi1");
-//        }else if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() != 3){
-//            //se ho dato i permessi ma non il gps: ho la mappa e lista con regali in base alla posizione scritta
-//            Log.i("permperm", "Eccomi2");
-//        }else{
-//            //se ho attivato tutto: ho la mappa e la lista dei regali in base alla posizione dell'utente
-//            Log.i("permperm", "Eccomi3");
-//        }
+
+    }
+
+    //serve per far funzionare le geofences
+    private int checkIsHighAccuracy(){
+        try {
+            return (Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.LOCATION_MODE));
+        } catch (Exception exception) {
+            Log.i(TAG, "location mode: " + exception.getMessage());
+        }
+        return 0;
     }
 
     public void checkUserLocation() {
@@ -400,15 +383,6 @@ public class HomeFragment extends Fragment implements LocationListener {
         }
     }
 
-//    private int checkIsHighAccuracy(){
-//        try {
-//            return (Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.LOCATION_MODE));
-//        } catch (Exception exception) {
-//            Log.i("gpsgps", "check " + exception.getMessage());
-//        }
-//        return 0;
-//    }
-
     //mette il marker nella posizione cercata se il gps non è attivo
     private void setSearchPosition(){
 
@@ -421,20 +395,17 @@ public class HomeFragment extends Fragment implements LocationListener {
                 ArrayList<Double> coord = AddressPermissionUtils.getCoordsFromAddress(addPosition.getText().toString(), mContext);
 
                 final GeoPoint start = new GeoPoint(coord.get(0), coord.get(1));
-                Log.i("geogeo", "coord " + coord.get(0) + " " + coord.get(1));
-
 
                 final Marker marker = new Marker(map);
                 removeFirstMarker.add(marker);
                 drawableBuildVersion(marker, ContextCompat.getDrawable(mContext, R.drawable.position), ContextCompat.getDrawable(mContext, R.mipmap.position));
-                //marker.setIcon(ContextCompat.getDrawable(mContext, R.drawable.position));
                 marker.setPosition(start);
                 marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                 marker.setInfoWindow(null); //toglie il popup di default
-                Log.i("geogeo", "coord " + marker.getPosition());
 
                 map.getOverlays().add(marker);
 
+                //for one marker per search
                 if (removeFirstMarker.size() > 1){ //mi serve per rimuovere il marker precedente
                     if (start.toString().equals(removeFirstMarker.get(removeFirstMarker.size() - 1).getPosition().toString())){
                         map.getOverlayManager().remove(removeFirstMarker.get(removeFirstMarker.size() - 2));
@@ -442,32 +413,27 @@ public class HomeFragment extends Fragment implements LocationListener {
                     }
                 }
 
-                if (removeFirstMarker.size() == 1){
-                    Log.i("geogeo", "size " + removeFirstMarker.size());
-                    myLocationNewOverlay.disableFollowLocation();
-                    mapController.setCenter(start);
-                }
+//                if (removeFirstMarker.size() == 1){
+//                    myLocationNewOverlay.disableFollowLocation();
+//                    mapController.setCenter(start);
+//                }
 
                 myLocationNewOverlay.disableFollowLocation();
-
+                
                 mapController.setCenter(start);
 
                 userPos.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-//                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3) {
-                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3) {
                             myLocationNewOverlay.enableFollowLocation();
                             mapController.setZoom(17.50);
                         }else{
-                            Log.i("geogeo", "size1 " + removeFirstMarker.size());
                             enablePermissionsAndGPS();
                         }
                         map.getOverlayManager().remove(marker);
                         map.invalidate();
-
-                        //controllare se il gps è attivo
 
                     }
                 });
@@ -484,49 +450,25 @@ public class HomeFragment extends Fragment implements LocationListener {
 
     }
 
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("permperm", String.valueOf(requestCode));
 
         if (requestCode == GPS_SETTING_CODE) {
-//            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && checkIsHighAccuracy() == 3) {
-//                checkUserLocation();
-//            }
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 checkUserLocation();
             }
         }
 
         if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION){
-            Log.i("permperm", "eccomi");
+            Log.i(TAG, "eccomi");
         }
 
     }
 
-
-//    private void requestPermissionsIfNecessary(String[] permissions) {
-//        ArrayList<String> permissionsToRequest = new ArrayList<>();
-//        for (String permission : permissions) {
-//            if (ContextCompat.checkSelfPermission(mContext, permission)
-//                    != PackageManager.PERMISSION_GRANTED) {
-//                // Permission is not granted
-//                permissionsToRequest.add(permission);
-//
-//            }
-//        }
-//        if (permissionsToRequest.size() > 0) {
-//            ActivityCompat.requestPermissions(
-//                    getActivity(),
-//                    permissionsToRequest.toArray(new String[0]),
-//                    REQUEST_PERMISSIONS_REQUEST_CODE); //mette in REQUEST_PERMISSIONS_REQUEST_CODE i permessi da richiedere
-//        }
-//    }
-
+    //prende i regali degli utenti tranne quelli dell'utente loggato
     public void getUsersGifts() {
-        TwitterRequests.searchTweets(mContext, TWEET_ARTICLE_HASHTAG, new VolleyListener() {
+        TwitterFunctions.usersTweets(mContext, TWEET_ARTICLE_HASHTAG, new VolleyListener() {
 
             @Override
             public void onResponse(String response) {
@@ -575,14 +517,12 @@ public class HomeFragment extends Fragment implements LocationListener {
 
                         if (!userGift.getIssuer().equals(MainActivity.userName)) {
                             arrayUsersGifts.add(userGift);
-//                            Log.i("giftgift", "array " + userGift.getName() + " " + userGift.getIssuer());
+                            Log.i(TAG, "arrayUsersGifts " + userGift.getName() + " " + userGift.getIssuer());
                         }
 
 
                     }
-//                    Log.i("giftgift", "username " + MainActivity.userName);
-//                    Log.i("giftgift", "array " + arrayUsersGifts);
-//                    Log.i("giftgift", "size " + arrayUsersGifts.size());
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -597,17 +537,6 @@ public class HomeFragment extends Fragment implements LocationListener {
                 for (int i = 0; i < arrayUsersGifts.size()-1; i++){
                     for (int j = i+1; j < arrayUsersGifts.size(); j++){
                         if (arrayUsersGifts.get(j).getAddress().equals(arrayUsersGifts.get(i).getAddress())){
-
-                            //Cluster veloce sullo stesso indirizzo
-//                            RadiusMarkerClusterer poiMarkers = new RadiusMarkerClusterer(mContext);
-//                            Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster, null);
-//                            Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
-//                            poiMarkers.setIcon(clusterIcon);
-//                            poiMarkers.add(allMarkers.get(i));
-//                            poiMarkers.add(allMarkers.get(j));
-//                            map.getOverlays().remove(allMarkers.get(i));
-//                            map.getOverlays().remove(allMarkers.get(j));
-//                            map.getOverlays().add(poiMarkers);
 
                             //popolo gli array con gli elementi che hanno la stessa via
                             selectedMarker.add(allMarkers.get(i));
@@ -632,11 +561,9 @@ public class HomeFragment extends Fragment implements LocationListener {
 
                         Marker markerSamePosition = new Marker(map);
                         drawableBuildVersion(markerSamePosition, ContextCompat.getDrawable(mContext, R.drawable.location_same), ContextCompat.getDrawable(mContext, R.mipmap.location_same));
-                        //markerSamePosition.setIcon(ContextCompat.getDrawable(mContext, R.drawable.location_same));
                         markerSamePosition.setPosition(gift.getGeoPoint());
                         markerSamePosition.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                         markerSamePosition.setTitle(gift.getGiftId());
-                        //Log.i("giftgift", markerSamePosition.getTitle());
                         poiMarkers.add(markerSamePosition);
 
                         //onClick per vedere il dialog con la recyclerView (contiene i regali aventi lo stesso indirizzo)
@@ -693,6 +620,7 @@ public class HomeFragment extends Fragment implements LocationListener {
     //collega recyclerView all'adapter
     private void setupRecyclerView(ArrayList<UsersGift> usersGiftsList, RecyclerView recyclerView){
 
+        //recyclerview per stesso indirizzo
         PopupAdapter popupAdapter = new PopupAdapter(mContext, usersGiftsList, getActivity(), this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -760,32 +688,6 @@ public class HomeFragment extends Fragment implements LocationListener {
                 break;
         }
 
-
-
-        //marker senza cluster
-        //GeoPoint startPoint = new GeoPoint(array[0], array[1]);
-        //MarkerInfoWindow markerInfoWindow = new MarkerInfoWindow(R.layout.popup_marker, map);
-        //popup custom
-//        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, title, description, issuer, mContext);
-//
-//        Marker marker = new Marker(map);
-//        marker.setIcon(ContextCompat.getDrawable(mContext, markerIcon));
-//        marker.setPosition(geoPoint);
-//        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-//
-//        marker.setInfoWindow(customInfoWindow); //setta il popup
-//        marker.setSubDescription("Tocca per chiudere oppure"); //sottodescrizione
-//        marker.setImage(drawableImagePopup); //setta l'immagine nel popup
-//        marker.setInfoWindowAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
-//
-//        allMarkers.add(marker);
-//
-//        map.getOverlays().add(marker);
-
-
-
-//        CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, giftId, tweetId, title, description, issuer, address, mContext, getActivity());
-
         CustomInfoWindow customInfoWindow = new CustomInfoWindow(R.layout.popup_marker, map, usersGift, mContext, getActivity());
 
         Marker marker = new Marker(map);
@@ -816,7 +718,6 @@ public class HomeFragment extends Fragment implements LocationListener {
 
     //In base alla versione di android prendo i drawable da due cartelle diverse (uscivano marker piccoli in android superiore a pie)
     private void drawableBuildVersion(Marker marker, Drawable drawable, Drawable mipmap){
-        Log.i("mipmip", mipmap+"");
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             Bitmap bitmap = ((BitmapDrawable) mipmap).getBitmap();
             Drawable dr = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) (64.0f * getResources().getDisplayMetrics().density), (int) (64.0f * getResources().getDisplayMetrics().density), true));
@@ -832,19 +733,19 @@ public class HomeFragment extends Fragment implements LocationListener {
         GeofencingRequest geofencingRequest = geofencesMain.getGeofencingRequest(geofence);
         PendingIntent intent = geofencesMain.getGeofencePendingIntent(mContext);
 
-        Log.i("geofencegeofence", "Address coords: " + lat + " " + lon + ", raggio di ricerca: " + radiusSearch);
+        Log.i(TAG, "Geofences address coords: " + lat + " " + lon + ", radius: " + radiusSearch);
 
         geofencingClient.addGeofences(geofencingRequest, intent)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.i("geofencegeofence", "OK");
+                        Log.i(TAG, "Geofences OK");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i("geofencegeofence", "Error " + e.getMessage());
+                        Log.i(TAG, "Add Geofences Error " + e.getMessage());
                     }
                 });
 
@@ -855,13 +756,13 @@ public class HomeFragment extends Fragment implements LocationListener {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.i("geofencegeofence", "rimosso");
+                        Log.i(TAG, "Geofences removed");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i("geofencegeofence", "Error: " + e.getMessage());
+                        Log.i(TAG, "Remove Geofences Error: " + e.getMessage());
                     }
                 });
     }
@@ -874,22 +775,7 @@ public class HomeFragment extends Fragment implements LocationListener {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         Configuration.getInstance().load(mContext, PreferenceManager.getDefaultSharedPreferences(mContext));
         map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
-//        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-//            //enablePermissionsAndGPS();
-//            String userTweetsFragmentTag = getResources().getString(R.string.users_tweets_fragment_tag);
-//            UserTweetsFragment userTweetsFragment = new UserTweetsFragment();
-//            FragmentTransaction fragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.setCustomAnimations(R.anim.bottomtotop, R.anim.none);
-//            fragmentTransaction.replace(R.id.fragment_container, userTweetsFragment, userTweetsFragmentTag).commit();
-//            fragmentTransaction.addToBackStack(userTweetsFragmentTag);
-//            MainActivity.activeFragment = userTweetsFragment;
-//        }
 
-        //resetto per non far aumentare il numero dei marker nel cluster dello stesso luogo
-//        selectedGift.clear();
-//        selectedMarker.clear();
-//        allMarkers.clear();
-        //arrayUsersGifts.clear();
     }
 
     @Override

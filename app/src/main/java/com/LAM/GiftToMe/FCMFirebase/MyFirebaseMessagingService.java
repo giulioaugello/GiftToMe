@@ -10,7 +10,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private final String TAG = "FCMTAG";
+    private static final String TAG = "MyFirebaseMessagingTAG";
     public MyFirebaseMessagingService() {
     }
 

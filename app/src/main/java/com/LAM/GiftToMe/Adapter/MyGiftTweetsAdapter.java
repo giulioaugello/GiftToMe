@@ -19,9 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.LAM.GiftToMe.FCMFirebase.Chat;
+import com.LAM.GiftToMe.FCMFirebase.FirestoreCheckName;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.TwitterFunctions;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.LAM.GiftToMe.UsefulClass.AddressPermissionUtils;
 import com.LAM.GiftToMe.UsefulClass.MyGift;
@@ -40,17 +41,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapter.ViewHolder> {
 
+    private static final String TAG = "MyGiftTweetsAdapter";
     private Context mContext;
     private Activity activity;
     private Fragment fragment;
     private ArrayList<MyGift> myGift;
     private ArrayList<MyGift> allGift;
-    private static final String TAG = "UserGiftRecyclerViewTAG";
     private TextView nameLong, descriptionLong, addressLong;
     private ImageView imageCategory;
     private String nameString,addressString,descriptionString,categoryString, issuer;
-
-    public static boolean isOnTouch = false;
 
     public MyGiftTweetsAdapter(Context mContext, ArrayList<MyGift> myGift, Activity activity, Fragment fragment) {
         this.mContext = mContext;
@@ -154,7 +153,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
     //cancella regalo
     private void removeGift(final String id, final int position){
 
-        TwitterRequests.deleteGift(id, mContext, new VolleyListener() {
+        TwitterFunctions.deleteGift(id, mContext, new VolleyListener() {
 
             @Override
             public void onResponse(String response) {
@@ -235,7 +234,6 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
                     case R.id.musicRadio:
                     case R.id.otherRadio:
                         categoryString = (String) radioChecked.getText();
-                        //Log.i("chk", "Nuova categoria " + categoryString);
                         break;
                 }
 
@@ -250,7 +248,7 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
                 nameString = nameLong.getText().toString();
                 descriptionString = descriptionLong.getText().toString();
                 addressString = addressLong.getText().toString();
-                ArrayList<Double> addressCoords = AddressPermissionUtils.getCoordsFromAddress(addressString, mContext);
+                final ArrayList<Double> addressCoords = AddressPermissionUtils.getCoordsFromAddress(addressString, mContext);
 
                 if(nameString.isEmpty() || descriptionString.isEmpty() || addressString.isEmpty()){
                     Toast.makeText(mContext, mContext.getResources().getString(R.string.all_fields), Toast.LENGTH_LONG).show();
@@ -261,25 +259,65 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
                     return;
                 }
 
-                String task = "";
-                task = EditString.normalizeTask(addressCoords.get(0), addressCoords.get(1), nameString, descriptionString, categoryString, issuer);
+                Log.i(TAG, "nameString: " + nameString + ", " + "myGift: " + myGift.get(position).getName());
 
-                removeGift(myGift.get(position).getTweetId(),position);
-                myGift.remove(position);
-                notifyItemRemoved(position);
+                //se il nome è uguale a quello del regalo non creo un altro posto nel db
+                if (nameString.equals(myGift.get(position).getName())){
+                    String task = "";
+                    task = EditString.correctTask(addressCoords.get(0), addressCoords.get(1), nameString, descriptionString, categoryString, issuer);
 
-                TwitterRequests.postTweet(task, "", mContext, new VolleyListener() {
-                    @Override
-                    public void onError(VolleyError message) {
-                        message.printStackTrace();
-                    }
+                    removeGift(myGift.get(position).getTweetId(), position);
+                    myGift.remove(position);
+                    notifyItemRemoved(position);
 
-                    @Override
-                    public void onResponse(String response) {
-                        reloadFragment(fragment,activity);
-                        dialog.dismiss();
-                    }
-                });
+                    TwitterFunctions.postTweet(task, "", mContext, new VolleyListener() {
+                        @Override
+                        public void onError(VolleyError message) {
+                            message.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(String response) {
+                            reloadFragment(fragment,activity);
+                            dialog.dismiss();
+                        }
+                    });
+                    Log.i(TAG, "uguale");
+                }else {
+                    Chat.checkNameExist(MainActivity.userName, nameString, mContext, new FirestoreCheckName() {
+                        @Override
+                        public void onReceiverRetrieve(boolean exist) {
+                            if (!exist){
+                                //Chat.newGiftUpload(MainActivity.userName, nameString);
+                                Chat.modifyGiftName(MainActivity.userName, myGift.get(position).getName(), nameString);
+                                String task = "";
+                                task = EditString.correctTask(addressCoords.get(0), addressCoords.get(1), nameString, descriptionString, categoryString, issuer);
+
+                                removeGift(myGift.get(position).getTweetId(), position);
+                                myGift.remove(position);
+                                notifyItemRemoved(position);
+
+                                TwitterFunctions.postTweet(task, "", mContext, new VolleyListener() {
+                                    @Override
+                                    public void onError(VolleyError message) {
+                                        message.printStackTrace();
+                                    }
+
+                                    @Override
+                                    public void onResponse(String response) {
+                                        reloadFragment(fragment,activity);
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    Log.i(TAG, "diverso");
+                }
+
+
+
+
             }
         });
 
@@ -361,8 +399,6 @@ public class MyGiftTweetsAdapter extends RecyclerView.Adapter<MyGiftTweetsAdapte
     }
 
     public static void reloadFragment(Fragment fragment, Activity activity){
-
-        //Log.i("fragmentfragment", "Sono in " + fragment.getTag());
 
         FragmentManager fragmentManager = ((AppCompatActivity)activity).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

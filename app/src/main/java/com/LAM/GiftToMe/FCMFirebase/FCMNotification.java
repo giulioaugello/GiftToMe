@@ -45,8 +45,8 @@ public class FCMNotification extends ContextWrapper {
             NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.enableLights(true);
             notificationChannel.enableVibration(true);
-            notificationChannel.setDescription("this is the desc of the channel");
-            notificationChannel.setLightColor(Color.BLUE);
+            notificationChannel.setDescription("description of the channel");
+            notificationChannel.setLightColor(Color.GREEN);
             notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -63,7 +63,7 @@ public class FCMNotification extends ContextWrapper {
                 .setSmallIcon(R.drawable.ic_baseline_card_giftcard_24)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
-                .setColor(Color.BLUE)
+                .setColor(Color.GREEN)
                 .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().setSummaryText("GiftToMe").setBigContentTitle(title).bigText(body))
                 .build();
@@ -142,7 +142,7 @@ public class FCMNotification extends ContextWrapper {
                 .setStyle(bigTextStyle)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setColor(Color.BLUE)
+                .setColor(Color.GREEN)
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true)

@@ -20,7 +20,7 @@ import com.LAM.GiftToMe.FCMFirebase.ModelUserMessage;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.Picasso.CircleTransformation;
 import com.LAM.GiftToMe.R;
-import com.LAM.GiftToMe.Twitter.TwitterRequests;
+import com.LAM.GiftToMe.Twitter.TwitterFunctions;
 import com.LAM.GiftToMe.Twitter.VolleyListener;
 import com.android.volley.VolleyError;
 import com.google.firebase.Timestamp;
@@ -42,6 +42,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ReplyChatFragment extends Fragment {
 
+    private static final String TAG = "ReplyChatFragmentTAG";
     private Context mContext;
     private RecyclerView recyclerView;
     private ReplyChatAdapter replyChatAdapter;
@@ -51,11 +52,6 @@ public class ReplyChatFragment extends Fragment {
 
     private EditText text;
     private ImageView send, twPhoto;
-
-//    public ReplyChatFragment(String receiverName, String giftName){
-//        this.receiverName = receiverName;
-//        this.giftName = giftName;
-//    }
 
     @Nullable
     @Override
@@ -69,10 +65,8 @@ public class ReplyChatFragment extends Fragment {
         text = v.findViewById(R.id.message_text);
         send = v.findViewById(R.id.send_message);
 
-
         TextView messageUsername = v.findViewById(R.id.tw_username);
         TextView messageGiftName = v.findViewById(R.id.mes_gift_name);
-
 
         receiverName = getArguments().getString("receiverName");
         giftName = getArguments().getString("giftName");
@@ -115,7 +109,6 @@ public class ReplyChatFragment extends Fragment {
                 ModelUserMessage newMessage = new ModelUserMessage(MainActivity.userName, receiverName, yourReply);
                 arrayMessages.add(newMessage);
                 replyChatAdapter.updateList(arrayMessages); //aggiorna la recyclerview
-                Log.i("chatchat", "COUNT: " + replyChatAdapter.getItemCount() + " ... " + arrayMessages.size());
                 text.setText("");
 
                 recyclerView.scrollToPosition(replyChatAdapter.getItemCount() - 1); //mi serve per tenere il focus sull'ultimo messaggio inviato
@@ -126,7 +119,7 @@ public class ReplyChatFragment extends Fragment {
         //confronta i timestamp dei messaggi e inserisce i messaggi nell'ordine giusto
         if (!ChatFragment.isMyGift){
 
-            Chat.getTimestamps2(MainActivity.userName, receiverName, giftName, new FirestoreListener() {
+            Chat.getTimestamps2(MainActivity.userName, receiverName, giftName, getActivity(), new FirestoreListener() {
                 @Override
                 public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -136,18 +129,13 @@ public class ReplyChatFragment extends Fragment {
                 public void onDateRetrieve(final List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
                     final List<Timestamp> timestamps = new ArrayList<>();
                     final List<String> messages = new ArrayList<>();
-                    //Chat.provaSnapshot(MainActivity.userName);
 
                     timestamps.addAll(listenerTimestamps);
                     messages.addAll(listenerMessages);
-                    //Log.i("chatchat", "MMM: " + messages);
-                    Log.i("chatchat", "Timestamps: " + timestamps.size());
-                    //Log.i("chatchat", "Gift: " + giftName);
 
-                    // sopra hanno le i
-                    //sotto le j
+                    Log.i(TAG, "Timestamps: " + timestamps.size());
 
-                    Chat.getMyTimestamps2(receiverName, MainActivity.userName, giftName, new FirestoreListener() {
+                    Chat.getMyTimestamps2(receiverName, MainActivity.userName, giftName, getActivity(), new FirestoreListener() {
                         @Override
                         public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -156,13 +144,6 @@ public class ReplyChatFragment extends Fragment {
                         @Override
                         public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
                             arrayMessages.clear();
-                            Log.i("chatchat", "AAA: " + arrayMessages.size());
-                            //Log.i("chatchat", "MMM1: " + listenerMessages);
-                            //Log.i("chatchat", "Messages: " + listenerTimestamps + " ... " + listenerMessages + " ... " + timestamps + " ... " +  messages);
-                            //Log.i("chatchat", "Gift: " + giftName);
-
-                            int fullSize = timestamps.size() + listenerTimestamps.size();
-
 
                             int index = 0;
 
@@ -170,8 +151,6 @@ public class ReplyChatFragment extends Fragment {
 
                                 if (listenerTimestamps.size() == 0) { //se hanno solo contattato un mio regalo ma ancora non rispondo
 
-                                    //Log.i("chatchat", "Ancora non rispondo, mostro solo i suoi messaggi");
-                                    //Log.i("chatchat", messages.get(i));
                                     ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(i));
                                     arrayMessages.add(modelUserMessage);
 
@@ -185,22 +164,18 @@ public class ReplyChatFragment extends Fragment {
 
                                             if (i == timestamps.size()-1){ //se sono all'ultimo elemento di timestamps
 
-                                                //Log.i("chatchat", "Prima timestamps"); //mostro l'ultimo
-                                                //Log.i("chatchat", messages.get(i));
                                                 ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(i));
                                                 arrayMessages.add(modelUserMessage);
 
                                                 if (j == listenerTimestamps.size()-1){ //se sono all'ultimo elemento di listener
-                                                    //Log.i("chatchat", "Ultimo elemento di listener"); //lo mostro
-                                                    //Log.i("chatchat", listenerMessages.get(j));
+
                                                     ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(j));
                                                     arrayMessages.add(modelUserMessageJ);
 
                                                 }else { //altrimenti mostro tutti i rimanenti listener
 
                                                     for (int k = j; k < listenerTimestamps.size(); k++){
-                                                        //Log.i("chatchat", "Mostro tutti i rimanenti j");
-                                                        //Log.i("chatchat", listenerMessages.get(k));
+
                                                         ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(k));
                                                         arrayMessages.add(modelUserMessageJ);
                                                     }
@@ -210,9 +185,6 @@ public class ReplyChatFragment extends Fragment {
 
                                             }else{ //se i non è l'ultimo elemento
 
-                                                //Log.i("chatchat", "Prima timestamps");
-                                                //Log.i("chatchat", messages.get(i));
-                                                //Log.i("chatchat", "JJJ: " + j);
                                                 ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(i));
                                                 arrayMessages.add(modelUserMessage);
                                                 index = j;
@@ -224,42 +196,34 @@ public class ReplyChatFragment extends Fragment {
 
                                             if (j == listenerTimestamps.size()-1){
 
-                                                //Log.i("chatchat", "Prima listenerTimestamps");
-                                                //Log.i("chatchat", listenerMessages.get(j));
                                                 ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(j));
                                                 arrayMessages.add(modelUserMessageJ);
 
                                                 for (int k = i; k < timestamps.size(); k++){
-                                                    //Log.i("chatchat", "Mostro tutti i rimanenti i ");
-                                                    //Log.i("chatchat", messages.get(k));
+
                                                     ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(k));
                                                     arrayMessages.add(modelUserMessage);
                                                     i = k;
+
                                                 }
 
                                             }else {
 
-                                                //Log.i("chatchat", "Prima listenerTimestamps");
-                                                //Log.i("chatchat", listenerMessages.get(j));
                                                 ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(j));
                                                 arrayMessages.add(modelUserMessageJ);
 
                                             }
 
-
                                         }
+
                                     }
 
-//                                }
-
                                 }
-
-
 
                             }
 
 
-                            Log.i("chatchat", "ARRAYMESSAGE: " + arrayMessages.size());
+                            Log.i(TAG, "ARRAYMESSAGE: " + arrayMessages.size());
                             setupRecyclerView(arrayMessages);
 
                         }
@@ -297,10 +261,11 @@ public class ReplyChatFragment extends Fragment {
 
                 }
             });
+
         }else {
 
 
-            Chat.getMyTimestamps2(MainActivity.userName, receiverName, giftName, new FirestoreListener() {
+            Chat.getMyTimestamps2(MainActivity.userName, receiverName, giftName, getActivity(), new FirestoreListener() {
                 @Override
                 public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -311,15 +276,12 @@ public class ReplyChatFragment extends Fragment {
 
                     final List<Timestamp> timestamps = new ArrayList<>();
                     final List<String> messages = new ArrayList<>();
-                    //Chat.provaSnapshot(MainActivity.userName);
 
                     timestamps.addAll(listenerTimestamps);
                     messages.addAll(listenerMessages);
-                    //Log.i("chatchat", "Timestamps: " + timestamps + " ... " + messages);
-                    //Log.i("chatchat", "Gift: " + giftName);
 
 
-                    Chat.getTimestamps2(receiverName, MainActivity.userName, giftName, new FirestoreListener() {
+                    Chat.getTimestamps2(receiverName, MainActivity.userName, giftName, getActivity(), new FirestoreListener() {
                         @Override
                         public void onMessageRetrieve(List<String> listenerMessages) {
 
@@ -327,12 +289,8 @@ public class ReplyChatFragment extends Fragment {
 
                         @Override
                         public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
-                            //Log.i("chatchat", "Messages: " + listenerTimestamps + " ... " + listenerMessages + " ... " + timestamps + " ... " +  messages);
-                            //Log.i("chatchat", "Gift: " + giftName);
 
                             arrayMessages.clear();
-
-                            int fullSize = timestamps.size() + listenerTimestamps.size();
 
                             int index = 0;
 
@@ -340,8 +298,6 @@ public class ReplyChatFragment extends Fragment {
 
                                 if (timestamps.size() == 0) { //se hanno solo contattato un mio regalo ma ancora non rispondo
 
-                                    //Log.i("chatchat", "Ancora non rispondo, mostro solo i suoi messaggi");
-                                    //Log.i("chatchat", listenerMessages.get(i));
                                     ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(i));
                                     arrayMessages.add(modelUserMessage);
 
@@ -355,24 +311,21 @@ public class ReplyChatFragment extends Fragment {
 
                                             if (i == listenerTimestamps.size()-1){ //se sono all'ultimo elemento di timestamps
 
-                                                //Log.i("chatchat", "Prima timestamps"); //mostro l'ultimo
-                                                //Log.i("chatchat", listenerMessages.get(i));
                                                 ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(i));
                                                 arrayMessages.add(modelUserMessage);
 
                                                 if (j == timestamps.size()-1){ //se sono all'ultimo elemento di listener
-                                                    //Log.i("chatchat", "Ultimo elemento di listener"); //lo mostro
-                                                    //Log.i("chatchat", messages.get(j));
+
                                                     ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(j));
                                                     arrayMessages.add(modelUserMessageJ);
 
                                                 }else { //altrimenti mostro tutti i rimanenti listener
 
                                                     for (int k = j; k < timestamps.size(); k++){
-                                                        //Log.i("chatchat", "Mostro tutti i rimanenti j");
-                                                        //Log.i("chatchat", messages.get(k));
+
                                                         ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(k));
                                                         arrayMessages.add(modelUserMessageJ);
+
                                                     }
                                                     break;
 
@@ -380,9 +333,6 @@ public class ReplyChatFragment extends Fragment {
 
                                             }else{ //se i non è l'ultimo elemento
 
-                                                //Log.i("chatchat", "Prima timestamps");
-                                                //Log.i("chatchat", listenerMessages.get(i));
-                                                //Log.i("chatchat", "JJJ: " + j);
                                                 ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(i));
                                                 arrayMessages.add(modelUserMessage);
                                                 index = j;
@@ -394,23 +344,19 @@ public class ReplyChatFragment extends Fragment {
 
                                             if (j == timestamps.size()-1){
 
-                                                //Log.i("chatchat", "Prima listenerTimestamps");
-                                                //Log.i("chatchat", messages.get(j));
                                                 ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(j));
                                                 arrayMessages.add(modelUserMessageJ);
 
                                                 for (int k = i; k < listenerTimestamps.size(); k++){
-                                                    //Log.i("chatchat", "Mostro tutti i rimanenti i ");
-                                                    //Log.i("chatchat", listenerMessages.get(k));
+
                                                     ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(k));
                                                     arrayMessages.add(modelUserMessage);
                                                     i = k;
+
                                                 }
 
                                             }else {
 
-                                                //Log.i("chatchat", "Prima listenerTimestamps");
-                                                //Log.i("chatchat", messages.get(j));
                                                 ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(j));
                                                 arrayMessages.add(modelUserMessageJ);
 
@@ -418,18 +364,15 @@ public class ReplyChatFragment extends Fragment {
 
 
                                         }
+
                                     }
 
-//                                }
-
                                 }
-
-
 
                             }
 
 
-                            //Log.i("chatchat", "ARRAYMESSAGE: " + arrayMessages);
+                            Log.i(TAG, "ARRAYMESSAGE2: " + arrayMessages);
                             setupRecyclerView(arrayMessages);
 
                         }
@@ -470,6 +413,304 @@ public class ReplyChatFragment extends Fragment {
 
         }
 
+
+
+//        if (!ChatFragment.isMyGift){
+//
+//            Chat.getTimestamps2(MainActivity.userName, receiverName, giftName, new FirestoreListener() {
+//                @Override
+//                public void onMessageRetrieve(List<String> listenerMessages) {
+//
+//                }
+//
+//                @Override
+//                public void onDateRetrieve(final List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+//                    final List<Timestamp> timestamps = new ArrayList<>();
+//                    final List<String> messages = new ArrayList<>();
+//
+//                    timestamps.addAll(listenerTimestamps);
+//                    messages.addAll(listenerMessages);
+//
+//                    Log.i(TAG, "Timestamps: " + timestamps.size());
+//
+//                    Chat.getMyTimestamps2(receiverName, MainActivity.userName, giftName, new FirestoreListener() {
+//                        @Override
+//                        public void onMessageRetrieve(List<String> listenerMessages) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+//                            arrayMessages.clear();
+//
+//                            int index = 0;
+//
+//                            for (int i = 0; i < timestamps.size(); i++){
+//
+//                                if (listenerTimestamps.size() == 0) { //se hanno solo contattato un mio regalo ma ancora non rispondo
+//
+//                                    ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(i));
+//                                    arrayMessages.add(modelUserMessage);
+//
+//                                }else {
+//
+//
+//                                    for (int j = index; j < listenerTimestamps.size(); j++){
+//
+//
+//                                        if (timestamps.get(i).compareTo(listenerTimestamps.get(j)) < 0){ //se timestamps < listener
+//
+//                                            if (i == timestamps.size()-1){ //se sono all'ultimo elemento di timestamps
+//
+//                                                ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(i));
+//                                                arrayMessages.add(modelUserMessage);
+//
+//                                                if (j == listenerTimestamps.size()-1){ //se sono all'ultimo elemento di listener
+//
+//                                                    ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(j));
+//                                                    arrayMessages.add(modelUserMessageJ);
+//
+//                                                }else { //altrimenti mostro tutti i rimanenti listener
+//
+//                                                    for (int k = j; k < listenerTimestamps.size(); k++){
+//
+//                                                        ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(k));
+//                                                        arrayMessages.add(modelUserMessageJ);
+//                                                    }
+//                                                    break;
+//
+//                                                }
+//
+//                                            }else{ //se i non è l'ultimo elemento
+//
+//                                                ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(i));
+//                                                arrayMessages.add(modelUserMessage);
+//                                                index = j;
+//                                                break;
+//
+//                                            }
+//
+//                                        }else{ //se timestamps >= listener
+//
+//                                            if (j == listenerTimestamps.size()-1){
+//
+//                                                ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(j));
+//                                                arrayMessages.add(modelUserMessageJ);
+//
+//                                                for (int k = i; k < timestamps.size(); k++){
+//
+//                                                    ModelUserMessage modelUserMessage = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(k));
+//                                                    arrayMessages.add(modelUserMessage);
+//                                                    i = k;
+//
+//                                                }
+//
+//                                            }else {
+//
+//                                                ModelUserMessage modelUserMessageJ = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(j));
+//                                                arrayMessages.add(modelUserMessageJ);
+//
+//                                            }
+//
+//                                        }
+//
+//                                    }
+//
+//                                }
+//
+//                            }
+//
+//
+//                            Log.i(TAG, "ARRAYMESSAGE: " + arrayMessages.size());
+//                            setupRecyclerView(arrayMessages);
+//
+//                        }
+//
+//                        @Override
+//                        public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onReceiverRetrieve(String receiver) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onTaskError(Exception taskException) {
+//
+//                        }
+//                    });
+//
+//                }
+//
+//                @Override
+//                public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+//
+//                }
+//
+//                @Override
+//                public void onReceiverRetrieve(String receiver) {
+//
+//                }
+//
+//                @Override
+//                public void onTaskError(Exception taskException) {
+//
+//                }
+//            });
+//
+//        }else {
+//
+//
+//            Chat.getMyTimestamps2(MainActivity.userName, receiverName, giftName, new FirestoreListener() {
+//                @Override
+//                public void onMessageRetrieve(List<String> listenerMessages) {
+//
+//                }
+//
+//                @Override
+//                public void onDateRetrieve(final List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+//
+//                    final List<Timestamp> timestamps = new ArrayList<>();
+//                    final List<String> messages = new ArrayList<>();
+//
+//                    timestamps.addAll(listenerTimestamps);
+//                    messages.addAll(listenerMessages);
+//
+//
+//                    Chat.getTimestamps2(receiverName, MainActivity.userName, giftName, new FirestoreListener() {
+//                        @Override
+//                        public void onMessageRetrieve(List<String> listenerMessages) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onDateRetrieve(List<Timestamp> listenerTimestamps, List<String> listenerMessages) {
+//
+//                            arrayMessages.clear();
+//
+//                            int index = 0;
+//
+//                            for (int i = 0; i < listenerTimestamps.size(); i++){
+//
+//                                if (timestamps.size() == 0) { //se hanno solo contattato un mio regalo ma ancora non rispondo
+//
+//                                    ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(i));
+//                                    arrayMessages.add(modelUserMessage);
+//
+//                                }else {
+//
+//
+//                                    for (int j = index; j < timestamps.size(); j++){
+//
+//
+//                                        if (listenerTimestamps.get(i).compareTo(timestamps.get(j)) < 0){ //se timestamps < listener
+//
+//                                            if (i == listenerTimestamps.size()-1){ //se sono all'ultimo elemento di timestamps
+//
+//                                                ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(i));
+//                                                arrayMessages.add(modelUserMessage);
+//
+//                                                if (j == timestamps.size()-1){ //se sono all'ultimo elemento di listener
+//
+//                                                    ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(j));
+//                                                    arrayMessages.add(modelUserMessageJ);
+//
+//                                                }else { //altrimenti mostro tutti i rimanenti listener
+//
+//                                                    for (int k = j; k < timestamps.size(); k++){
+//
+//                                                        ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(k));
+//                                                        arrayMessages.add(modelUserMessageJ);
+//
+//                                                    }
+//                                                    break;
+//
+//                                                }
+//
+//                                            }else{ //se i non è l'ultimo elemento
+//
+//                                                ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(i));
+//                                                arrayMessages.add(modelUserMessage);
+//                                                index = j;
+//                                                break;
+//
+//                                            }
+//
+//                                        }else{ //se timestamps >= listener
+//
+//                                            if (j == timestamps.size()-1){
+//
+//                                                ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(j));
+//                                                arrayMessages.add(modelUserMessageJ);
+//
+//                                                for (int k = i; k < listenerTimestamps.size(); k++){
+//
+//                                                    ModelUserMessage modelUserMessage = new ModelUserMessage(receiverName, MainActivity.userName, listenerMessages.get(k));
+//                                                    arrayMessages.add(modelUserMessage);
+//                                                    i = k;
+//
+//                                                }
+//
+//                                            }else {
+//
+//                                                ModelUserMessage modelUserMessageJ = new ModelUserMessage(MainActivity.userName, receiverName, messages.get(j));
+//                                                arrayMessages.add(modelUserMessageJ);
+//
+//                                            }
+//
+//
+//                                        }
+//
+//                                    }
+//
+//                                }
+//
+//                            }
+//
+//
+//                            Log.i(TAG, "ARRAYMESSAGE2: " + arrayMessages);
+//                            setupRecyclerView(arrayMessages);
+//
+//                        }
+//
+//                        @Override
+//                        public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onReceiverRetrieve(String receiver) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onTaskError(Exception taskException) {
+//
+//                        }
+//                    });
+//
+//                }
+//
+//                @Override
+//                public void onChatRetrieve(List<Map<String, Object>> listenerChat) {
+//
+//                }
+//
+//                @Override
+//                public void onReceiverRetrieve(String receiver) {
+//
+//                }
+//
+//                @Override
+//                public void onTaskError(Exception taskException) {
+//
+//                }
+//            });
+//
+//        }
+
         ImageView goBackButton = v.findViewById(R.id.go_back_chat);
 
         goBackButton.setOnClickListener(new View.OnClickListener() {
@@ -502,7 +743,7 @@ public class ReplyChatFragment extends Fragment {
 
     //ritorna immagine del profilo
     private void getTwitterProfileImage(String username, final ImageView profileImage){
-        TwitterRequests.getUserInfo(mContext, username, new VolleyListener() {
+        TwitterFunctions.userInfo(mContext, username, new VolleyListener() {
 
             @Override
             public void onResponse(String response) {

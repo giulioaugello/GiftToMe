@@ -52,6 +52,7 @@
     <string name="mygift_fragment_tag" translatable="false">MyGiftFragment</string>
     <string name="settings_fragment_tag" translatable="false">SettingsFragment</string>
     <string name="reply_chat_fragment_tag" translatable="false">ReplyChatFragment</string>
+    <string name="myreply_fragment_tag" translatable="false">MyReplyFragment</string>
 
     <string name="double_tap_to_exit_message">Press back button again to exit</string>
 
@@ -133,8 +134,10 @@
     <!--  profile_fragment2  -->
     <string name="start">To get the items you are interested in or post new ones:</string>
     <string name="my_gift">My Gifts</string>
+    <string name="my_reply">My Reply</string>
     <string name="settings">Settings</string>
     <string name="exit">Exit</string>
+    <string name="my_reply_title">Edit Reply</string>
 
     <string name="log_out">Logged out!</string>
 
@@ -176,5 +179,12 @@
     <string name="new_gift_menu">New Gift</string>
     <string name="chat_menu">Chat</string>
     <string name="account_menu">Account</string>
+
+    <!--  GPS  -->
+    <string name="title_gps">Activate the position</string>
+    <string name="descr_gps">You have to activate the location</string>
+    <string name="descr_high">The position must be in high mode</string>
+    <string name="other2">other</string>
+    <string name="ook">OK</string>
 
 </resources>
