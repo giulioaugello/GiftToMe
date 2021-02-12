@@ -68,4 +68,5 @@
     <string name="my_reply">私の返信</string>
     <string name="my_reply_title">返信を編集</string>
     <string name="sure_reply">返信を削除してもよろしいですか？</string>
+    <string name="already">受信者はすでにあなたに答えます、あなたは編集できません</string>
 </resources>

@@ -68,4 +68,5 @@
     <string name="my_reply">Risposte</string>
     <string name="my_reply_title">Modifica Risposta</string>
     <string name="sure_reply">Sei sicuro di voler eliminare la risposta?</string>
+    <string name="already">Il destinatario già ti ha risposto, non puoi modificare</string>
 </resources>

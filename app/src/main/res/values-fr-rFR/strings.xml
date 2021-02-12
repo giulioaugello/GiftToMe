@@ -68,4 +68,5 @@
     <string name="my_reply">Ma Réponse</string>
     <string name="my_reply_title">Modifier la Réponse</string>
     <string name="sure_reply">Voulez-vous vraiment supprimer la réponse?</string>
+    <string name="already">Le destinataire vous répond déjà, vous ne pouvez pas modifier</string>
 </resources>

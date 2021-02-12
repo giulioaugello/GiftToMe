@@ -188,4 +188,7 @@
     <string name="other2">other</string>
     <string name="ook">OK</string>
 
+
+    <string name="already">Receiver already answer you, you cannot edit</string>
+
 </resources>

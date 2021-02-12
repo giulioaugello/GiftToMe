@@ -70,7 +70,6 @@ public class MyReplyAdapter extends RecyclerView.Adapter<MyReplyAdapter.ViewHold
                     @Override
                     public void onReceiverRetrieve(boolean exist) {
 
-                        Log.i(TAG, "ci entro");
                         if (exist){
                             holder.editReply.setEnabled(false);
                         }else{

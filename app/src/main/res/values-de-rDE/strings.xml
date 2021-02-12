@@ -68,4 +68,5 @@
     <string name="my_reply">Meine Antwort</string>
     <string name="my_reply_title">Antwort Bearbeiten</string>
     <string name="sure_reply">Möchten Sie die Antwort wirklich löschen?</string>
+    <string name="already">Empfänger antworten Ihnen bereits, Sie können nicht bearbeiten</string>
 </resources>
