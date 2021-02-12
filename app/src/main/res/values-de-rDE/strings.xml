@@ -67,4 +67,5 @@
     <string name="other2">andere</string>
     <string name="my_reply">Meine Antwort</string>
     <string name="my_reply_title">Antwort Bearbeiten</string>
+    <string name="sure_reply">Möchten Sie die Antwort wirklich löschen?</string>
 </resources>

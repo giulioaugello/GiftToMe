@@ -2,8 +2,8 @@
     <string name="app_name">GiftToMeApp</string>
 
     <!--  credenziali Twitter API -->
-    <string name="CONSUMER_KEY" translatable="false">FDuIWWAoNzMAgJFnJFOKVGvAe</string>
-    <string name="CONSUMER_SECRET" translatable="false">dRGTLXzxSmWwT3ekam0vRRhFl8g8PaeLKAsrzTlxRCzrT80K1p</string>
+    <string name="CONSUMER_KEY" translatable="false">TtsXVZJUyIuAQOTMb9CoO4XlJ</string>
+    <string name="CONSUMER_SECRET" translatable="false">snlA9gKVu4YwyPpXDHfkJc17ai7WxBsfBLFMybkhgWyvaj3PiV</string>
 
     <!--  FCM Server Key  -->
     <string name="FCM_Server_Key" translatable="false">AAAAU8t-klw:APA91bEC9DUa-MkumJ75_nlcsA3jIVfe2vZoM13grj4LJpVOsqQwkbeYXgC7QywntBpj4val5Mk9wPfMkSEmq-rSt8iAo9tbn-A7dqeqSYV4c9h14ymCqCBEBVheqxepADJb_zPKk-O9</string>
@@ -91,6 +91,7 @@
 
     <!--  delete_mygift_dialog  -->
     <string name="sure">Are you sure you want to delete the gift?</string>
+    <string name="sure_reply">Are you sure you want to delete the reply?</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
 

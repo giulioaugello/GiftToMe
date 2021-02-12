@@ -725,31 +725,38 @@ public class Chat {
 
                 for (QueryDocumentSnapshot queryDocumentSnapshot : value) {
                     List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+                    assert chat != null;
+                    if (chat.size() > 0){
 
-                    int indexR = 0; //indice del regalo
-                    for (int i = 0; i < chat.size(); i++){
+                        int indexR = 0; //indice del regalo
+                        for (int i = 0; i < chat.size(); i++){
 
-                        if (chat.get(i).get("myGiftName").equals(giftName)){
-                            indexR = i;
-                            break;
+                            if (chat.get(i).get("myGiftName").equals(giftName)){
+                                indexR = i;
+                                break;
+                            }
                         }
+                        //lista dei regali del destinatario
+                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) chat.get(indexR).get("arrayMyGift");
+                        assert giftList != null;
+                        if (giftList.size() > 0){
+                            int indexG = 0; //indice del sender
+                            for (int j = 0; j < giftList.size(); j++){
+
+                                if (giftList.get(j).get("sender").equals(sender)){
+                                    indexG = j;
+                                    break;
+                                }
+                            }
+
+
+                            final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
+                            List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
+                            listener.onDateRetrieve(myTimestamps, myMessages);
+                        }
+
                     }
 
-                    //lista dei regali del destinatario
-                    List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(indexR).get("arrayMyGift");
-
-                    int indexG = 0; //indice del sender
-                    for (int j = 0; j < giftList.size(); j++){
-
-                        if (giftList.get(j).get("sender").equals(sender)){
-                            indexG = j;
-                            break;
-                        }
-                    }
-
-                    final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
-                    List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
-                    listener.onDateRetrieve(myTimestamps, myMessages);
                 }
             }
         });
@@ -817,31 +824,39 @@ public class Chat {
 
                     List<Map<String, Object>> chat = (List<Map<String, Object>>) queryDocumentSnapshot.get("chat");
 
-                    int indexR = 0; //indice del destinatario
-                    for (int i = 0; i < chat.size(); i++){
+                    assert chat != null;
+                    if (chat.size() > 0){
 
-                        if (chat.get(i).get("receiver").equals(receiver)){
-                            indexR = i;
-                            break;
+
+                        int indexR = 0; //indice del destinatario
+                        for (int i = 0; i < chat.size(); i++){
+
+                            if (chat.get(i).get("receiver").equals(receiver)){
+                                indexR = i;
+                                break;
+                            }
                         }
-                    }
 
-                    //lista dei regali del destinatario
-                    List<Map<String, Object>> giftList = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chat")).get(indexR).get("arrayGift");
+                        //lista dei regali del destinatario
+                        List<Map<String, Object>> giftList = (List<Map<String, Object>>) chat.get(indexR).get("arrayGift");
+                        assert giftList != null;
+                        if (giftList.size() > 0){
+                            int indexG = 0; //indice del regalo
+                            for (int j = 0; j < giftList.size(); j++){
 
-                    int indexG = 0; //indice del regalo
-                    for (int j = 0; j < giftList.size(); j++){
+                                if (giftList.get(j).get("giftName").equals(giftName)){
+                                    indexG = j;
+                                    break;
+                                }
+                            }
 
-                        if (giftList.get(j).get("giftName").equals(giftName)){
-                            indexG = j;
-                            break;
+                            final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
+                            List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
+
+                            listener.onDateRetrieve(myTimestamps, myMessages);
                         }
+
                     }
-
-                    final List<Timestamp> myTimestamps = (List<Timestamp>) giftList.get(indexG).get("timestamps");
-                    List<String> myMessages = (List<String>) giftList.get(indexG).get("messages");
-
-                    listener.onDateRetrieve(myTimestamps, myMessages);
                 }
             }
         });
@@ -1028,17 +1043,16 @@ public class Chat {
 
                                         List<String> myMessages = (List<String>) arrayElement.get(j).get("messages");
                                         String first = myMessages.get(0);
-                                        Log.i("receiverreceiver", myMessages.get(0) + ", " + first + ", " + oldMessage + ", " + newMessage);
+                                        Log.i(TAG, myMessages.get(0) + ", " + first + ", " + oldMessage + ", " + newMessage);
 
                                         first = newMessage;
                                         ArrayList<String> messagesArrayList = new ArrayList<>();
                                         messagesArrayList.add(newMessage);
-                                        Log.i("receiverreceiver", myMessages.get(0) + ", " + oldMessage + ", " + newMessage + " ... " + first);
+                                        Log.i(TAG, first);
 
                                         arrayElement.get(j).remove("messages");
 
                                         arrayElement.get(j).put("messages", messagesArrayList);
-                                        Log.i("receiverreceiver", messagesArrayList + "");
 
                                         chat.get(i).remove("arrayGift");
                                         chat.get(i).put("arrayGift", arrayElement);
@@ -1056,6 +1070,44 @@ public class Chat {
                             }
                         }
 
+                    }
+                }
+            }
+        });
+    }
+
+    public static void checkIfMessageExist(final String username, final String sender, final String giftName, final FirestoreCheckName firestoreCheckName){
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = firestoreDB.collection("users");
+        collectionReference.whereEqualTo("username", username).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+
+                        List<Map<String, Object>> chatMyGift = (List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift");
+
+                        boolean existMessages = false;
+
+                        for (int i = 0; i < chatMyGift.size(); i++) {
+                            if (chatMyGift.get(i).get("myGiftName").equals(giftName)) {
+
+                                List<Map<String, Object>> arrayElement = (List<Map<String, Object>>) ((List<Map<String, Object>>) queryDocumentSnapshot.get("chatMyGift")).get(i).get("arrayMyGift");
+
+                                for (int j = 0; j < arrayElement.size(); j++){
+                                    if (arrayElement.get(j).get("sender").equals(sender)){
+                                        ArrayList<String> element = (ArrayList<String>) arrayElement.get(j).get("messages");
+                                        if (element.size() > 0){
+                                            existMessages = true;
+                                            break;
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+                        firestoreCheckName.onReceiverRetrieve(existMessages);
                     }
                 }
             }

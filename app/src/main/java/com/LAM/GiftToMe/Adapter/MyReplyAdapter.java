@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.LAM.GiftToMe.FCMFirebase.Chat;
+import com.LAM.GiftToMe.FCMFirebase.FirestoreCheckName;
 import com.LAM.GiftToMe.Fragment.ProfileFragment;
 import com.LAM.GiftToMe.MainActivity;
 import com.LAM.GiftToMe.R;
@@ -58,11 +59,31 @@ public class MyReplyAdapter extends RecyclerView.Adapter<MyReplyAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final MyReplyAdapter.ViewHolder holder, final int position) {
+
+        final String receiver = myReplies.get(position).getReceiverName();
+
         TwitterFunctions.getGiftName(mContext, myReplies.get(position).getTweetReplyId(), new VolleyListener() {
             @Override
             public void onResponse(String response) {
                 holder.giftName.setText(response);
+                Chat.checkIfMessageExist(receiver, MainActivity.userName, response, new FirestoreCheckName() {
+                    @Override
+                    public void onReceiverRetrieve(boolean exist) {
 
+                        Log.i(TAG, "ci entro");
+                        if (exist){
+                            holder.editReply.setEnabled(false);
+                        }else{
+                            holder.editReply.setEnabled(true);
+                            holder.editReply.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    showEditDialog(position);
+                                }
+                            });
+                        }
+                    }
+                });
             }
 
             @Override
@@ -75,6 +96,7 @@ public class MyReplyAdapter extends RecyclerView.Adapter<MyReplyAdapter.ViewHold
 
         holder.myReply.setText(myReplies.get(position).getMessage());
 
+
         holder.editReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,11 +107,8 @@ public class MyReplyAdapter extends RecyclerView.Adapter<MyReplyAdapter.ViewHold
         holder.removeReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 showRemoveDialog(position);
-//                removeReply(myReplies.get(position).getTweetId(), position);
-//                myReplies.remove(position);
-//                notifyItemRemoved(position);
-//                goBack(mContext, activity);
 
             }
         });

@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sei sicuro di voler eliminare la risposta?"
+            android:text="@string/sure_reply"
             android:gravity="center"
             android:textSize="20sp"
             android:textColor="@color/colorChipSelected"

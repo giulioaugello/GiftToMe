@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(this, String.valueOf(requestCode), Toast.LENGTH_LONG).show();
 
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE); //continua a chiedere sempre i permessi che non dai
 
